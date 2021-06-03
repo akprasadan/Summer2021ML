@@ -2,6 +2,57 @@ import numpy as np
 from sklearn.utils.random import sample_without_replacement
 
 class Cluster:
+    '''
+    A class to represent a k-means clustering model.
+
+        Attributes
+        ----------
+        training_data : numpy array
+            Dataset to train on; of size n_train by d
+        testing_data : numpy array
+            Test dataset to use pre-calculated means to cluster on
+        d : int
+            Dimension of the data
+        n_train : int
+            Number of samples in the training data
+        k : int
+            How many clusters to use in the algorithm
+        clusters_indices : list
+            A list of length n storing which cluster each observation belongs to
+        means : numpy array
+            A k by d matrix storing the positions of the cluster centers
+        training_data_means : numpy array
+            A n by d matrix storing the cluster center that each training observation belongs to
+        errors : list
+            Stores the error (distance between two updates of the cluster centers)
+        number_iterations : int
+            How many steps the algorithm took to converge
+        threshold : float
+            How small the error needs to be to end the convergence
+        predicted_clusters : list
+            A list of length 
+        predicted_means : numpy array
+            A matrix of size n_predictions by d
+        n_predictions : int
+            Number of rows in the test set
+        labelled_training_data : numpy array
+            The training matrix with an additional column of cluster labels
+        labelled_testing_data : numpy array
+            The testing matrix with an additional column of cluster labels
+
+        Methods
+        -------
+        compute_distance_matrix : Computes matrix of distances between each observation and each cluster
+
+        update_clusters : Compute list of closest clusters given a distance matrix
+
+        update_means : Obtain matrix of updated cluster centers
+
+        fit : Perform the k-means clustering algorithm
+
+        predict : Calculate closest clusters to new data using clusters calculated from fit 
+
+    '''
     def __init__(self):
         self.training_data = None
         self.testing_data = None
@@ -16,6 +67,7 @@ class Cluster:
         self.threshold = None
         self.predicted_clusters = None
         self.predicted_means = None
+        self.n_predictions = None
         self.labelled_training_data = None
         self.labelled_testing_data = None
 
@@ -164,6 +216,7 @@ class Cluster:
         '''
         self.testing_data = testing_data
         n_predictions = testing_data.shape[0]
+        self.n_predictions = n_predictions
         predicted_clusters = self.update_clusters(self.testing_data, self.means, n_predictions, self.k)
         self.predicted_clusters = predicted_clusters
 
@@ -172,11 +225,3 @@ class Cluster:
 
         self.predicted_means = predicted_means
         self.labelled_testing_data = np.append(self.testing_data, self.predicted_clusters.reshape((self.n_train, 1)), axis = 1)
-
-
-
-example = Cluster()
-
-X = np.random.rand(20,5)
-example.fit(X)
-print(example.labelled_training_data)
