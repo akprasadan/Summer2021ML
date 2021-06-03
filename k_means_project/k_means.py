@@ -53,6 +53,7 @@ class Cluster:
         predict : Calculate closest clusters to new data using clusters calculated from fit 
 
     '''
+
     def __init__(self):
         self.training_data = None
         self.testing_data = None
@@ -112,6 +113,7 @@ class Cluster:
                     The i-th entry is the integer p minimizing distance of ith row of X to the pth cluster point.
                     We use the l_2 Euclidean norm for d dimension.   
         '''
+
         distance_matrix = self.compute_distance_matrix(X, center_points, n, k)
         
         # For each row i, we want to know the column k for which distance_matrix[i,k] is minimal
@@ -160,9 +162,8 @@ class Cluster:
                 threshold (float): 
                     Positive number that the error must fall below for the algorithm to terminate.
                     Error is defined as Frobenius norm of difference of the matrix of cluster means between updates.
-
-                
         '''
+
         self.training_data = X
         self.n_train = self.training_data.shape[0]
         self.d = self.training_data.shape[1]
@@ -214,6 +215,7 @@ class Cluster:
                 testing_data (numpy array): n_predictions by self.d matrix
   
         '''
+        
         self.testing_data = testing_data
         n_predictions = testing_data.shape[0]
         self.n_predictions = n_predictions
