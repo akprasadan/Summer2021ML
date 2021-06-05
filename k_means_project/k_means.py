@@ -8,7 +8,7 @@ class Cluster:
 
         Attributes
         ----------
-        training_data : numpy array
+        training_data : numpy array (possible converted from Pandas DataFrame)
             Dataset to train on; of size n_train by d
         testing_data : numpy array
             Test dataset to use pre-calculated means to cluster on
