@@ -164,7 +164,7 @@ class Cluster:
                     Positive number that the error must fall below for the algorithm to terminate.
                     Error is defined as Frobenius norm of difference of the matrix of cluster means between updates.
         '''
-        if type(X) is numpy.ndarray:
+        if type(X) == 'numpy.ndarray':
             self.training_data = X
         elif type(X) is pd.DataFrame:
                 self.training_data = X.to_numpy()
