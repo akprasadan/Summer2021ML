@@ -1,5 +1,6 @@
 import numpy as np 
 from sklearn.utils.random import sample_without_replacement
+import pandas as pd
 
 class Cluster:
     '''
@@ -48,7 +49,7 @@ class Cluster:
 
         update_means : Obtain matrix of updated cluster centers
 
-        fit : Perform the k-means clustering algorithm
+        fit : Perform the k-means clustering algorithm (taking in a Pandas DataFrame or Numpy Array)
 
         predict : Calculate closest clusters to new data using clusters calculated from fit 
 
@@ -163,8 +164,10 @@ class Cluster:
                     Positive number that the error must fall below for the algorithm to terminate.
                     Error is defined as Frobenius norm of difference of the matrix of cluster means between updates.
         '''
-
-        self.training_data = X
+        if type(X) is numpy.ndarray:
+            self.training_data = X
+        elif type(X) is pd.DataFrame:
+                self.training_data = X.to_numpy()
         self.n_train = self.training_data.shape[0]
         self.d = self.training_data.shape[1]
         self.k = k
@@ -227,3 +230,4 @@ class Cluster:
 
         self.predicted_means = predicted_means
         self.labelled_testing_data = np.append(self.testing_data, self.predicted_clusters.reshape((self.n_train, 1)), axis = 1)
+
