@@ -1,6 +1,9 @@
+from os import stat
 import numpy as np
+from numpy.core.numeric import True_
 import pandas as pd
 from scipy import stats
+import distance_func as metric
 
 class KNNClassify:
     '''
@@ -12,6 +15,11 @@ class KNNClassify:
             Number of neighbors 
         d : int
             Dimension of dataset (number of features)
+        distance_metric : function
+            The distance metric to use, imported from distance_func.py. 
+            It is the L_2 norm by default (euclidean2), but can also take L_{infinity} (euclidean_infty) and L_1 (euclidean_1).
+        normalize : Boolean
+            Decides whether to center/scale the data to have mean 0 and standard deviation 1
 
         train_features : numpy array
             Training data (features only); dimension n_test by d 
@@ -31,6 +39,7 @@ class KNNClassify:
 
         test_accuracy : float
             Proportion of correctly classified test labels
+        
 
         Methods
         -------
@@ -40,14 +49,18 @@ class KNNClassify:
 
         prediction_accuracy : Obtain proportion of correctly classified test labels
 
-        standardize_data_type : Convert data to numpy array if it is a Pandas DataFrame
+        scale_and_center : Center and scale each feature in the given dataset. Apply to train/test data separately.
+
+        preprocessing : Convert data to numpy array if it is a Pandas DataFrame; also standardize dataset if needed.
 
         fit : Perform the k-nearest neighbors classification algorithm (taking in a Pandas DataFrame or Numpy Array)
 
     '''
-    def __init__(self):
-        self.k = None 
+    def __init__(self, k = 3, weight = False, distance_metric = metric.euclidean_2, normalize = True):
+        self.k = k 
+        self.weight = weight
         self.d = None
+        self.normalize = normalize
         self.train_features = None
         self.train_labels = None
         self.n_train = None
@@ -56,6 +69,7 @@ class KNNClassify:
         self.predicted_test_labels = None
         self.n_test = None
         self.test_accuracy = None
+        self.distance_metric = distance_metric
 
     def k_neighbors_idx(self, test_row):
         '''
@@ -73,7 +87,7 @@ class KNNClassify:
         current_point = self.test_features[test_row, :] # The test observation with row index test_row
 
         # Calulate distance (Euclidean L_2 norm) of each training observation to current_point
-        distances = np.array([np.linalg.norm(current_point - self.train_features[i, :]) for i in range(self.n_test)]) 
+        distances = np.array([self.distance_metric(current_point - self.train_features[i, :]) for i in range(self.n_test)]) 
 
         closest_neighbor_idx = np.argsort(distances)[:self.k] # Indices (in training data) of closest points
 
@@ -105,18 +119,32 @@ class KNNClassify:
         accuracy = num_matched_labels / self.n_test # Proportion correctly classified
 
         return accuracy
+
+    @staticmethod
+    def scale_and_center(data_input):
+        '''Center and scale each column of the given numpy array.'''
+
+        n_rows, n_cols = data_input.shape
+        for column in range(n_cols):
+            data_input[:, column] = (data_input[:, column] - np.mean(data_input[:, column])*np.ones(n_rows)) / np.std(data_input[:, column])
+        return data_input
     
-    def standardize_data_type(self, data_input):
-        ''' Convert data input to numpy array version, if needed.
-        '''
+    def preprocessing(self, data_input, is_feature):
+        ''' Convert data input to numpy array version, and center/normalize to have mean 0, standard deviation 1 (if applicable or instructed).'''
 
         if type(data_input) is np.ndarray:
+            if self.normalize and is_feature:
+                return KNNClassify.scale_and_center(data_input)
+            else:
                 return data_input
         elif type(data_input) is pd.DataFrame:
-                return data_input.to_numpy()
+                if self.normalize and is_feature:
+                    return KNNClassify.scale_and_center(data_input.to_numpy())
+                else:
+                    return data_input.to_numpy()
 
 
-    def fit(self, train_features, train_labels, test_features, true_test_labels, k):
+    def fit(self, train_features, train_labels, test_features, true_test_labels):
         '''
         Train and evaluate the k-nearest neighbor model. Results stored as attributes.
         
@@ -130,11 +158,11 @@ class KNNClassify:
                 true_test_labels : numpy array
                     True labels for test data; dimension n_test by 1
         '''
-        self.train_features = self.standardize_data_type(train_features)
-        self.train_labels = self.standardize_data_type(train_labels)
-        self.test_features = self.standardize_data_type(test_features)
-        self.true_test_labels = self.standardize_data_type(true_test_labels)
-        self.k = k
+
+        self.train_features = self.preprocessing(train_features, True)
+        self.train_labels = self.preprocessing(train_labels, False)
+        self.test_features = self.preprocessing(test_features, True)
+        self.true_test_labels = self.preprocessing(true_test_labels, False)
         self.d = self.train_features.shape[1]
         self.n_train = self.train_features.shape[0]
         self.n_test = self.test_features.shape[0]
@@ -143,7 +171,8 @@ class KNNClassify:
         self.predicted_test_labels = predicted_test_labels # Vector of predicted test labels
         self.test_accuracy = self.prediction_accuracy() # Test accuracy
 
-model = KNNClassify()
+'''
+model = KNNClassify(k = 3, normalize = True)
 
 from sklearn.datasets import load_iris
 iris_dataset = load_iris()
@@ -152,6 +181,7 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     iris_dataset['data'], iris_dataset['target'])
 
-model.fit(X_train, y_train, X_test, y_test, 3)
+model.fit(X_train, y_train, X_test, y_test)
 
 print('n_train =', model.n_train, 'n_test =', model.n_test, 'accuracy =', model.test_accuracy, 'k =', model.k)
+'''
