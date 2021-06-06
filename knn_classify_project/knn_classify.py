@@ -171,6 +171,45 @@ class KNNClassify:
         self.predicted_test_labels = predicted_test_labels # Vector of predicted test labels
         self.test_accuracy = self.prediction_accuracy() # Test accuracy
 
+class TuneKNN:
+    def __init__(self, k_choices, metrics, kernelwidth):
+        self.k_choices = k_choices
+        self.metrics = metrics
+        self.kernelwidth = kernelwidth
+        self.accuracies = np.zeros((len(k_choices), len(metrics)))
+        self.best_k = None
+        self.best_metric = None 
+        self.best_kernelwidth = None 
+        self.best_accuracy = None
+        self.train_features = None # We will not preprocess in a method of this class, only via KNNClassify.fit()
+        self.train_labels = None 
+        self.test_features = None 
+        self.true_test_labels = None
+
+    def hyperparameter_accuracy(self, k, metric): 
+        model = KNNClassify(k, distance_metric = metric)
+        model.fit(self.train_features, self.train_labels, self.test_features, self.true_test_labels)
+        return model.test_accuracy
+    
+    def hyperparameter_combinations(self):
+        for i in range(len(self.k_choices)):
+            for j in range(len(self.metrics)):
+                accuracy = self.hyperparameter_accuracy(self.k_choices[i], self.metrics[j], self.train_features, self.train_labels, self.test_features, self.true_test_labels)
+                self.accuracies[i, j] = accuracy
+    
+    def best_combo(self, train_features, train_labels, test_features, true_test_labels):
+        self.train_features = train_features
+        self.train_labels = train_labels
+        self.test_features = test_features
+        self.true_test_labels = true_test_labels
+
+        self.hyperparameter_combinations()
+        self.best_accuracy = np.min(self.accuracies)
+        best_coordinates = np.argwhere(self.accuracies == np.min(self.accuracies))
+        self.best_k = self.k_choices[best_coordinates[0]]
+        self.best_metric = self.metrics[best_coordinates[1]]
+
+
 '''
 model = KNNClassify(k = 3, normalize = True)
 
