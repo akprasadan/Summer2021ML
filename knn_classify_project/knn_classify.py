@@ -171,17 +171,57 @@ class KNNClassify:
         self.predicted_test_labels = predicted_test_labels # Vector of predicted test labels
         self.test_accuracy = self.prediction_accuracy() # Test accuracy
 
-'''
-model = KNNClassify(k = 3, normalize = True)
+class TuneKNN:
+    def __init__(self, k_choices, metrics=[metric.euclidean_2]):
+        self.k_choices = k_choices
+        self.metrics = metrics
+        self.accuracies = np.zeros((len(k_choices), len(metrics)))
+        self.best_k = None
+        self.best_metric = None 
+        self.best_accuracy = None
+        self.train_features = None # We will not preprocess in a method of this class, only via KNNClassify.fit()
+        self.train_labels = None 
+        self.test_features = None 
+        self.true_test_labels = None
 
-from sklearn.datasets import load_iris
-iris_dataset = load_iris()
+    def hyperparameter_accuracy(self, k, metric): 
+        model = KNNClassify(k, distance_metric = metric)
+        model.fit(self.train_features, self.train_labels, self.test_features, self.true_test_labels)
+        return model.test_accuracy
+    
+    def hyperparameter_combinations(self):
+        for i in range(len(self.k_choices)):
+            for j in range(len(self.metrics)):
+                accuracy = self.hyperparameter_accuracy(self.k_choices[i], self.metrics[j])
+                self.accuracies[i, j] = accuracy
+    
+    def best_combo(self, train_features, train_labels, test_features, true_test_labels):
+        self.train_features = train_features
+        self.train_labels = train_labels
+        self.test_features = test_features
+        self.true_test_labels = true_test_labels
 
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(
-    iris_dataset['data'], iris_dataset['target'])
+        self.hyperparameter_combinations()
+        self.best_accuracy = np.max(self.accuracies)
+        best_coordinates = np.argwhere(self.accuracies == np.max(self.accuracies))[0, :]
+        self.best_k = self.k_choices[best_coordinates[0]]
+        self.best_metric = self.metrics[best_coordinates[1]]
 
-model.fit(X_train, y_train, X_test, y_test)
 
-print('n_train =', model.n_train, 'n_test =', model.n_test, 'accuracy =', model.test_accuracy, 'k =', model.k)
-'''
+
+# model = KNNClassify(k = 1, normalize = True)
+
+# from sklearn.datasets import load_iris
+# iris_dataset = load_iris()
+
+# from sklearn.model_selection import train_test_split
+# X_train, X_test, y_train, y_test = train_test_split(
+#     iris_dataset['data'], iris_dataset['target'])
+
+# model.fit(X_train, y_train, X_test, y_test)
+
+# print('n_train =', model.n_train, 'n_test =', model.n_test, 'accuracy =', model.test_accuracy, 'k =', model.k)
+
+# model_tune = TuneKNN(k_choices=[1,3,5])
+# model_tune.best_combo(X_train, y_train, X_test, y_test)
+# print(model_tune.accuracies, model_tune.best_k)
