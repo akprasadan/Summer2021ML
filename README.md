@@ -6,5 +6,4 @@ In this repository, I store some 2021 Summer projects to upgrade my Python / dat
 - generalclassifier: Build an abstract framework to do machine learning using Object Oriented Programming. The goal will be to unify all of the below models into one library.
 - k_means_project: Implement k-means clustering algorithm. Upcoming: Evaluation techniques, plotting functionality
 - knn_classify_project: Implement the k-nearest neighbors classification algorithm. Both model training and evaluation is included. Upcoming: Plotting functionality.
-- red_wine_project: Carrying out some basic PCA to practice sklearn.
 
