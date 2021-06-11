@@ -8,6 +8,7 @@ iris_dataset = load_iris()
 
 
 # Let's verify that our preprocessing was valid
+# We compare it to sklearn's Standard Scalar function
 def test_normalize():
     n_cols = 30
     n_rows = 40
