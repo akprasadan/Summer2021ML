@@ -21,9 +21,15 @@ class SupervisedAlgorithm:
         pass
     
 
+
 class Classification(SupervisedAlgorithm):
 
     def __init__(self, features, output, split_proportion):
         super().__init__(features, output, split_proportion)
 
+    @staticmethod
+    def evaluate_accuracy(predicted_output, true_output):
+        number_predictions = predicted_output.shape[0]
+        correct_predictions = np.count_nonzero(predicted_outupt == true_output)
+        return correct_predictions / number_predictions
     
