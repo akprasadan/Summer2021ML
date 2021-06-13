@@ -41,26 +41,7 @@ class Classification(SupervisedAlgorithm):
             self.number_labels = number_labels
         self.labels = np.arange()
 
-
-    @staticmethod
-    def evaluate_accuracy(predicted_output, true_output):
-        number_predictions = predicted_output.shape[0]
-        correct_predictions = np.count_nonzero(predicted_output == true_output)
-        return correct_predictions / number_predictions
     
-    @jit(nopython=True) 
-    def confusion_matrix(self, predicted_output, true_output):
-        confusion_matrix = np.zeros(shape = (self.number_labels, self.number_labels))
-        output_combined = np.stack((true_output, predicted_output), axis = 1)  # each row has 2 elements
-
-        for row_index in range(self.number_labels): #i
-            for col_index in range(self.number_labels): #j
-                # Let's compute the number of rows of output_combined containing (i,j) 
-                # want predicted == j, true == i
-                # Source of the following line's logic: https://stackoverflow.com/a/40382459
-                confusion_matrix[row_index, col_index] = (output_combined == (row_index, col_index)).all(axis = 1).sum()
-
-        return confusion_matrix
 
 class Regression(SupervisedAlgorithm):
 
@@ -68,5 +49,3 @@ class Regression(SupervisedAlgorithm):
         super().__init__(features, output, split_proportion)
 
     @staticmethod
-    def evaluate_mse(predicted_output, true_output):
-        return np.linalg.norm(predicted_output, true_output)**2
