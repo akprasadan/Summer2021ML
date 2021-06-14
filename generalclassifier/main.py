@@ -1,5 +1,6 @@
 import numpy as np
 from numba import jit
+from preprocessing import train_test_split
 
 class SupervisedAlgorithm:
 
@@ -32,12 +33,28 @@ class Classification(SupervisedAlgorithm):
         else: 
             self.number_labels = number_labels
         self.labels = np.arange()
-
-    
+        self.sample_size, \
+        self.train_size, \
+        self.test_size, \
+        self.train_rows, \
+        self.test_rows, \
+        self.train_features, \
+        self.test_features, \
+        self.train_output, \
+        self.test_output = train_test_split(features, output, split_proportion)
 
 class Regression(SupervisedAlgorithm):
 
     def __init__(self, features, output, split_proportion, number_labels = None):
         super().__init__(features, output, split_proportion)
+        self.sample_size, \
+        self.train_size, \
+        self.test_size, \
+        self.train_rows, \
+        self.test_rows, \
+        self.train_features, \
+        self.test_features, \
+        self.train_output, \
+        self.test_output = train_test_split(features, output, split_proportion)
 
-    @staticmethod
+    
