@@ -20,15 +20,7 @@ class SupervisedAlgorithm:
     def fit_to(self, input, output):
         pass
     
-    @staticmethod
-    def scale_and_center(feature_matrix):
-        '''Center and scale the feature matrix.'''
-
-        n_rows, n_cols = feature_matrix.shape
-        for column in range(n_cols):
-            feature_matrix[:, column] = (feature_matrix[:, column] - np.mean(feature_matrix[:, column])*np.ones(n_rows)) \
-                / np.std(feature_matrix[:, column])
-        return feature_matrix
+    
 
 
 class Classification(SupervisedAlgorithm):

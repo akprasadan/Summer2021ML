@@ -1,6 +1,6 @@
 import numpy as np
 from numba import jit
-import distance_norms as norms
+import norms as norms
 
 def evaluate_accuracy(predicted_output, true_output):
     number_predictions = predicted_output.shape[0]
