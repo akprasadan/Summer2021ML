@@ -25,5 +25,5 @@ def confusion_matrix(number_labels, predicted_output, true_output):
 
     return confusion_matrix
 
-def evaluate_mse(predicted_output, true_output):
-    return norms.euclidean_2(predicted_output - true_output)**2
+def evaluate_regression_error(predicted_output, true_output, norm = norms.euclidean_2):
+    return norm(predicted_output - true_output)**2
