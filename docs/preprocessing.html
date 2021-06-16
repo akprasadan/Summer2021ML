@@ -164,21 +164,29 @@
 <h1>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-preprocessing"></span><p>Docstring for the preprocessing.py module.</p>
-<dl class="simple">
-<dt>This module provides data processing and preparation tools</dt><dd><ul class="simple">
+<span class="target" id="module-preprocessing"></span><p>This module provides data processing and preparation tools.</p>
+<ul class="simple">
 <li><p>Scaling/centering data</p></li>
 <li><p>Generating Test/Train splits</p></li>
 <li><p>Generating Cross validation Folds (In Progress)</p></li>
 <li><p>Generating Bootstrap resamples (In Progress)</p></li>
 </ul>
-</dd>
-</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="preprocessing.scale_and_center">
 <span class="sig-prename descclassname"><span class="pre">preprocessing.</span></span><span class="sig-name descname"><span class="pre">scale_and_center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#preprocessing.scale_and_center" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center and scale each individual column of the feature matrix
 to have 0 mean and unit variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>feature_matrix</strong> – Design matrix of scaled and centered explanatory variables.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

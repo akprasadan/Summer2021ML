@@ -1,6 +1,9 @@
 Classification Algorithms
 ========================================
 
+Base Classifier
+---------------
+
 .. toctree::
    :maxdepth: 2
 
@@ -11,6 +14,8 @@ Classification Algorithms
    :members:
    :undoc-members:
 
+Logistic Classifier
+------------------------------------
 .. automodule:: logisticreg
    :members:
 

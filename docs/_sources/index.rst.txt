@@ -1,6 +1,15 @@
 Welcome to Summer2021ML's documentation!
 ========================================
 
+Building a ML Library From Scratch
+-----------------------------------
+
+My goal for the Summer of 2021 is to upgrade my Python and data science skills, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, sklearn, and general data analysis/visualization. In addition, I want to explore the 'ecosystem' of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others).
+
+To do so, I will create a unified framework (similar to Tidymodels in R or Sklearn in Python) to perform ML in Python. I will begin with base classes for Classification, Regression, Clustering, for instance, from which I will derive classes for each algorithm of interest. I will provide functionality for train/test and cross-validation splitting, model tuning, model evaluation (with a variety of metrics), and automatically generated plots.
+
+You can find all the documentation `here <https://akprasadan.github.io/Summer2021ML/index.html>`_ produced using Sphinx and Read the Docs.
+
 .. toctree::
    regression
    classification

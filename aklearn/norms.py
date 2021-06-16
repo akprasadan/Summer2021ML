@@ -1,6 +1,4 @@
-'''Docstring for the norms.py module.
-
-We define multiple notions of distance and norms to use in our 
+'''This module defines multiple notions of distance and norms to use in our 
 model construction and evaluation.
 
 '''

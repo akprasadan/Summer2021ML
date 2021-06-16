@@ -1,6 +1,4 @@
-'''Docstring for the linearreg.py module.
-
-This module is for performing linear regression models.
+'''This module is for performing linear regression models.
 
 '''
 

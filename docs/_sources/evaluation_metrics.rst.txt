@@ -7,10 +7,6 @@ Model Evaluation
 .. automodule:: evaluation_metrics
    :members:
 
-
-
-==================
-
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

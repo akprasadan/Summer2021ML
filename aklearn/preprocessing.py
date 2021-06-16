@@ -1,6 +1,5 @@
-'''Docstring for the preprocessing.py module.
+'''This module provides data processing and preparation tools.
 
-This module provides data processing and preparation tools
     - Scaling/centering data
     - Generating Test/Train splits
     - Generating Cross validation Folds (In Progress)
@@ -16,6 +15,16 @@ def scale_and_center(feature_matrix):
     '''
     Center and scale each individual column of the feature matrix 
     to have 0 mean and unit variance.
+
+    Parameters
+    ----------
+    feature_matrix : numpy.ndarray
+        Design matrix of explanatory variables.
+    
+    Returns
+    -------
+    feature_matrix : numpy.ndarray
+        Design matrix of scaled and centered explanatory variables.
     '''
 
     n_rows, n_cols = feature_matrix.shape

@@ -1,6 +1,4 @@
-'''Docstring for classification.py module.
-
-This module builds a class for classification problems, such as logistic
+'''This module builds a base class for classification problems, such as logistic
 regression or k-nearest neighbors classification. 
 The preprocessing (if applicable) is done at this class level.
 

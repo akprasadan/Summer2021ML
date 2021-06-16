@@ -89,7 +89,11 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Classification Algorithms</a><ul class="simple">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#base-classifier">Base Classifier</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-logisticreg">Logistic Classifier</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a></li>
@@ -163,10 +167,11 @@
             
   <div class="section" id="classification-algorithms">
 <h1>Classification Algorithms<a class="headerlink" href="#classification-algorithms" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="base-classifier">
+<h2>Base Classifier<a class="headerlink" href="#base-classifier" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-classification"></span><p>Docstring for classification.py module.</p>
-<p>This module builds a class for classification problems, such as logistic
+<span class="target" id="module-classification"></span><p>This module builds a base class for classification problems, such as logistic
 regression or k-nearest neighbors classification.
 The preprocessing (if applicable) is done at this class level.</p>
 <dl class="py class">
@@ -181,7 +186,9 @@ The preprocessing (if applicable) is done at this class level.</p>
 
 </dd></dl>
 
-<span class="target" id="module-logisticreg"></span><p>Docstring for logistic.py module.</p>
+</div>
+<div class="section" id="module-logisticreg">
+<span id="logistic-classifier"></span><h2>Logistic Classifier<a class="headerlink" href="#module-logisticreg" title="Permalink to this headline">¶</a></h2>
 <p>This module builds a class for logistic regression problems.
 We compute the solution by directly maximizing the log-likelihood.
 We use an existing software implementation to globally maximize the
@@ -277,6 +284,7 @@ This requires negating the log likelihood as we use minimization.</p>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+</div>
 </div>
 
 

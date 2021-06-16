@@ -1,6 +1,4 @@
-'''Docstring for logistic.py module.
-
-This module builds a class for logistic regression problems.
+'''This module builds a class for logistic regression problems.
 We compute the solution by directly maximizing the log-likelihood.
 We use an existing software implementation to globally maximize the 
 likelihood function: BFGS, available in 

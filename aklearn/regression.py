@@ -1,6 +1,5 @@
-'''Docstring for regression.py module.
-
-This module builds a class for regression problems, such as least squares
+'''
+This module builds a a base class for regression problems, such as least squares
 or k-nearest neighbors regressions. The preprocessing (if applicable)
 is done at this class level.
 

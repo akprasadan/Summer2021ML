@@ -1,6 +1,4 @@
-'''Docstring for the evaluation_metrics.py module.
-
-This module provides functionality to evaluate the 
+'''This module provides functionality to evaluate the 
 performance of a machine learning model.
 Each method compares the predicted data to true data.
 
