@@ -4,6 +4,8 @@ My goal for the Summer of 2021 is to upgrade my Python and data science skills, 
 
 To do so, I will create a unified framework (similar to Tidymodels in R or Sklearn in Python) to perform ML in Python. I will begin with base classes for Classification, Regression, Clustering, for instance, from which I will derive classes for each algorithm of interest. I will provide functionality for train/test and cross-validation splitting, model tuning, model evaluation (with a variety of metrics), and automatically generated plots.
 
+You can find all the documentation [here](https://akprasadan.github.io/Summer2021ML/index.html), produced using Sphinx and Read the Docs.
+
 ## What's Completed so far?
 
 - Able to use basics of Git/Github 
