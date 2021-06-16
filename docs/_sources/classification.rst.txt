@@ -1,0 +1,27 @@
+Classification Algorithms
+========================================
+
+.. toctree::
+   :maxdepth: 2
+
+.. automodule:: classification
+   :members:
+
+.. autoclass:: classification.Classification
+   :members:
+   :undoc-members:
+
+.. automodule:: logisticreg
+   :members:
+
+.. autoclass:: logisticreg.Logistic
+   :members:
+   :undoc-members:
+
+
+
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
