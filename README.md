@@ -14,14 +14,13 @@ To do so, I will create a unified framework (similar to Tidymodels in R or Sklea
 
 I will store the main functionality in generalclassifier. The other folders (knn, kmeans) will eventually be merged into it as I adapt them to inherit from my base classes.
 
- - generalclassifier
+ - aklearn
      - regression 
-          - linearreg.py
-          - \_\_init\_\_.py
+     - classification.py
+     - linearreg.py
+     - logisticreg.py
      - evaluation_metrics.py 
-     - main.py
      - norms.py
-     - requirements.txt
      - preprocessing.py
      - \_\_init\_\_.py
  - k_means_project
