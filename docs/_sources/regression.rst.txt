@@ -1,6 +1,9 @@
 Regression Implementation
 ========================================
 
+Base Regression
+------------------
+
 .. toctree::
    :maxdepth: 2
 
@@ -10,6 +13,9 @@ Regression Implementation
 .. autoclass:: regression.Regression
    :members:
    :undoc-members:
+
+Linear Regression
+------------------
 
 .. automodule:: linearreg
    :members:
