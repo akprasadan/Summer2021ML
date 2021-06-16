@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>preprocessing &mdash; Summer2021ML 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Summer2021ML
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Summer2021ML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>preprocessing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;This module provides data processing and preparation tools.</span>
+
+<span class="sd">    - Scaling/centering data</span>
+<span class="sd">    - Generating Test/Train splits</span>
+<span class="sd">    - Generating Cross validation Folds (In Progress)</span>
+<span class="sd">    - Generating Bootstrap resamples (In Progress)</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+
+<div class="viewcode-block" id="scale_and_center"><a class="viewcode-back" href="../preprocessing.html#preprocessing.scale_and_center">[docs]</a><span class="k">def</span> <span class="nf">scale_and_center</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Center and scale each individual column of the feature matrix </span>
+<span class="sd">    to have 0 mean and unit variance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    feature_matrix : numpy.ndarray</span>
+<span class="sd">        Design matrix of explanatory variables.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    feature_matrix : numpy.ndarray</span>
+<span class="sd">        Design matrix of scaled and centered explanatory variables.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="n">feature_matrix</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols</span><span class="p">):</span>
+        <span class="n">column_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_rows</span><span class="p">)</span>
+        <span class="n">column_std_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
+        <span class="n">centered_column</span> <span class="o">=</span> <span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">-</span> <span class="n">column_mean</span>
+        <span class="n">centered_and_scaled_column</span> <span class="o">=</span> <span class="n">centered_column</span> <span class="o">/</span> <span class="n">column_std_dev</span>
+
+        <span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">centered_and_scaled_column</span>
+            
+    <span class="k">return</span> <span class="n">feature_matrix</span></div>
+
+
+<div class="viewcode-block" id="train_test_split"><a class="viewcode-back" href="../preprocessing.html#preprocessing.train_test_split">[docs]</a><span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Split the data into training and testing sets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    features : numpy.ndarray</span>
+<span class="sd">        Design matrix of explanatory variables</span>
+<span class="sd">    output : numpy.ndarray</span>
+<span class="sd">        The given response variables</span>
+<span class="sd">    split_proportion : float</span>
+<span class="sd">        The proportion of data used for training. Default is 25%.</span>
+<span class="sd">        Must lie between 0 and 1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    split_values : namedTuple</span>
+<span class="sd">        Stores the following values: [&#39;sample_size&#39;, &#39;train_size&#39;, </span>
+<span class="sd">                         &#39;test_size&#39;,&#39;train_rows&#39;, &#39;test_rows&#39;, </span>
+<span class="sd">                         &#39;train_features&#39;, &#39;test_features&#39;, </span>
+<span class="sd">                         &#39;train_output&#39;, &#39;test_output&#39;]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    I used [2]_ to figure out how to randomly choose rows of an array.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [2] https://stackoverflow.com/a/14262743</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">sample_size</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">train_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">sample_size</span> <span class="o">*</span> <span class="n">split_proportion</span><span class="p">)</span>
+    <span class="n">test_size</span> <span class="o">=</span> <span class="n">sample_size</span> <span class="o">-</span> <span class="n">train_size</span>
+    <span class="c1">#</span>
+    <span class="n">train_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">train_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">train_size</span><span class="p">,</span> 
+                                  <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">test_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">sample_size</span><span class="p">),</span> <span class="n">train_rows</span><span class="p">)</span>
+    <span class="n">train_features</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="n">train_rows</span><span class="p">]</span>
+    <span class="n">test_features</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="n">test_rows</span><span class="p">]</span>
+    <span class="n">train_output</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="n">train_rows</span><span class="p">]</span>
+    <span class="n">test_output</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="n">test_rows</span><span class="p">]</span>
+
+    <span class="n">split_information</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sample_size&#39;</span><span class="p">,</span> <span class="s1">&#39;train_size&#39;</span><span class="p">,</span> <span class="s1">&#39;test_size&#39;</span><span class="p">,</span> 
+                         <span class="s1">&#39;train_rows&#39;</span><span class="p">,</span> <span class="s1">&#39;test_rows&#39;</span><span class="p">,</span> <span class="s1">&#39;train_features&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;test_features&#39;</span><span class="p">,</span> <span class="s1">&#39;train_output&#39;</span><span class="p">,</span> <span class="s1">&#39;test_output&#39;</span><span class="p">]</span>
+
+    <span class="n">TrainTestSplit</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;TrainTestSplit&#39;</span><span class="p">,</span> <span class="n">split_information</span><span class="p">)</span>
+
+    <span class="n">split_values</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">test_size</span><span class="p">,</span> 
+                                  <span class="n">train_rows</span><span class="p">,</span> <span class="n">test_rows</span><span class="p">,</span> 
+                                  <span class="n">train_features</span><span class="p">,</span> <span class="n">test_features</span><span class="p">,</span> 
+                                  <span class="n">train_output</span><span class="p">,</span> <span class="n">test_output</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">split_values</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Akshay Prasadan.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

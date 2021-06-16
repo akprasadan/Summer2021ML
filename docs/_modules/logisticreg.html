@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>logisticreg &mdash; Summer2021ML 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Summer2021ML
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Summer2021ML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>logisticreg</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for logisticreg</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;This module builds a class for logistic regression problems.</span>
+<span class="sd">We compute the solution by directly maximizing the log-likelihood.</span>
+<span class="sd">We use an existing software implementation to globally maximize the </span>
+<span class="sd">likelihood function: BFGS, available in </span>
+<span class="sd">scipy.optimize.minimize(method = &#39;BFGS)</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize.optimize</span> <span class="kn">import</span> <span class="n">_minimize_bfgs</span>
+<span class="kn">from</span> <span class="nn">classification</span> <span class="kn">import</span> <span class="n">Classification</span>
+<span class="kn">from</span> <span class="nn">evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+
+<div class="viewcode-block" id="Logistic"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic">[docs]</a><span class="k">class</span> <span class="nc">Logistic</span><span class="p">(</span><span class="n">Classification</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+                 <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
+                         <span class="n">standardized</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span> 
+                                                  <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span> 
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span> 
+                                                <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Logistic.loglikelihood"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.loglikelihood">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">loglikelihood</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute empirical log likelihood for each coefficient.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            Design matrix of explanatory variables</span>
+<span class="sd">        labels : numpy.ndarray</span>
+<span class="sd">            The given output labels</span>
+<span class="sd">        coefficients : numpy.ndarray</span>
+<span class="sd">            Vector of coefficients for logistic regression.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        loglikelihood : float</span>
+<span class="sd">            The value of the log likelihood with given data and coefficient.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficient</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">features</span> <span class="o">*</span> <span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">log_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dot_prods</span><span class="p">)))</span>
+        <span class="n">summands</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">log_h</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">log_h</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">labels</span><span class="p">)</span>
+        <span class="n">logliklihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">summands</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">loglikelihood</span></div>
+
+<div class="viewcode-block" id="Logistic.mle_finder"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.mle_finder">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mle_finder</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Find the MLE for a logistic model; return the coefficient.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            Design matrix of explanatory variables</span>
+<span class="sd">        labels : numpy.ndarray</span>
+<span class="sd">            The given output labels</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        mle : float</span>
+<span class="sd">            The coefficient that solves the logistic regression problem for </span>
+<span class="sd">            the given data.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        We use the BFGS algorithm as implemented in scipy to maximize</span>
+<span class="sd">        the log-likelihood.</span>
+<span class="sd">        This requires negating the log likelihood as we use minimization.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        scipy.optimize.minimize</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">coefficient</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">Logistic</span><span class="o">.</span><span class="n">loglikelihood</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> 
+                                            <span class="n">coefficient</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">optimum</span> <span class="o">=</span> <span class="n">_minimize_bfgs</span><span class="p">(</span><span class="n">negative_log_likelihood</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+        <span class="n">mle</span> <span class="o">=</span> <span class="n">optimum</span><span class="o">.</span><span class="n">x</span>  <span class="c1"># Obtain argmin</span>
+        <span class="k">return</span> <span class="n">mle</span></div>
+
+<div class="viewcode-block" id="Logistic.fit"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate the coefficient estimate on the training data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">mle_finder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">coefficients</span></div>
+
+<div class="viewcode-block" id="Logistic.predict"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute estimated output P(Y =1|X=x, beta_hat) </span>
+<span class="sd">           of logistic regression.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            Design matrix of explanatory variables.</span>
+<span class="sd">        coefficients : numpy.ndarray</span>
+<span class="sd">            Vector of coefficients for logistic regression solution.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        p : numpy.ndarray</span>
+<span class="sd">            Predicted output (probability) for each observation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">features</span> <span class="o">*</span> <span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dot_prods</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">p</span></div></div>
+    
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Akshay Prasadan.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
