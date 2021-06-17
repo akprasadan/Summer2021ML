@@ -4,13 +4,14 @@
 import numpy as np
 from scipy.stats import mode
 from classification import Classification
-from evaluation_metrics import evaluate_accuracy, confusion_matrix
+from evaluation_metrics import evaluate_accuracy, confusion_matrix, evaluate_regression_error
 from numba import jit
 
 class KNNClassify(Classification):
     '''
     A class used to represent a k-nearest neighbor classifier.
-    We only list non-inherited attributes.
+    We only list non-inherited attributes. We include regression
+    functionality as well.
 
     Parameters
     -----------
@@ -27,17 +28,27 @@ class KNNClassify(Classification):
         True by default.
     k : int
         The number of neighbors to use in the algorithm.
+    classify : bool
+        Whether we are using this class for classification or regression.
+        True by default. We will use instants with classify == False
+        for a KNNRegression class.
     
     Attributes
     ----------
     k : int
         The number of neighbors to use in the algorithm.
     test_predictions : numpy.ndarray
-        The labels predicted for the given test data.
+        The labels predicted for the given test data (for classification).
     test_accuracy : float
-        The accuracy of the classifier evaluated on test data.
+        The accuracy of the classifier evaluated on test data 
+        (for classification).
     test_confusion : numpy.ndarray
-        A confusion matrix of the classifier evaluated on test data.
+        A confusion matrix of the classifier evaluated on test data 
+        (for classification).
+    test_predictions_reg : numpy.ndarray
+        The predicted output on test data (for regression).
+    test_error : float
+        The test MSE of model fit using training data (for regression).
 
     Methods
     --------
@@ -45,23 +56,40 @@ class KNNClassify(Classification):
         Identify the k-nearest neighbors.
     classify_point
         Classify a datapoint given its k-nearest neighbors.
-    predict
+    predict_class
         Classify many test datapoints using some training data.
+    predict_estimate
+        Estimate the output value of a test datapoint using some training data.
+
+    See Also
+    ---------
+    knnregression.KNNRegression : Class for a regression k-nearest neighbor model.
     '''
+
     def __init__(self, features, output, split_proportion,
-                 number_labels=None, standardized=True, k=3):
+                 number_labels=None, standardized=True, k=3, 
+                 classify=True):
         super().__init__(features, output, split_proportion, number_labels, 
                          standardized)
         self.k = k
-        self.test_predictions = KNNClassify.predict(self.train_features,
-                                                    self.train_output,
-                                                    self.test_features,
-                                                    self.k)
-        self.test_accuracy = evaluate_accuracy(self.test_predictions, 
+        if classify == True:
+            self.test_predictions = KNNClassify.predict_class(self.train_features,
+                                                        self.train_output,
+                                                        self.test_features,
+                                                        self.k)
+            self.test_accuracy = evaluate_accuracy(self.test_predictions, 
                                                self.test_output)
-        self.test_confusion = confusion_matrix(self.number_labels, 
+            self.test_confusion = confusion_matrix(self.number_labels, 
                                                self.test_predictions, 
                                                self.test_output)
+        else:
+            self.test_predictions_reg = KNNClassify.predict_value(self.train_features,
+                                                        self.train_output,
+                                                        self.test_features,
+                                                        self.k)
+            self.test_error = evaluate_regression_error(self.test_predictions_reg, 
+                                                        self.test_output)
+
     @staticmethod
     @jit(nopython=True)
     def k_neighbors_idx(feature_matrix, current_location, k):
@@ -125,6 +153,11 @@ class KNNClassify(Classification):
         Notes
         ------
         We choose the smallest label by default.
+
+        See Also
+        ---------
+        KNNClassify.estimate_point : Find average output value among neighbors instead 
+                                     of most common label (for regression).
         '''
 
         k_nearest_idx = KNNClassify.k_neighbors_idx(feature_matrix, current_location, k)
@@ -133,8 +166,41 @@ class KNNClassify(Classification):
 
         return label_mode
 
+    @staticmethod
     @jit(nopython=True)
-    def predict(train_features, train_output, test_features, k):
+    def estimate_point(feature_matrix, output, current_location, k):
+        '''Estimate (for a regression context) a new datapoint based on its k neighbors.
+        
+        Parameters
+        -----------
+        feature_matrix : numpy.ndarray 
+            Design matrix of explanatory variables.
+        output : numpy.ndarray
+            Labels corresponding to feature_matrix.
+        current_location : numpy.ndarray
+            Point we would like to classify, using its neighbors.
+        k : int
+            The number of neighbors to use.
+
+        Returns
+        --------
+        output_estimate : int
+            The predicted output value of the current location.
+
+        See Also
+        ---------
+        KNNClassify.classify_point : Find most common label among neighbors instead of
+                                     average output value (for classification).
+        '''
+
+        k_nearest_idx = KNNClassify.k_neighbors_idx(feature_matrix, current_location, k)
+        output_estimate = np.mean(output[k_nearest_idx, :])
+
+        return output_estimate
+
+
+    @jit(nopython=True)
+    def predict_class(train_features, train_output, test_features, k):
         '''Classify many new datapoints based on their k neighbors.
         
         Parameters
@@ -152,6 +218,10 @@ class KNNClassify(Classification):
         --------
         test_labels : numpy.ndarray
             The predicted labels for each test datapoint.
+        See Also
+        ---------
+        KNNClassify.predict_value : Predict output value instead 
+                                     of label (for regression).
         '''
         test_sample_size = test_features.shape[0]
         test_labels = np.zeros((test_sample_size, 1))
@@ -162,6 +232,41 @@ class KNNClassify(Classification):
                                                            test_features[i, :],
                                                            k)
         return test_labels
+
+    @jit(nopython=True)
+    def predict_value(train_features, train_output, test_features, k):
+        '''Classify many new datapoints based on their k neighbors.
+        
+        Parameters
+        -----------
+        train_features : numpy.ndarray 
+            Design matrix of explanatory variables.
+        train_output : numpy.ndarray
+            Labels corresponding to feature_matrix.
+        test_features : numpy.ndarray
+            Points we would like to classify, using their neighbors.
+        k : int
+            The number of neighbors to use.
+
+        Returns
+        --------
+        test_estimates : numpy.ndarray
+            The predicted output for each test datapoint.
+
+        See Also
+        ---------
+        KNNClassify.predict_class : Predict label instead of output 
+                                    value (for classification).
+        '''
+        test_sample_size = test_features.shape[0]
+        test_estimates = np.zeros((test_sample_size, 1))
+
+        for row in range(test_sample_size):
+            test_estimates[row] = KNNClassify.estimate_point(train_features, 
+                                                           train_output,
+                                                           test_features[i, :],
+                                                           k)
+        return test_estimates
         
 
 

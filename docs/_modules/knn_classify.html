@@ -13,8 +13,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,7 +29,6 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
@@ -162,13 +159,14 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mode</span>
 <span class="kn">from</span> <span class="nn">classification</span> <span class="kn">import</span> <span class="n">Classification</span>
-<span class="kn">from</span> <span class="nn">evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span> <span class="nn">evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">evaluate_regression_error</span>
 <span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
 
 <div class="viewcode-block" id="KNNClassify"><a class="viewcode-back" href="../classification.html#knn_classify.KNNClassify">[docs]</a><span class="k">class</span> <span class="nc">KNNClassify</span><span class="p">(</span><span class="n">Classification</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A class used to represent a k-nearest neighbor classifier.</span>
-<span class="sd">    We only list non-inherited attributes.</span>
+<span class="sd">    We only list non-inherited attributes. We include regression</span>
+<span class="sd">    functionality as well.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
@@ -185,17 +183,27 @@
 <span class="sd">        True by default.</span>
 <span class="sd">    k : int</span>
 <span class="sd">        The number of neighbors to use in the algorithm.</span>
+<span class="sd">    classify : bool</span>
+<span class="sd">        Whether we are using this class for classification or regression.</span>
+<span class="sd">        True by default. We will use instants with classify == False</span>
+<span class="sd">        for a KNNRegression class.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    k : int</span>
 <span class="sd">        The number of neighbors to use in the algorithm.</span>
 <span class="sd">    test_predictions : numpy.ndarray</span>
-<span class="sd">        The labels predicted for the given test data.</span>
+<span class="sd">        The labels predicted for the given test data (for classification).</span>
 <span class="sd">    test_accuracy : float</span>
-<span class="sd">        The accuracy of the classifier evaluated on test data.</span>
+<span class="sd">        The accuracy of the classifier evaluated on test data </span>
+<span class="sd">        (for classification).</span>
 <span class="sd">    test_confusion : numpy.ndarray</span>
-<span class="sd">        A confusion matrix of the classifier evaluated on test data.</span>
+<span class="sd">        A confusion matrix of the classifier evaluated on test data </span>
+<span class="sd">        (for classification).</span>
+<span class="sd">    test_predictions_reg : numpy.ndarray</span>
+<span class="sd">        The predicted output on test data (for regression).</span>
+<span class="sd">    test_error : float</span>
+<span class="sd">        The test MSE of model fit using training data (for regression).</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    --------</span>
@@ -203,23 +211,40 @@
 <span class="sd">        Identify the k-nearest neighbors.</span>
 <span class="sd">    classify_point</span>
 <span class="sd">        Classify a datapoint given its k-nearest neighbors.</span>
-<span class="sd">    predict</span>
+<span class="sd">    predict_class</span>
 <span class="sd">        Classify many test datapoints using some training data.</span>
+<span class="sd">    predict_estimate</span>
+<span class="sd">        Estimate the output value of a test datapoint using some training data.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    ---------</span>
+<span class="sd">    knnregression.KNNRegression : Class for a regression k-nearest neighbor model.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span>
-                 <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+                 <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                 <span class="n">classify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
                          <span class="n">standardized</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
-                                                    <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>
-                                                    <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span>
-                                                    <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
+        <span class="k">if</span> <span class="n">classify</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">predict_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions_reg</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">predict_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_error</span> <span class="o">=</span> <span class="n">evaluate_regression_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions_reg</span><span class="p">,</span> 
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
+
 <div class="viewcode-block" id="KNNClassify.k_neighbors_idx"><a class="viewcode-back" href="../classification.html#knn_classify.KNNClassify.k_neighbors_idx">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">k_neighbors_idx</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">current_location</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
@@ -283,6 +308,11 @@
 <span class="sd">        Notes</span>
 <span class="sd">        ------</span>
 <span class="sd">        We choose the smallest label by default.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        ---------</span>
+<span class="sd">        KNNClassify.estimate_point : Find average output value among neighbors instead </span>
+<span class="sd">                                     of most common label (for regression).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="n">k_nearest_idx</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">k_neighbors_idx</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">current_location</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
@@ -291,8 +321,41 @@
 
         <span class="k">return</span> <span class="n">label_mode</span></div>
 
-<div class="viewcode-block" id="KNNClassify.predict"><a class="viewcode-back" href="../classification.html#knn_classify.KNNClassify.predict">[docs]</a>    <span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">train_features</span><span class="p">,</span> <span class="n">train_output</span><span class="p">,</span> <span class="n">test_features</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<div class="viewcode-block" id="KNNClassify.estimate_point"><a class="viewcode-back" href="../classification.html#knn_classify.KNNClassify.estimate_point">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">estimate_point</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">current_location</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Estimate (for a regression context) a new datapoint based on its k neighbors.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        feature_matrix : numpy.ndarray </span>
+<span class="sd">            Design matrix of explanatory variables.</span>
+<span class="sd">        output : numpy.ndarray</span>
+<span class="sd">            Labels corresponding to feature_matrix.</span>
+<span class="sd">        current_location : numpy.ndarray</span>
+<span class="sd">            Point we would like to classify, using its neighbors.</span>
+<span class="sd">        k : int</span>
+<span class="sd">            The number of neighbors to use.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        output_estimate : int</span>
+<span class="sd">            The predicted output value of the current location.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        ---------</span>
+<span class="sd">        KNNClassify.classify_point : Find most common label among neighbors instead of</span>
+<span class="sd">                                     average output value (for classification).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">k_nearest_idx</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">k_neighbors_idx</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">current_location</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">output_estimate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">k_nearest_idx</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="k">return</span> <span class="n">output_estimate</span></div>
+
+
+<div class="viewcode-block" id="KNNClassify.predict_class"><a class="viewcode-back" href="../classification.html#knn_classify.KNNClassify.predict_class">[docs]</a>    <span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">predict_class</span><span class="p">(</span><span class="n">train_features</span><span class="p">,</span> <span class="n">train_output</span><span class="p">,</span> <span class="n">test_features</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Classify many new datapoints based on their k neighbors.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -310,6 +373,10 @@
 <span class="sd">        --------</span>
 <span class="sd">        test_labels : numpy.ndarray</span>
 <span class="sd">            The predicted labels for each test datapoint.</span>
+<span class="sd">        See Also</span>
+<span class="sd">        ---------</span>
+<span class="sd">        KNNClassify.predict_value : Predict output value instead </span>
+<span class="sd">                                     of label (for regression).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">test_sample_size</span> <span class="o">=</span> <span class="n">test_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">test_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">test_sample_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -319,7 +386,42 @@
                                                            <span class="n">train_output</span><span class="p">,</span>
                                                            <span class="n">test_features</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span>
                                                            <span class="n">k</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">test_labels</span></div></div>
+        <span class="k">return</span> <span class="n">test_labels</span></div>
+
+<div class="viewcode-block" id="KNNClassify.predict_value"><a class="viewcode-back" href="../classification.html#knn_classify.KNNClassify.predict_value">[docs]</a>    <span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">predict_value</span><span class="p">(</span><span class="n">train_features</span><span class="p">,</span> <span class="n">train_output</span><span class="p">,</span> <span class="n">test_features</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Classify many new datapoints based on their k neighbors.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        train_features : numpy.ndarray </span>
+<span class="sd">            Design matrix of explanatory variables.</span>
+<span class="sd">        train_output : numpy.ndarray</span>
+<span class="sd">            Labels corresponding to feature_matrix.</span>
+<span class="sd">        test_features : numpy.ndarray</span>
+<span class="sd">            Points we would like to classify, using their neighbors.</span>
+<span class="sd">        k : int</span>
+<span class="sd">            The number of neighbors to use.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        test_estimates : numpy.ndarray</span>
+<span class="sd">            The predicted output for each test datapoint.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        ---------</span>
+<span class="sd">        KNNClassify.predict_class : Predict label instead of output </span>
+<span class="sd">                                    value (for classification).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">test_sample_size</span> <span class="o">=</span> <span class="n">test_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">test_estimates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">test_sample_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">test_sample_size</span><span class="p">):</span>
+            <span class="n">test_estimates</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">estimate_point</span><span class="p">(</span><span class="n">train_features</span><span class="p">,</span> 
+                                                           <span class="n">train_output</span><span class="p">,</span>
+                                                           <span class="n">test_features</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span>
+                                                           <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">test_estimates</span></div></div>
         
 
 

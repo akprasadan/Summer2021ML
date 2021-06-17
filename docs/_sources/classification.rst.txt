@@ -16,6 +16,7 @@ Base Classifier
 
 Logistic Classifier
 ------------------------------------
+
 .. automodule:: logisticreg
    :members:
 
@@ -25,6 +26,7 @@ Logistic Classifier
 
 K-Nearest Neighbor Classifier
 ------------------------------------
+
 .. automodule:: knn_classify
    :members:
 
