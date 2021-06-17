@@ -160,14 +160,13 @@ class Poisson(Regression):
         In a Poisson model, we assume Y is Poisson, and that
         log E[Y|x] = beta^T x. 
 
-        Here we return our estimate of E[Y|x].
-        for a test data point x. This quantity reflects the mean 
-        (and variance of the) count we might expect of the response,
-        conditional on the observed features.
+        Here we return our estimate of E[Y|x] for a test data point x. 
+        This quantity reflects the mean (and variance of the) count we 
+        might expect of the response, conditional on the observed features.
 
         '''
 
-        coeff_matrix = np.tile(coefficient, (features.shape[0], 1))
+        coeff_matrix = np.tile(coefficients, (features.shape[0], 1))
         dot_prods = np.sum(features * coeff_matrix, axis=1)
         exp_dot_prods = np.exp(dot_prods)
         
