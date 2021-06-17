@@ -41,12 +41,6 @@ class Poisson(Regression):
     train_error : float
         The error of model on test data (default is MSE).
 
-    Methods
-    --------
-    fit 
-        Fit the Poisson model to training data.
-    predict
-        Estimate output values on new test data using fitted coefficients.
     '''
     def __init__(self, features, output, split_proportion, 
                  standardized=True):

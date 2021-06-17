@@ -58,16 +58,6 @@ class Logistic(Classification):
     test_confusion : numpy.ndarray
         A confusion matrix of the classifier evaluated on test data.
 
-    Methods
-    --------
-    loglikelihood
-        Compute empirical log likelihood for a given coefficient.
-    mle_finder
-        Find the coefficient maximizing the empirical log likelihood.
-    fit 
-        Fit the logistic classifier to the training data.
-    predict
-        Estimate probabilities of label 1 on new test data using a fitted coefficient.
     '''
 
     def __init__(self, features, output, split_proportion, threshold=0.5, 

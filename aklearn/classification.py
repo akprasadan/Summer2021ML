@@ -52,12 +52,6 @@ class Classification:
         The number of dimensions of the data, or columns of design matrix.
         Does not include output.
 
-    Methods
-    -------
-    standardize 
-        Center and scale the train and test data (separately) 
-        to have mean 0 and variance 1.
-
     """
     def __init__(self, features, output, split_proportion, number_labels=None, 
                  standardized=True):

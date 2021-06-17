@@ -301,13 +301,6 @@ Does not include output.</p>
 <dl class="py method">
 <dt id="regression.Regression.standardize">
 <code class="sig-name descname"><span class="pre">standardize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.Regression.standardize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Center and scale the train and test data (separately)
-to have mean 0 and variance 1.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id0">
-<code class="sig-name descname"><span class="pre">standardize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Separately scale/center the train and test data so each feature
 (column of observations) has 0 mean and unit variance.</p>
 </dd></dl>
@@ -315,8 +308,8 @@ to have mean 0 and variance 1.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="id1">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">Regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dt id="id0">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">Regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a regression algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -330,8 +323,8 @@ True by default.</p></li>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="id2">
-<code class="sig-name descname"><span class="pre">sample_size</span></code><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dt id="id1">
+<code class="sig-name descname"><span class="pre">sample_size</span></code><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd><p>The sample size of all given data (train and test).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -341,8 +334,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id3">
-<code class="sig-name descname"><span class="pre">train_size</span></code><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dt id="id2">
+<code class="sig-name descname"><span class="pre">train_size</span></code><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
 <dd><p>The sample size of the training data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -352,8 +345,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id4">
-<code class="sig-name descname"><span class="pre">test_size</span></code><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dt id="id3">
+<code class="sig-name descname"><span class="pre">test_size</span></code><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
 <dd><p>The sample size of the test data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -363,8 +356,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id5">
-<code class="sig-name descname"><span class="pre">train_rows</span></code><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dt id="id4">
+<code class="sig-name descname"><span class="pre">train_rows</span></code><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
 <dd><p>The list of indices for the train split.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -374,8 +367,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id6">
-<code class="sig-name descname"><span class="pre">test_rows</span></code><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dt id="id5">
+<code class="sig-name descname"><span class="pre">test_rows</span></code><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
 <dd><p>The list of indices for the test split.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -385,8 +378,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id7">
-<code class="sig-name descname"><span class="pre">train_features</span></code><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dt id="id6">
+<code class="sig-name descname"><span class="pre">train_features</span></code><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
 <dd><p>The train design matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -396,8 +389,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id8">
-<code class="sig-name descname"><span class="pre">test_features</span></code><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dt id="id7">
+<code class="sig-name descname"><span class="pre">test_features</span></code><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
 <dd><p>The test design matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -407,8 +400,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id9">
-<code class="sig-name descname"><span class="pre">train_output</span></code><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dt id="id8">
+<code class="sig-name descname"><span class="pre">train_output</span></code><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
 <dd><p>The train output data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -418,8 +411,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id10">
-<code class="sig-name descname"><span class="pre">test_output</span></code><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dt id="id9">
+<code class="sig-name descname"><span class="pre">test_output</span></code><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
 <dd><p>The test output data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -429,8 +422,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id11">
-<code class="sig-name descname"><span class="pre">dimension</span></code><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dt id="id10">
+<code class="sig-name descname"><span class="pre">dimension</span></code><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of dimensions of the data, or columns of design matrix.
 Does not include output.</p>
 <dl class="field-list simple">
@@ -441,15 +434,8 @@ Does not include output.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id12">
-<code class="sig-name descname"><span class="pre">standardize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
-<dd><p>Center and scale the train and test data (separately)
-to have mean 0 and variance 1.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id13">
-<code class="sig-name descname"><span class="pre">standardize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
+<dt id="id11">
+<code class="sig-name descname"><span class="pre">standardize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
 <dd><p>Separately scale/center the train and test data so each feature
 (column of observations) has 0 mean and unit variance.</p>
 </dd></dl>
@@ -520,8 +506,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id14">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dt id="id12">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on test data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -533,18 +519,6 @@ True by default.</p></li>
 <dl class="py method">
 <dt id="linearreg.Linear.fit">
 <code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the linear model to training data.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="linearreg.Linear.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate output values on new test data using fitted coefficients.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id15">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the coefficient solving the least squares problem
 using training data.</p>
 <dl class="field-list simple">
@@ -558,8 +532,8 @@ using training data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id16">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Permalink to this definition">¶</a></dt>
+<dt id="linearreg.Linear.predict">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute estimated output y = X*beta_hat of linear regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -580,8 +554,8 @@ using training data.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="id17">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">linearreg.</span></code><code class="sig-name descname"><span class="pre">Linear</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
+<dt id="id13">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">linearreg.</span></code><code class="sig-name descname"><span class="pre">Linear</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a linear regression classifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -595,8 +569,8 @@ True by default.</p></li>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="id18">
-<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
+<dt id="id14">
+<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
 <dd><p>The coefficients in the logistic regression model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -606,8 +580,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id19">
-<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
+<dt id="id15">
+<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id15" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predicted output values for the training data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -617,8 +591,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id20">
-<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
+<dt id="id16">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id16" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predicted output values for the test data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -628,8 +602,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id21">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
+<dt id="id17">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on training data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -639,8 +613,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id22">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dt id="id18">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on test data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -650,20 +624,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id23">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the linear model to training data.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id24">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate output values on new test data using fitted coefficients.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id25">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dt id="id19">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the coefficient solving the least squares problem
 using training data.</p>
 <dl class="field-list simple">
@@ -677,8 +639,8 @@ using training data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id26">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
+<dt id="id20">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute estimated output y = X*beta_hat of linear regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -723,8 +685,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt id="id27">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">knnreg.</span></code><code class="sig-name descname"><span class="pre">KNNRegression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knnreg.html#KNNRegression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
+<dt id="id21">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">knnreg.</span></code><code class="sig-name descname"><span class="pre">KNNRegression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knnreg.html#KNNRegression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a k-nearest neighbor regressor.
 The regression methods and attributes can be found in the
 KNNClassify class.</p>
@@ -810,8 +772,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id28">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id28" title="Permalink to this definition">¶</a></dt>
+<dt id="id22">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on test data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -823,18 +785,6 @@ True by default.</p></li>
 <dl class="py method">
 <dt id="poissonreg.Poisson.fit">
 <code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#poissonreg.Poisson.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the Poisson model to training data.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="poissonreg.Poisson.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#poissonreg.Poisson.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate output values on new test data using fitted coefficients.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id29">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the coefficient estimate on the training data.</p>
 </dd></dl>
 
@@ -889,8 +839,8 @@ This requires negating the log likelihood as we use minimization.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id30">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
+<dt id="poissonreg.Poisson.predict">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#poissonreg.Poisson.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute estimated means of Poisson regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -917,8 +867,8 @@ might expect of the response, conditional on the observed features.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="id31">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">poissonreg.</span></code><code class="sig-name descname"><span class="pre">Poisson</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id31" title="Permalink to this definition">¶</a></dt>
+<dt id="id23">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">poissonreg.</span></code><code class="sig-name descname"><span class="pre">Poisson</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a Poisson regression model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -932,8 +882,8 @@ True by default.</p></li>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="id32">
-<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id32" title="Permalink to this definition">¶</a></dt>
+<dt id="id24">
+<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
 <dd><p>The coefficients in the Poisson regression model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -943,8 +893,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id33">
-<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id33" title="Permalink to this definition">¶</a></dt>
+<dt id="id25">
+<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predicted output values for the training data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -954,8 +904,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id34">
-<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id34" title="Permalink to this definition">¶</a></dt>
+<dt id="id26">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predicted output values for the test data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -965,8 +915,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id35">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id35" title="Permalink to this definition">¶</a></dt>
+<dt id="id27">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on training data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -976,8 +926,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id36">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id36" title="Permalink to this definition">¶</a></dt>
+<dt id="id28">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id28" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on test data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -987,26 +937,14 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id37">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id37" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the Poisson model to training data.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id38">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id38" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate output values on new test data using fitted coefficients.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="id39">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id39" title="Permalink to this definition">¶</a></dt>
+<dt id="id29">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the coefficient estimate on the training data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id40">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">loglikelihood</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id40" title="Permalink to this definition">¶</a></dt>
+<dt id="id30">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">loglikelihood</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute empirical log likelihood for each coefficient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1026,8 +964,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id41">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">mle_finder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.mle_finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id41" title="Permalink to this definition">¶</a></dt>
+<dt id="id31">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">mle_finder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.mle_finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id31" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the MLE for a Poisson regression model; return the coefficient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1055,8 +993,8 @@ This requires negating the log likelihood as we use minimization.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id42">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id42" title="Permalink to this definition">¶</a></dt>
+<dt id="id32">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id32" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute estimated means of Poisson regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

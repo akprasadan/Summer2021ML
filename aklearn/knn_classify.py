@@ -50,16 +50,6 @@ class KNNClassify(Classification):
     test_error : float
         The test MSE of model fit using training data (for regression).
 
-    Methods
-    --------
-    k_neighbors_idx
-        Identify the k-nearest neighbors.
-    classify_point
-        Classify a datapoint given its k-nearest neighbors.
-    predict_class
-        Classify many test datapoints using some training data.
-    predict_estimate
-        Estimate the output value of a test datapoint using some training data.
 
     See Also
     ---------

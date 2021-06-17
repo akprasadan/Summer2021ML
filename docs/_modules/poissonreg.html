@@ -196,12 +196,6 @@
 <span class="sd">    train_error : float</span>
 <span class="sd">        The error of model on test data (default is MSE).</span>
 
-<span class="sd">    Methods</span>
-<span class="sd">    --------</span>
-<span class="sd">    fit </span>
-<span class="sd">        Fit the Poisson model to training data.</span>
-<span class="sd">    predict</span>
-<span class="sd">        Estimate output values on new test data using fitted coefficients.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
                  <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -315,14 +309,13 @@
 <span class="sd">        In a Poisson model, we assume Y is Poisson, and that</span>
 <span class="sd">        log E[Y|x] = beta^T x. </span>
 
-<span class="sd">        Here we return our estimate of E[Y|x].</span>
-<span class="sd">        for a test data point x. This quantity reflects the mean </span>
-<span class="sd">        (and variance of the) count we might expect of the response,</span>
-<span class="sd">        conditional on the observed features.</span>
+<span class="sd">        Here we return our estimate of E[Y|x] for a test data point x. </span>
+<span class="sd">        This quantity reflects the mean (and variance of the) count we </span>
+<span class="sd">        might expect of the response, conditional on the observed features.</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
 
-        <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficient</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">features</span> <span class="o">*</span> <span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">exp_dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">dot_prods</span><span class="p">)</span>
         
