@@ -24,6 +24,15 @@ Linear Regression
    :members:
    :undoc-members:
 
+K-Nearest Neighbor Regression
+------------------------------
+
+.. automodule:: knnregression
+   :members:
+
+.. autoclass:: knnregression.KNNRegression
+   :members:
+   :undoc-members:
 
 
 ==================
