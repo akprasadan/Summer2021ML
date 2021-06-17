@@ -310,6 +310,16 @@
 <span class="sd">        exp_dot_prods : numpy.ndarray</span>
 <span class="sd">            Predicted mean of Poisson distribution</span>
 
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        In a Poisson model, we assume Y is Poisson, and that</span>
+<span class="sd">        log E[Y|x] = beta^T x. </span>
+
+<span class="sd">        Here we return our estimate of E[Y|x].</span>
+<span class="sd">        for a test data point x. This quantity reflects the mean </span>
+<span class="sd">        (and variance of the) count we might expect of the response,</span>
+<span class="sd">        conditional on the observed features.</span>
+
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficient</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
