@@ -27,13 +27,22 @@ Linear Regression
 K-Nearest Neighbor Regression
 ------------------------------
 
-.. automodule:: knnregression
+.. automodule:: knnreg
    :members:
 
-.. autoclass:: knnregression.KNNRegression
+.. autoclass:: knnreg.KNNRegression
    :members:
    :undoc-members:
 
+Poisson Regression
+------------------------------
+
+.. automodule:: poissonreg
+   :members:
+
+.. autoclass:: poissonreg.Poisson
+   :members:
+   :undoc-members:
 
 ==================
 

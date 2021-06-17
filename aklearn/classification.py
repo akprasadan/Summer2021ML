@@ -8,7 +8,6 @@ import numpy as np
 from preprocessing import train_test_split, scale_and_center
 from evaluation_metrics import evaluate_accuracy
 
-
 class Classification:
     """
     A class used to represent a classification algorithm.

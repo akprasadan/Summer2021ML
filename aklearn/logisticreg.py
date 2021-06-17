@@ -118,7 +118,7 @@ class Logistic(Classification):
         dot_prods = np.sum(features * coeff_matrix, axis=1)
         log_h = np.log(1/(1+np.exp(-dot_prods)))
         summands = np.multiply(log_h, labels)+np.multiply(1-log_h, 1-labels)
-        logliklihood = np.mean(summands)
+        loglikelihood = np.mean(summands)
 
         return loglikelihood
 
@@ -154,7 +154,7 @@ class Logistic(Classification):
         def negative_log_likelihood(coefficient):
             ''' The negative log likelihood function that we minimize.
             '''
-            value = -Logistic.loglikelihood(labels, labels, 
+            value = -Logistic.loglikelihood(features, labels, 
                                             coefficient)
             return value
 

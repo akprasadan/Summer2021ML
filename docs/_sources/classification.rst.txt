@@ -24,7 +24,7 @@ Logistic Classifier
    :members:
    :undoc-members:
 
-K-Nearest Neighbor Classifier
+K-Nearest Neighbor Classification
 ------------------------------------
 
 .. automodule:: knn_classify
