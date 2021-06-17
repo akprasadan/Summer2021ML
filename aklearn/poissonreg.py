@@ -155,18 +155,6 @@ class Poisson(Regression):
         exp_dot_prods : numpy.ndarray
             Predicted mean of Poisson distribution
 
-        Notes
-        ------
-        In a Poisson model, we assume Y is Poisson, and that
-        .. math:: 
-
-            \\log \\mathbb{E}[Y|x] = \\beta^T x. 
-
-        Here we return our estimate of :math: `E[Y|x]`.
-        for a test data point x. This quantity reflects the mean 
-        (and variance of the) count we might expect of the response,
-        conditional on the observed features.
-
         '''
 
         coeff_matrix = np.tile(coefficient, (features.shape[0], 1))
