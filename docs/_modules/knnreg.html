@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Overview: module code &mdash; Summer2021ML 1.0 documentation</title>
+  <title>knnreg &mdash; Summer2021ML 1.0 documentation</title>
   
 
   
@@ -135,7 +135,9 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Overview: module code</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>knnreg</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -150,17 +152,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="classification.html">classification</a></li>
-<li><a href="evaluation_metrics.html">evaluation_metrics</a></li>
-<li><a href="knn_classify.html">knn_classify</a></li>
-<li><a href="knnreg.html">knnreg</a></li>
-<li><a href="linearreg.html">linearreg</a></li>
-<li><a href="logisticreg.html">logisticreg</a></li>
-<li><a href="poissonreg.html">poissonreg</a></li>
-<li><a href="preprocessing.html">preprocessing</a></li>
-<li><a href="regression.html">regression</a></li>
-</ul>
+  <h1>Source code for knnreg</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;This module builds a class for k-nearest neighbor classification.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">knn_classify</span> <span class="kn">import</span> <span class="n">KNNClassify</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="KNNRegression"><a class="viewcode-back" href="../regression.html#knnreg.KNNRegression">[docs]</a><span class="k">class</span> <span class="nc">KNNRegression</span><span class="p">(</span><span class="n">KNNClassify</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A class used to represent a k-nearest neighbor regressor.</span>
+<span class="sd">    The regression methods and attributes can be found in the </span>
+<span class="sd">    KNNClassify class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    features : numpy.ndarray</span>
+<span class="sd">        Design matrix of explanatory variables.</span>
+<span class="sd">    output : numpy.ndarray</span>
+<span class="sd">        Labels of data corresponding to feature matrix.</span>
+<span class="sd">    split_proportion : float</span>
+<span class="sd">        Proportion of data to use for training; between 0 and 1.</span>
+<span class="sd">    standardized : bool</span>
+<span class="sd">        Whether to center/scale the data (train/test done separately).</span>
+<span class="sd">        True by default.</span>
+<span class="sd">    k : int</span>
+<span class="sd">        The number of neighbors to use in the algorithm.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span>
+                <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">classify</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
+                         <span class="n">standardized</span><span class="p">)</span></div>
+                
+</pre></div>
 
            </div>
            
