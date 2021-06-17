@@ -158,7 +158,9 @@ class Poisson(Regression):
         Notes
         ------
         In a Poisson model, we assume Y is Poisson, and that
-        log E[Y|x] = beta^T x. Here we return our estimate of E[Y|x]
+        .. math: 
+            log E[Y|x] = beta^T x. 
+        Here we return our estimate of :math: `E[Y|x]`.
         for a test data point x. This quantity reflects the mean 
         (and variance of the) count we might expect of the response,
         conditional on the observed features.
