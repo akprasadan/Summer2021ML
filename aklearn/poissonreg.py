@@ -160,7 +160,7 @@ class Poisson(Regression):
         In a Poisson model, we assume Y is Poisson, and that
         .. math:: 
 
-            \log \mathbb{E}[Y|x] = \beta^T x. 
+            \\log \\mathbb{E}[Y|x] = \\beta^T x. 
 
         Here we return our estimate of :math: `E[Y|x]`.
         for a test data point x. This quantity reflects the mean 
