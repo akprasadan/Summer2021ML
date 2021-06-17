@@ -172,6 +172,62 @@
 
 
 <div class="viewcode-block" id="Logistic"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic">[docs]</a><span class="k">class</span> <span class="nc">Logistic</span><span class="p">(</span><span class="n">Classification</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A class used to represent a logistic regression classifier.</span>
+<span class="sd">    We only list non-inherited attributes. We use an optimizer</span>
+<span class="sd">    from scipy to manually compute the maximum likelihood estimator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    features : numpy.ndarray</span>
+<span class="sd">        Design matrix of explanatory variables.</span>
+<span class="sd">    output : numpy.ndarray</span>
+<span class="sd">        Labels of data corresponding to feature matrix.</span>
+<span class="sd">    split_proportion : float</span>
+<span class="sd">        Proportion of data to use for training; between 0 and 1.</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        The minimum probability needed to classify a datapoint as a 1.</span>
+<span class="sd">    number_labels : int</span>
+<span class="sd">        The number of labels present in the data.</span>
+<span class="sd">    standardized : bool</span>
+<span class="sd">        Whether to center/scale the data (train/test done separately).</span>
+<span class="sd">        True by default.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coefficients : numpy.ndarray</span>
+<span class="sd">        The coefficients in the logistic regression model.</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        The minimum probability needed to classify a datapoint as a 1.</span>
+<span class="sd">    train_probs : numpy.ndarray</span>
+<span class="sd">        The predicted probabilities each training observation has label 1.</span>
+<span class="sd">    train_predictions : numpy.ndarray</span>
+<span class="sd">        The classified labels for the training data.</span>
+<span class="sd">    test_probs : numpy.ndarray</span>
+<span class="sd">        The predicted probabilities each test observation has label 1.</span>
+<span class="sd">    test_predictions : numpy.ndarray</span>
+<span class="sd">        The labels predicted for the given test data.</span>
+<span class="sd">    train_accuracy : float</span>
+<span class="sd">        The accuracy of the classifier evaluated on training data.</span>
+<span class="sd">    test_accuracy : float</span>
+<span class="sd">        The accuracy of the classifier evaluated on test data.</span>
+<span class="sd">    train_confusion : float</span>
+<span class="sd">        The accuracy of the classifier evaluated on training data.</span>
+<span class="sd">    test_confusion : numpy.ndarray</span>
+<span class="sd">        A confusion matrix of the classifier evaluated on test data.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    --------</span>
+<span class="sd">    loglikelihood</span>
+<span class="sd">        Compute empirical log likelihood for a given coefficient.</span>
+<span class="sd">    mle_finder</span>
+<span class="sd">        Find the coefficient maximizing the empirical log likelihood.</span>
+<span class="sd">    fit </span>
+<span class="sd">        Fit the logistic classifier to the training data.</span>
+<span class="sd">    predict</span>
+<span class="sd">        Estimate probabilities of label 1 on new test data using a fitted coefficient.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
                  <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
@@ -186,6 +242,8 @@
                                            <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span> 
                                                 <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span><span class="p">,</span> 
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
@@ -252,6 +310,8 @@
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">coefficient</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39; The negative log likelihood function that we minimize.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">Logistic</span><span class="o">.</span><span class="n">loglikelihood</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> 
                                             <span class="n">coefficient</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">value</span>

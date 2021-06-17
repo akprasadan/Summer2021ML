@@ -168,6 +168,52 @@
 
 
 <div class="viewcode-block" id="Regression"><a class="viewcode-back" href="../regression.html#regression.Regression">[docs]</a><span class="k">class</span> <span class="nc">Regression</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class used to represent a regression algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    features : numpy.ndarray</span>
+<span class="sd">        Design matrix of explanatory variables.</span>
+<span class="sd">    output : numpy.ndarray</span>
+<span class="sd">        Labels of data corresponding to feature matrix.</span>
+<span class="sd">    split_proportion : float</span>
+<span class="sd">        Proportion of data to use for training; between 0 and 1.</span>
+<span class="sd">    standardized : bool</span>
+<span class="sd">        Whether to center/scale the data (train/test done separately).</span>
+<span class="sd">        True by default.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+<span class="sd">    sample_size : int</span>
+<span class="sd">        The sample size of all given data (train and test).</span>
+<span class="sd">    train_size : int</span>
+<span class="sd">        The sample size of the training data.</span>
+<span class="sd">    test_size : int</span>
+<span class="sd">        The sample size of the test data.</span>
+<span class="sd">    train_rows : numpy.ndarray</span>
+<span class="sd">        The list of indices for the train split.</span>
+<span class="sd">    test_rows : numpy.ndarray</span>
+<span class="sd">        The list of indices for the test split.</span>
+<span class="sd">    train_features : numpy.ndarray</span>
+<span class="sd">        The train design matrix.</span>
+<span class="sd">    test_features : numpy.ndarray</span>
+<span class="sd">        The test design matrix.</span>
+<span class="sd">    train_output : numpy.ndarray</span>
+<span class="sd">        The train output data.</span>
+<span class="sd">    test_output : numpy.ndarray</span>
+<span class="sd">        The test output data.</span>
+<span class="sd">    dimension : int</span>
+<span class="sd">        The number of dimensions of the data, or columns of design matrix.</span>
+<span class="sd">        Does not include output.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    standardize </span>
+<span class="sd">        Center and scale the train and test data (separately) </span>
+<span class="sd">        to have mean 0 and variance 1.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span><span class="p">,</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span><span class="p">,</span> 

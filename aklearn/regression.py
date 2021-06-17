@@ -10,6 +10,52 @@ from preprocessing import train_test_split, scale_and_center
 
 
 class Regression:
+    """
+    A class used to represent a regression algorithm.
+
+    Parameters
+    -----------
+    features : numpy.ndarray
+        Design matrix of explanatory variables.
+    output : numpy.ndarray
+        Labels of data corresponding to feature matrix.
+    split_proportion : float
+        Proportion of data to use for training; between 0 and 1.
+    standardized : bool
+        Whether to center/scale the data (train/test done separately).
+        True by default.
+
+    Attributes
+    -----------
+    sample_size : int
+        The sample size of all given data (train and test).
+    train_size : int
+        The sample size of the training data.
+    test_size : int
+        The sample size of the test data.
+    train_rows : numpy.ndarray
+        The list of indices for the train split.
+    test_rows : numpy.ndarray
+        The list of indices for the test split.
+    train_features : numpy.ndarray
+        The train design matrix.
+    test_features : numpy.ndarray
+        The test design matrix.
+    train_output : numpy.ndarray
+        The train output data.
+    test_output : numpy.ndarray
+        The test output data.
+    dimension : int
+        The number of dimensions of the data, or columns of design matrix.
+        Does not include output.
+
+    Methods
+    -------
+    standardize 
+        Center and scale the train and test data (separately) 
+        to have mean 0 and variance 1.
+
+    """
     def __init__(self, features, output, split_proportion, standardized=True):
         self.sample_size, 
         self.train_size, 

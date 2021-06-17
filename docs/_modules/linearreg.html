@@ -168,6 +168,41 @@
 
 
 <div class="viewcode-block" id="Linear"><a class="viewcode-back" href="../regression.html#linearreg.Linear">[docs]</a><span class="k">class</span> <span class="nc">Linear</span><span class="p">(</span><span class="n">Regression</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A class used to represent a linear regression classifier.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    features : numpy.ndarray</span>
+<span class="sd">        Design matrix of explanatory variables.</span>
+<span class="sd">    output : numpy.ndarray</span>
+<span class="sd">        Labels of data corresponding to feature matrix.</span>
+<span class="sd">    split_proportion : float</span>
+<span class="sd">        Proportion of data to use for training; between 0 and 1.</span>
+<span class="sd">    standardized : bool</span>
+<span class="sd">        Whether to center/scale the data (train/test done separately).</span>
+<span class="sd">        True by default.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coefficients : numpy.ndarray</span>
+<span class="sd">        The coefficients in the logistic regression model.</span>
+<span class="sd">    train_predictions : numpy.ndarray</span>
+<span class="sd">        The predicted output values for the training data.</span>
+<span class="sd">    test_predictions : numpy.ndarray</span>
+<span class="sd">        The predicted output values for the test data.</span>
+<span class="sd">    train_error : float</span>
+<span class="sd">        The error of model on training data (default is MSE).</span>
+<span class="sd">    train_error : float</span>
+<span class="sd">        The error of model on test data (default is MSE).</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    --------</span>
+<span class="sd">    fit </span>
+<span class="sd">        Fit the linear model to training data.</span>
+<span class="sd">    predict</span>
+<span class="sd">        Estimate output values on new test data using fitted coefficients.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
                  <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">standardized</span><span class="p">)</span>

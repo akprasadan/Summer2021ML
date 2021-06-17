@@ -177,9 +177,281 @@ is done at this class level.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="regression.Regression">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">Regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.Regression" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>A class used to represent a regression algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.sample_size">
+<span class="sig-name descname"><span class="pre">sample_size</span></span><a class="headerlink" href="#regression.Regression.sample_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of all given data (train and test).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.train_size">
+<span class="sig-name descname"><span class="pre">train_size</span></span><a class="headerlink" href="#regression.Regression.train_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.test_size">
+<span class="sig-name descname"><span class="pre">test_size</span></span><a class="headerlink" href="#regression.Regression.test_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of the test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.train_rows">
+<span class="sig-name descname"><span class="pre">train_rows</span></span><a class="headerlink" href="#regression.Regression.train_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of indices for the train split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.test_rows">
+<span class="sig-name descname"><span class="pre">test_rows</span></span><a class="headerlink" href="#regression.Regression.test_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of indices for the test split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.train_features">
+<span class="sig-name descname"><span class="pre">train_features</span></span><a class="headerlink" href="#regression.Regression.train_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>The train design matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.test_features">
+<span class="sig-name descname"><span class="pre">test_features</span></span><a class="headerlink" href="#regression.Regression.test_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test design matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.train_output">
+<span class="sig-name descname"><span class="pre">train_output</span></span><a class="headerlink" href="#regression.Regression.train_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The train output data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.test_output">
+<span class="sig-name descname"><span class="pre">test_output</span></span><a class="headerlink" href="#regression.Regression.test_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test output data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="regression.Regression.dimension">
+<span class="sig-name descname"><span class="pre">dimension</span></span><a class="headerlink" href="#regression.Regression.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dimensions of the data, or columns of design matrix.
+Does not include output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="regression.Regression.standardize">
 <span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.Regression.standardize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center and scale the train and test data (separately)
+to have mean 0 and variance 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separately scale/center the train and test data so each feature
+(column of observations) has 0 mean and unit variance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">regression.</span></span><span class="sig-name descname"><span class="pre">Regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a regression algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">sample_size</span></span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of all given data (train and test).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">train_size</span></span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">test_size</span></span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of the test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">train_rows</span></span><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of indices for the train split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">test_rows</span></span><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of indices for the test split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">train_features</span></span><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd><p>The train design matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">test_features</span></span><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test design matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">train_output</span></span><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dd><p>The train output data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">test_output</span></span><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test output data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">dimension</span></span><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dimensions of the data, or columns of design matrix.
+Does not include output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center and scale the train and test data (separately)
+to have mean 0 and variance 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
 <dd><p>Separately scale/center the train and test data so each feature
 (column of observations) has 0 mean and unit variance.</p>
 </dd></dl>
@@ -193,9 +465,88 @@ is done at this class level.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="linearreg.Linear">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">linearreg.</span></span><span class="sig-name descname"><span class="pre">Linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>A class used to represent a linear regression classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="linearreg.Linear.coefficients">
+<span class="sig-name descname"><span class="pre">coefficients</span></span><a class="headerlink" href="#linearreg.Linear.coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coefficients in the logistic regression model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="linearreg.Linear.train_predictions">
+<span class="sig-name descname"><span class="pre">train_predictions</span></span><a class="headerlink" href="#linearreg.Linear.train_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted output values for the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="linearreg.Linear.test_predictions">
+<span class="sig-name descname"><span class="pre">test_predictions</span></span><a class="headerlink" href="#linearreg.Linear.test_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted output values for the test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="linearreg.Linear.train_error">
+<span class="sig-name descname"><span class="pre">train_error</span></span><a class="headerlink" href="#linearreg.Linear.train_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>The error of model on training data (default is MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">train_error</span></span><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dd><p>The error of model on test data (default is MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="linearreg.Linear.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the linear model to training data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="linearreg.Linear.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate output values on new test data using fitted coefficients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the coefficient solving the least squares problem
 using training data.</p>
 <dl class="field-list simple">
@@ -209,8 +560,127 @@ using training data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="linearreg.Linear.predict">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#linearreg.Linear.predict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id16">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute estimated output y = X*beta_hat of linear regression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>coefficients</strong> (<em>numpy.ndarray</em>) – Vector of coefficients for least squares solution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>prediction</strong> – Predicted output for each observation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id17">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">linearreg.</span></span><span class="sig-name descname"><span class="pre">Linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a linear regression classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">coefficients</span></span><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coefficients in the logistic regression model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">train_predictions</span></span><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted output values for the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">test_predictions</span></span><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted output values for the test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">train_error</span></span><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
+<dd><p>The error of model on training data (default is MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">train_error</span></span><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dd><p>The error of model on test data (default is MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the linear model to training data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate output values on new test data using fitted coefficients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the coefficient solving the least squares problem
+using training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>coefficients</strong> – Vector of coefficients of length self.dimension</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id26">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/linearreg.html#Linear.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute estimated output y = X*beta_hat of linear regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

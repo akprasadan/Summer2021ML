@@ -23,7 +23,14 @@ Logistic Classifier
    :members:
    :undoc-members:
 
+K-Nearest Neighbor Classifier
+------------------------------------
+.. automodule:: knn_classify
+   :members:
 
+.. autoclass:: knn_classify.KNNClassify
+   :members:
+   :undoc-members:
 
 ==================
 

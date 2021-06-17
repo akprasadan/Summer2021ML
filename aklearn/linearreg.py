@@ -10,6 +10,41 @@ from evaluation_metrics import evaluate_regression_error
 
 
 class Linear(Regression):
+    '''
+    A class used to represent a linear regression classifier.
+
+    Parameters
+    -----------
+    features : numpy.ndarray
+        Design matrix of explanatory variables.
+    output : numpy.ndarray
+        Labels of data corresponding to feature matrix.
+    split_proportion : float
+        Proportion of data to use for training; between 0 and 1.
+    standardized : bool
+        Whether to center/scale the data (train/test done separately).
+        True by default.
+
+    Attributes
+    ----------
+    coefficients : numpy.ndarray
+        The coefficients in the logistic regression model.
+    train_predictions : numpy.ndarray
+        The predicted output values for the training data.
+    test_predictions : numpy.ndarray
+        The predicted output values for the test data.
+    train_error : float
+        The error of model on training data (default is MSE).
+    train_error : float
+        The error of model on test data (default is MSE).
+
+    Methods
+    --------
+    fit 
+        Fit the linear model to training data.
+    predict
+        Estimate output values on new test data using fitted coefficients.
+    '''
     def __init__(self, features, output, split_proportion, 
                  standardized=True):
         super().__init__(features, output, split_proportion, standardized)
