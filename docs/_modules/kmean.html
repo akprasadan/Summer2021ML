@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>kmean &mdash; Summer2021ML 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Summer2021ML
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Summer2021ML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>kmean</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for kmean</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">from</span> <span class="nn">clustering</span> <span class="kn">import</span> <span class="n">Clustering</span>
+
+<div class="viewcode-block" id="KCluster"><a class="viewcode-back" href="../clustering.html#kmean.KCluster">[docs]</a><span class="k">class</span> <span class="nc">KCluster</span><span class="p">(</span><span class="n">Clustering</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A class to represent a k-means clustering model.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+<span class="sd">    k : int</span>
+<span class="sd">        How many clusters to use in the algorithm</span>
+<span class="sd">    final_clusters_idx : numpy.ndarray</span>
+<span class="sd">        Store which cluster each observation belongs to</span>
+<span class="sd">    final_centers : numpy.ndarray</span>
+<span class="sd">        A self.k by self.dimension matrix storing the positions of the cluster centers</span>
+<span class="sd">    number_iterations : int</span>
+<span class="sd">        How many steps the algorithm took to converge</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        How small the error needs to be to end the convergence</span>
+<span class="sd">    feature_means : numpy.ndarray</span>
+<span class="sd">        Store the predicted position each observation is centered around.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">standardized</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_clusters_idx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">means</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_iterations</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_means</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_clusters</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="KCluster.compute_distance_matrix"><a class="viewcode-back" href="../clustering.html#kmean.KCluster.compute_distance_matrix">[docs]</a>    <span class="nd">@staticmethod</span> <span class="c1"># Note, REUSE THIS FOR KNN!!</span>
+    <span class="k">def</span> <span class="nf">compute_distance_matrix</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">centers</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute distances of each of n row vectors in a matrix to each of k vectors representing &#39;centers.&#39;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            n by d array, where d is the dimension of dataset, n is the sample size</span>
+<span class="sd">        centers : numpy.ndarray</span>
+<span class="sd">            k by d array, where k is the number of clusters and d is the dimension</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        distance_matrix : numpy.ndarray</span>
+<span class="sd">            An n by k array.</span>
+<span class="sd">            The (i,j) entry is the distance from the i-th row of X to the jth row of centers.  </span>
+<span class="sd">            We use the l_2 Euclidean norm for d dimensions.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        An efficient numpy procedure (using its broadcasting functionality) to compute </span>
+<span class="sd">        all pairwise differences between two collections of data points is given in [4]_.</span>
+<span class="sd">        We use this, as an alternative to using a manual nested &#39;for-loop&#39; procedure.</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ------------</span>
+<span class="sd">        .. [4] https://sparrow.dev/pairwise-distance-in-numpy/              </span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">pairwise_differences</span> <span class="o">=</span> <span class="n">features</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">centers</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pairwise_differences</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">distance_matrix</span></div>
+    
+<div class="viewcode-block" id="KCluster.update_clusters"><a class="viewcode-back" href="../clustering.html#kmean.KCluster.update_clusters">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_clusters</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">centers</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Given a current set of k centers, compute which cluster each </span>
+<span class="sd">        row vector of the data matrix is closest to.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            n by d array, where d is the dimension of dataset, n is the sample size</span>
+<span class="sd">        centers : numpy.ndarray</span>
+<span class="sd">            k by d array, where k is the number of centers</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        closest_center_idx : numpy.ndarray </span>
+<span class="sd">            A vector of length n whose i-th entry is the integer p minimizing </span>
+<span class="sd">            distance of ith row of features to the pth cluster point. </span>
+<span class="sd">            We use the d-dimensional l_2 Euclidean norm.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">KCluster</span><span class="o">.</span><span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">centers</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>        
+
+        <span class="n">closest_center_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">distance_to_centers</span> <span class="o">=</span> <span class="n">distance_matrix</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">closest_center_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">distance_to_centers</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">distance_to_centers</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> 
+            <span class="n">closest_center_idx</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">closest_center_index</span>
+
+        <span class="k">return</span> <span class="n">closest_center_idx</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="KCluster.update_means"><a class="viewcode-back" href="../clustering.html#kmean.KCluster.update_means">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_means</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">closest_center_idx</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            n by d array, where d is the dimension of dataset, </span>
+<span class="sd">            n is the sample size</span>
+<span class="sd">        closest_center_idx : numpy.ndarray</span>
+<span class="sd">            n by 1 array</span>
+<span class="sd">        k : int</span>
+<span class="sd">            The number of centers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        cluster_means : numpy.ndarray </span>
+<span class="sd">            A k by d array.</span>
+<span class="sd">            The i-th row is the d-dimensional element-wise mean of </span>
+<span class="sd">            all row vectors of X in cluster i.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">cluster_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">cluster_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">cluster_subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">closest_center_idx</span> <span class="o">==</span> <span class="n">cluster_index</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">cluster_means</span><span class="p">[</span><span class="n">cluster_index</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">cluster_subset</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cluster_means</span></div>
+
+<div class="viewcode-block" id="KCluster.fit"><a class="viewcode-back" href="../clustering.html#kmean.KCluster.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fit k-means to a dataset up to a predetermined threshold of convergence. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># Pick which rows of our data we will initialize as clusters (uniformly random)</span>
+        <span class="n">initial_data_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random_choice</span><span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">initial_data_idx</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># Store these row vectors as our first set of means, comprising the first cluster</span>
+        <span class="c1"># An k times d array</span>
+        <span class="n">initial_means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">initial_data_idx</span><span class="p">,</span> <span class="p">:]</span> 
+
+        <span class="c1"># Initialize arbitrary large error, so first step will always run</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Store the error at each step (see docstring)</span>
+        <span class="n">total_steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># How many iterations get performed?</span>
+
+        <span class="k">while</span> <span class="n">error</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+            <span class="n">total_steps</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">updated_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_clusters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">initial_means</span><span class="p">)</span>
+            <span class="n">updated_means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_means</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">updated_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">initial_means</span> <span class="o">-</span> <span class="n">updated_means</span><span class="p">)</span> <span class="c1"># How much did the k-means move?</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="n">initial_means</span> <span class="o">=</span> <span class="n">updated_means</span> <span class="c1"># Make the update and start the next round</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_clusters_idx</span> <span class="o">=</span> <span class="n">updated_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_centers</span> <span class="o">=</span> <span class="n">updated_means</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="n">errors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_iterations</span> <span class="o">=</span> <span class="n">total_steps</span>
+
+        <span class="n">feature_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_train</span><span class="p">):</span>
+            <span class="c1"># The ith prediction is the jth row of the means, where j = predicted_clusters[i]</span>
+            <span class="n">feature_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">[</span><span class="n">updated_indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_means</span> <span class="o">=</span> <span class="n">feature_means</span>  </div></div>
+        
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Akshay Prasadan.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

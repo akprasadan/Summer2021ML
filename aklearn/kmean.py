@@ -1,60 +1,35 @@
 import numpy as np 
-from sklearn.utils.random import sample_without_replacement
 from clustering import Clustering
 
 class KCluster(Clustering):
     '''
     A class to represent a k-means clustering model.
 
-        Attributes
-        ----------
-        k : int
-            How many clusters to use in the algorithm
-        clusters_indices : list
-            A list of length n storing which cluster each observation belongs to
-        means : numpy array
-            A k by d matrix storing the positions of the cluster centers
-        number_iterations : int
-            How many steps the algorithm took to converge
-        threshold : float
-            How small the error needs to be to end the convergence
-        predicted_clusters : list
-            A list of length 
-        predicted_means : numpy array
-            A matrix of size n_predictions by d
-        n_predictions : int
-            Number of rows in the test set
-        labelled_training_data : numpy array
-            The training matrix with an additional column of cluster labels
-        labelled_testing_data : numpy array
-            The testing matrix with an additional column of cluster labels
-
-        Methods
-        --------
-        compute_distance_matrix : Computes matrix of distances between each observation and each cluster
-
-        update_clusters : Compute list of closest clusters given a distance matrix
-
-        update_means : Obtain matrix of updated cluster centers
-
-        fit : Perform the k-means clustering algorithm (taking in a Pandas DataFrame or Numpy Array)
-
-        predict : Calculate closest clusters to new data using clusters calculated from fit 
-
+    Attributes
+    -----------
+    k : int
+        How many clusters to use in the algorithm
+    final_clusters_idx : numpy.ndarray
+        Store which cluster each observation belongs to
+    final_centers : numpy.ndarray
+        A self.k by self.dimension matrix storing the positions of the cluster centers
+    number_iterations : int
+        How many steps the algorithm took to converge
+    threshold : float
+        How small the error needs to be to end the convergence
+    feature_means : numpy.ndarray
+        Store the predicted position each observation is centered around.
     '''
 
     def __init__(self, features, standardized=True, k=3, threshold=0.01):
         super().__init__(features, standardized)
-        self.k = None
-        self.clusters_indices = None
+        self.k = k
+        self.final_clusters_idx = None
         self.means = None
         self.number_iterations = None
-        self.threshold = threshold
-        self.predicted_clusters = None
-        self.predicted_means = None
-        self.n_predictions = None
-        self.labelled_training_data = None
-        self.labelled_testing_data = None
+        self.threshold= threshold
+        self.feature_means = None
+        self.feature_clusters = None
 
     @staticmethod # Note, REUSE THIS FOR KNN!!
     def compute_distance_matrix(features, centers):
@@ -66,7 +41,7 @@ class KCluster(Clustering):
         features : numpy.ndarray
             n by d array, where d is the dimension of dataset, n is the sample size
         centers : numpy.ndarray
-            k by d array, where k is the number of clusters
+            k by d array, where k is the number of clusters and d is the dimension
 
         Returns
         --------
@@ -95,7 +70,8 @@ class KCluster(Clustering):
     @staticmethod
     def update_clusters(features, centers):
         '''
-        Given a current set of k centers, compute which cluster each row vector of the data matrix is closest to.
+        Given a current set of k centers, compute which cluster each 
+        row vector of the data matrix is closest to.
         
         Parameters
         -----------
@@ -130,9 +106,10 @@ class KCluster(Clustering):
         Parameters
         -----------
         features : numpy.ndarray
-            n by d array, where d is the dimension of dataset, n is the sample size
-        centers : numpy.ndarray
-            k by d array, where k is the number of centers.
+            n by d array, where d is the dimension of dataset, 
+            n is the sample size
+        closest_center_idx : numpy.ndarray
+            n by 1 array
         k : int
             The number of centers.
 
@@ -140,7 +117,8 @@ class KCluster(Clustering):
         --------
         cluster_means : numpy.ndarray 
             A k by d array.
-            The i-th row is the d-dimensional element-wise mean of all row vectors of X in cluster i.
+            The i-th row is the d-dimensional element-wise mean of 
+            all row vectors of X in cluster i.
         '''
 
         d = features.shape[1]
@@ -158,8 +136,7 @@ class KCluster(Clustering):
         '''
 
         # Pick which rows of our data we will initialize as clusters (uniformly random)
-        initial_data_idx = sample_without_replacement(n_population = self.sample_size, 
-                                                      n_samples = self.k, random_state = 100)
+        initial_data_idx = np.random_choice(a = self.sample_size, size = self.k)
         initial_data_idx.sort()
 
         # Store these row vectors as our first set of means, comprising the first cluster
@@ -177,42 +154,18 @@ class KCluster(Clustering):
             updated_means = self.update_means(self.features, updated_indices, self.k)
             error = np.linalg.norm(initial_means - updated_means) # How much did the k-means move?
             errors.append(error)
-            initial_means = updated_means # Make the update and start the enxt round
+            initial_means = updated_means # Make the update and start the next round
 
         self.final_clusters_idx = updated_indices
-        self.means = updated_means
+        self.final_centers = updated_means
         self.errors = errors
         self.number_iterations = total_steps
 
-        training_means = np.zeros((self.n_train, self.d))
+        feature_means = np.zeros((self.n_train, self.dimension))
 
         for i in range(self.n_train):
             # The ith prediction is the jth row of the means, where j = predicted_clusters[i]
-            training_means[i] = self.means[updated_indices[i], :]
+            feature_means[i] = self.means[updated_indices[i], :]
 
-        self.training_data_means = training_means  
+        self.feature_means = feature_means  
         
-        self.labelled_training_data = np.append(self.training_data, self.clusters_indices.reshape((self.n_train, 1)), axis = 1)
-  
-
-    def predict(self, testing_data):
-        '''
-        Predict clusters and their means for test data, stored as attributes. 
-            
-            Parameters:
-                testing_data (numpy array): n_predictions by self.d matrix
-  
-        '''
-        
-        self.testing_data = testing_data
-        n_predictions = testing_data.shape[0]
-        self.n_predictions = n_predictions
-        predicted_clusters = self.update_clusters(self.testing_data, self.means, n_predictions, self.k)
-        self.predicted_clusters = predicted_clusters
-
-        predicted_means = np.array([self.means[predicted_clusters[i], :] for i in range(n_predictions)])
-        # The ith prediction is the jth row of the means, where j = predicted_clusters[i]
-
-        self.predicted_means = predicted_means
-        self.labelled_testing_data = np.append(self.testing_data, self.predicted_clusters.reshape((self.n_train, 1)), axis = 1)
-

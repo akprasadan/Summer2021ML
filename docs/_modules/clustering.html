@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>knnreg &mdash; Summer2021ML 1.0 documentation</title>
+  <title>clustering &mdash; Summer2021ML 1.0 documentation</title>
   
 
   
@@ -138,7 +138,7 @@
         
           <li><a href="index.html">Module code</a> &raquo;</li>
         
-      <li>knnreg</li>
+      <li>clustering</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,40 +153,52 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for knnreg</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;This module builds a class for k-nearest neighbor classification.</span>
+  <h1>Source code for clustering</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This module builds a a base class for clustering problems, such as k-means. The preprocessing (if applicable)</span>
+<span class="sd">is done at this class level.</span>
+
 <span class="sd">&#39;&#39;&#39;</span>
 
-<span class="kn">from</span> <span class="nn">knn_classify</span> <span class="kn">import</span> <span class="n">KNNClassify</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">preprocessing</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">scale_and_center</span>
 
 
-<div class="viewcode-block" id="KNNRegression"><a class="viewcode-back" href="../regression.html#knnreg.KNNRegression">[docs]</a><span class="k">class</span> <span class="nc">KNNRegression</span><span class="p">(</span><span class="n">KNNClassify</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    A class used to represent a k-nearest neighbor regressor.</span>
-<span class="sd">    The regression methods and attributes can be found in the </span>
-<span class="sd">    KNNClassify class.</span>
+<div class="viewcode-block" id="Clustering"><a class="viewcode-back" href="../clustering.html#clustering.Clustering">[docs]</a><span class="k">class</span> <span class="nc">Clustering</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class used to represent a clustering algorithm.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
 <span class="sd">    features : numpy.ndarray</span>
 <span class="sd">        Design matrix of explanatory variables.</span>
-<span class="sd">    output : numpy.ndarray</span>
-<span class="sd">        Labels of data corresponding to feature matrix.</span>
-<span class="sd">    split_proportion : float</span>
-<span class="sd">        Proportion of data to use for training; between 0 and 1.</span>
 <span class="sd">    standardized : bool</span>
-<span class="sd">        Whether to center/scale the data (train/test done separately).</span>
-<span class="sd">        True by default.</span>
-<span class="sd">    k : int</span>
-<span class="sd">        The number of neighbors to use in the algorithm.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">        Whether to center/scale the data. True by default.</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span>
-                <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">classify</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
-                         <span class="n">standardized</span><span class="p">)</span></div>
-                
+<span class="sd">    Attributes</span>
+<span class="sd">    -----------</span>
+<span class="sd">    sample_size : int</span>
+<span class="sd">        The sample size of all given data (train and test).</span>
+<span class="sd">    dimension : int</span>
+<span class="sd">        The number of dimensions of the data, or columns of design matrix.</span>
+<span class="sd">        Does not include output.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">standardized</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Clustering.standardize"><a class="viewcode-back" href="../clustering.html#clustering.Clustering.standardize">[docs]</a>    <span class="k">def</span> <span class="nf">standardize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Separately scale/center the train and test data so each feature</span>
+<span class="sd">        (column of observations) has 0 mean and unit variance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

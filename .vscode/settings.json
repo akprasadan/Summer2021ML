@@ -2,5 +2,6 @@
     "python.linting.enabled": true,
     "activestate.promptRuntimeCreation": false,
     "python.linting.pylintEnabled": false,
-    "python.linting.pycodestyleEnabled": true
+    "python.linting.pycodestyleEnabled": true,
+    "python.pythonPath": "env\\Scripts\\python.exe"
 }
