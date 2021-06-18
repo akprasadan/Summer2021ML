@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.utils.random import sample_without_replacement
 import pandas as pd
 
-class Cluster:
+class KCluster:
     '''
     A class to represent a k-means clustering model.
 

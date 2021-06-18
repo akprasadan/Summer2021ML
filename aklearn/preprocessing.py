@@ -11,32 +11,32 @@ import numpy as np
 from collections import namedtuple
 
 
-def scale_and_center(feature_matrix):
+def scale_and_center(features):
     '''
     Center and scale each individual column of the feature matrix 
     to have 0 mean and unit variance.
 
     Parameters
     ----------
-    feature_matrix : numpy.ndarray
+    features : numpy.ndarray
         Design matrix of explanatory variables.
     
     Returns
     -------
-    feature_matrix : numpy.ndarray
+    features : numpy.ndarray
         Design matrix of scaled and centered explanatory variables.
     '''
 
-    n_rows, n_cols = feature_matrix.shape
+    n_rows, n_cols = features.shape
     for column in range(n_cols):
-        column_mean = np.mean(feature_matrix[:, column])*np.ones(n_rows)
-        column_std_dev = np.std(feature_matrix[:, column])
-        centered_column = feature_matrix[:, column] - column_mean
+        column_mean = np.mean(features[:, column])*np.ones(n_rows)
+        column_std_dev = np.std(features[:, column])
+        centered_column = features[:, column] - column_mean
         centered_and_scaled_column = centered_column / column_std_dev
 
-        feature_matrix[:, column] = centered_and_scaled_column
+        features[:, column] = centered_and_scaled_column
             
-    return feature_matrix
+    return features
 
 
 def train_test_split(features, output, split_proportion):

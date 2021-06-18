@@ -82,13 +82,13 @@ class KNNClassify(Classification):
 
     @staticmethod
     @jit(nopython=True)
-    def k_neighbors_idx(feature_matrix, current_location, k):
+    def k_neighbors_idx(features, current_location, k):
         '''Find row indices (in given data) of the k closest neighbors 
         to a given data point.
         
         Parameters
         -----------
-        feature_matrix : numpy.ndarray 
+        features : numpy.ndarray 
             Design matrix of explanatory variables
         current_location : numpy.ndarray
             Point we would like to classify, using its neighbors.
@@ -98,7 +98,7 @@ class KNNClassify(Classification):
         Returns
         --------
         k_nearest_idx : numpy.ndarray
-            The k indices of the feature_matrix observations closest
+            The k indices of the features observations closest
             to the current point.
 
         Notes
@@ -112,7 +112,7 @@ class KNNClassify(Classification):
         .. [1] https://sparrow.dev/pairwise-distance-in-numpy/
         '''
 
-        pairwise_differences = feature_matrix[:, None, :] - current_location[None, :, :]
+        pairwise_differences = features[:, None, :] - current_location[None, :, :]
         distance_matrix = np.linalg.norm(pairwise_differences)
         
         k_nearest_idx = np.argsort(distance_matrix)[:k]
@@ -121,15 +121,15 @@ class KNNClassify(Classification):
     
     @staticmethod
     @jit(nopython=True)
-    def classify_point(feature_matrix, output, current_location, k):
+    def classify_point(features, output, current_location, k):
         '''Classify a new datapoint based on its k neighbors.
         
         Parameters
         -----------
-        feature_matrix : numpy.ndarray 
+        features : numpy.ndarray 
             Design matrix of explanatory variables.
         output : numpy.ndarray
-            Labels corresponding to feature_matrix.
+            Labels corresponding to features.
         current_location : numpy.ndarray
             Point we would like to classify, using its neighbors.
         k : int
@@ -150,7 +150,7 @@ class KNNClassify(Classification):
                                      of most common label (for regression).
         '''
 
-        k_nearest_idx = KNNClassify.k_neighbors_idx(feature_matrix, current_location, k)
+        k_nearest_idx = KNNClassify.k_neighbors_idx(features, current_location, k)
         nearest_k_labels = output[k_nearest_idx, :]
         label_mode = mode(nearest_k_labels)[0]
 
@@ -158,15 +158,15 @@ class KNNClassify(Classification):
 
     @staticmethod
     @jit(nopython=True)
-    def estimate_point(feature_matrix, output, current_location, k):
+    def estimate_point(features, output, current_location, k):
         '''Estimate (for a regression context) a new datapoint based on its k neighbors.
         
         Parameters
         -----------
-        feature_matrix : numpy.ndarray 
+        features : numpy.ndarray 
             Design matrix of explanatory variables.
         output : numpy.ndarray
-            Labels corresponding to feature_matrix.
+            Labels corresponding to features.
         current_location : numpy.ndarray
             Point we would like to classify, using its neighbors.
         k : int
@@ -183,7 +183,7 @@ class KNNClassify(Classification):
                                      average output value (for classification).
         '''
 
-        k_nearest_idx = KNNClassify.k_neighbors_idx(feature_matrix, current_location, k)
+        k_nearest_idx = KNNClassify.k_neighbors_idx(features, current_location, k)
         output_estimate = np.mean(output[k_nearest_idx, :])
 
         return output_estimate
@@ -198,7 +198,7 @@ class KNNClassify(Classification):
         train_features : numpy.ndarray 
             Design matrix of explanatory variables.
         train_output : numpy.ndarray
-            Labels corresponding to feature_matrix.
+            Labels corresponding to features.
         test_features : numpy.ndarray
             Points we would like to classify, using their neighbors.
         k : int
@@ -232,7 +232,7 @@ class KNNClassify(Classification):
         train_features : numpy.ndarray 
             Design matrix of explanatory variables.
         train_output : numpy.ndarray
-            Labels corresponding to feature_matrix.
+            Labels corresponding to features.
         test_features : numpy.ndarray
             Points we would like to classify, using their neighbors.
         k : int
