@@ -214,7 +214,7 @@ class KNNClassify(Classification):
                                      of label (for regression).
         '''
         test_sample_size = test_features.shape[0]
-        test_labels = np.zeros((test_sample_size, 1))
+        test_labels = np.zeros((test_sample_size, 1), dtype = np.int8)
 
         for row in range(test_sample_size):
             test_labels[row] = KNNClassify.classify_point(train_features, 

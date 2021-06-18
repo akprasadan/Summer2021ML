@@ -50,7 +50,7 @@ class Regression:
         Does not include output.
 
     """
-    def __init__(self, features, output, split_proportion, standardized=True):
+    def __init__(self, features, output, split_proportion=0.75, standardized=True):
         self.sample_size, 
         self.train_size, 
         self.test_size, 

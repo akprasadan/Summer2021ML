@@ -118,7 +118,7 @@ class Poisson(Regression):
                                             coefficient)
             return value
 
-        dimension = np.ones(counts.shape[1])
+        dimension = np.ones(counts.shape[1], dtype = np.int8)
         optimum = _minimize_bfgs(negative_log_likelihood, dimension)
         mle = optimum.x  # Obtain argmin
         return mle

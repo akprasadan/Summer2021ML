@@ -5,8 +5,10 @@ The preprocessing (if applicable) is done at this class level.
 '''
 
 import numpy as np
+from numpy.lib.shape_base import split
 from preprocessing import train_test_split, scale_and_center
 from evaluation_metrics import evaluate_accuracy
+from exceptions import ClassInstantiationChecks
 
 class Classification:
     """
@@ -53,7 +55,7 @@ class Classification:
         Does not include output.
 
     """
-    def __init__(self, features, output, split_proportion, number_labels=None, 
+    def __init__(self, features, output, split_proportion=0.75, number_labels=None, 
                  standardized=True):
         # Default procedure is to assume all labels appear in output
         # If labels are missing in data, specify number_labels manually
@@ -61,16 +63,21 @@ class Classification:
             self.number_labels = len(np.unique(output)) 
         else: 
             self.number_labels = number_labels
-        self.sample_size, 
-        self.train_size, 
-        self.test_size, 
-        self.train_rows, 
-        self.test_rows, 
-        self.train_features, 
-        self.test_features, 
-        self.train_output, 
-        self.test_output = train_test_split(features, output, split_proportion)
-        self.dimension = self.train_rows.shape[1]
+
+        ClassInstantiationChecks(features, output, split_proportion, number_labels, 
+                 standardized)
+
+        train_test_split_data = train_test_split(features, output, split_proportion)
+        self.sample_size = train_test_split_data.sample_size
+        self.train_size = train_test_split_data.train_size
+        self.test_size = train_test_split_data.test_size
+        self.train_rows = train_test_split_data.train_rows
+        self.test_rows = train_test_split_data.test_rows
+        self.train_features = train_test_split_data.train_features
+        self.test_features = train_test_split_data.test_features
+        self.train_output = train_test_split_data.train_output
+        self.test_output = train_test_split_data.test_output
+        self.dimension = self.train_features.shape[1]
         if standardized:
             self.standardize()
 
@@ -81,3 +88,8 @@ class Classification:
         '''
         self.train_features = scale_and_center(self.train_features)
         self.test_features = scale_and_center(self.test_features)
+
+feature = np.random.rand(25,6)
+output = np.random.randint(2, size=26)
+
+test_class = Classification(feature, output, split_proportion=1)

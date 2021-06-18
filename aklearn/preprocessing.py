@@ -39,7 +39,7 @@ def scale_and_center(feature_matrix):
     return feature_matrix
 
 
-def train_test_split(features, output, split_proportion=0.25):
+def train_test_split(features, output, split_proportion):
     '''Split the data into training and testing sets.
 
     Parameters
@@ -68,12 +68,10 @@ def train_test_split(features, output, split_proportion=0.25):
     ----------
     .. [2] https://stackoverflow.com/a/14262743
     '''
-
     sample_size = features.shape[0]
-    train_size = np.ceil(sample_size * split_proportion)
+    train_size = np.ceil(sample_size * split_proportion).astype(int)
     test_size = sample_size - train_size
-    #
-    train_rows = np.random.choice(train_size.shape[0], train_size, 
+    train_rows = np.random.choice(sample_size, train_size, 
                                   replace=False)
     test_rows = np.setdiff1d(np.arange(sample_size), train_rows)
     train_features = features[train_rows]
@@ -93,3 +91,35 @@ def train_test_split(features, output, split_proportion=0.25):
                                   train_output, test_output)
 
     return split_values
+
+def cross_validation_folds_idx(row_count, fold_count):
+    '''Partition the (training) dataset into folds.
+
+    Parameters
+    -----------
+    row_count : int
+        Sample size of training data we form folds from.
+    fold_count : int    
+        The number of folds to produce; cannot exceed row_count.
+
+    Raises
+    -------
+    AssertionError
+        If more folds are requested than there are observations
+    '''
+
+    assert fold_count <= row_count, "There cannot be more folds than the sample size."
+    rows_per_fold = row_count // fold_count 
+
+    # Indices that have not been assigned to a fold yet; will be updated
+    row_indices = np.arange(row_count) 
+
+    # Array to store our folds: each row stores indices in that fold
+    folds = np.zeroes((fold_count, rows_per_fold), dtype = np.int8)
+
+    for fold in fold_count:
+        fold_rows = np.random.choice(row_indices, size=rows_per_fold, replace=False)
+        row_indices = np.setdiff1d(row_indices, fold_rows)
+        folds[fold, :] = fold_rows
+    
+    return folds

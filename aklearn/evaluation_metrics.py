@@ -64,7 +64,7 @@ def confusion_matrix(number_labels, predicted_output, true_output):
     -----------
     .. [1] https://stackoverflow.com/a/40382459
     """
-    confusion_matrix = np.zeros(shape=(number_labels, number_labels))
+    confusion_matrix = np.zeros(shape=(number_labels, number_labels), dtype = np.int8)
     output_combined = np.stack((true_output, predicted_output), axis=1)  
 
     for row_index in range(number_labels):  #
