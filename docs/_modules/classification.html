@@ -160,8 +160,10 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.lib.shape_base</span> <span class="kn">import</span> <span class="n">split</span>
 <span class="kn">from</span> <span class="nn">preprocessing</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">scale_and_center</span>
 <span class="kn">from</span> <span class="nn">evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span>
+<span class="kn">from</span> <span class="nn">exceptions</span> <span class="kn">import</span> <span class="n">ClassInstantiationChecks</span>
 
 <div class="viewcode-block" id="Classification"><a class="viewcode-back" href="../classification.html#classification.Classification">[docs]</a><span class="k">class</span> <span class="nc">Classification</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -208,7 +210,7 @@
 <span class="sd">        Does not include output.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                  <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="c1"># Default procedure is to assume all labels appear in output</span>
         <span class="c1"># If labels are missing in data, specify number_labels manually</span>
@@ -216,16 +218,21 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">output</span><span class="p">))</span> 
         <span class="k">else</span><span class="p">:</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span> <span class="o">=</span> <span class="n">number_labels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_rows</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_rows</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_rows</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">ClassInstantiationChecks</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
+                 <span class="n">standardized</span><span class="p">)</span>
+
+        <span class="n">train_test_split_data</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">sample_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_rows</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_rows</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">standardized</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
 

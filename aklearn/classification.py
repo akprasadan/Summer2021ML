@@ -88,8 +88,3 @@ class Classification:
         '''
         self.train_features = scale_and_center(self.train_features)
         self.test_features = scale_and_center(self.test_features)
-
-feature = np.random.rand(25,6)
-output = np.random.randint(2, size=26)
-
-test_class = Classification(feature, output, split_proportion=1)

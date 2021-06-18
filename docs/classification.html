@@ -5,6 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
+    <meta property="article:modified_time" content="2021-06-18T01:14:06-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Classification Algorithms &mdash; Summer2021ML 1.0 documentation</title>
@@ -90,8 +91,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#base-classifier">Base Classifier</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#logistic-classifier">Logistic Classifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#k-nearest-neighbor-classification">K-Nearest Neighbor Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-logisticreg">Logistic Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-knn_classify">K-Nearest Neighbor Classification</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a></li>
@@ -167,12 +168,1088 @@
 <span id="classif"></span><h2>Base Classifier<a class="headerlink" href="#base-classifier" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
+<span class="target" id="module-classification"></span><p>This module builds a base class for classification problems, such as logistic
+regression or k-nearest neighbors classification.
+The preprocessing (if applicable) is done at this class level.</p>
+<dl class="py class">
+<dt id="classification.Classification">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">classification.</span></code><code class="sig-name descname"><span class="pre">Classification</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/classification.html#Classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classification.Classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a classification algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="classification.Classification.number_labels">
+<code class="sig-name descname"><span class="pre">number_labels</span></code><a class="headerlink" href="#classification.Classification.number_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of labels present in existing and future data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.sample_size">
+<code class="sig-name descname"><span class="pre">sample_size</span></code><a class="headerlink" href="#classification.Classification.sample_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of all given data (train and test).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.train_size">
+<code class="sig-name descname"><span class="pre">train_size</span></code><a class="headerlink" href="#classification.Classification.train_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.test_size">
+<code class="sig-name descname"><span class="pre">test_size</span></code><a class="headerlink" href="#classification.Classification.test_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample size of the test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.train_rows">
+<code class="sig-name descname"><span class="pre">train_rows</span></code><a class="headerlink" href="#classification.Classification.train_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of indices for the train split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.test_rows">
+<code class="sig-name descname"><span class="pre">test_rows</span></code><a class="headerlink" href="#classification.Classification.test_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of indices for the test split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.train_features">
+<code class="sig-name descname"><span class="pre">train_features</span></code><a class="headerlink" href="#classification.Classification.train_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>The train design matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.test_features">
+<code class="sig-name descname"><span class="pre">test_features</span></code><a class="headerlink" href="#classification.Classification.test_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test design matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.train_output">
+<code class="sig-name descname"><span class="pre">train_output</span></code><a class="headerlink" href="#classification.Classification.train_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The train output data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.test_output">
+<code class="sig-name descname"><span class="pre">test_output</span></code><a class="headerlink" href="#classification.Classification.test_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test output data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="classification.Classification.dimension">
+<code class="sig-name descname"><span class="pre">dimension</span></code><a class="headerlink" href="#classification.Classification.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dimensions of the data, or columns of design matrix.
+Does not include output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="classification.Classification.standardize">
+<code class="sig-name descname"><span class="pre">standardize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/classification.html#Classification.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#classification.Classification.standardize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separately scale/center the train and test data so each feature
+(column of observations) has 0 mean and unit variance.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="logistic-classifier">
-<span id="logist"></span><h2>Logistic Classifier<a class="headerlink" href="#logistic-classifier" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-logisticreg">
+<span id="logistic-classifier"></span><span id="logist"></span><h2>Logistic Classifier<a class="headerlink" href="#module-logisticreg" title="Permalink to this headline">¶</a></h2>
+<p>This module builds a class for logistic regression problems.
+We compute the solution by directly maximizing the log-likelihood.
+We use an existing software implementation to globally maximize the
+likelihood function: BFGS, available in
+scipy.optimize.minimize(method = ‘BFGS)</p>
+<dl class="py class">
+<dt id="logisticreg.Logistic">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">logisticreg.</span></code><code class="sig-name descname"><span class="pre">Logistic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a logistic regression classifier.
+We only list non-inherited attributes. We use an optimizer
+from scipy to manually compute the maximum likelihood estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The minimum probability needed to classify a datapoint as a 1.</p></li>
+<li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.coefficients">
+<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#logisticreg.Logistic.coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coefficients in the logistic regression model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.threshold">
+<code class="sig-name descname"><span class="pre">threshold</span></code><a class="headerlink" href="#logisticreg.Logistic.threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minimum probability needed to classify a datapoint as a 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.train_probs">
+<code class="sig-name descname"><span class="pre">train_probs</span></code><a class="headerlink" href="#logisticreg.Logistic.train_probs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted probabilities each training observation has label 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.train_predictions">
+<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#logisticreg.Logistic.train_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The classified labels for the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.test_probs">
+<code class="sig-name descname"><span class="pre">test_probs</span></code><a class="headerlink" href="#logisticreg.Logistic.test_probs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted probabilities each test observation has label 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.test_predictions">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#logisticreg.Logistic.test_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The labels predicted for the given test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.train_accuracy">
+<code class="sig-name descname"><span class="pre">train_accuracy</span></code><a class="headerlink" href="#logisticreg.Logistic.train_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.test_accuracy">
+<code class="sig-name descname"><span class="pre">test_accuracy</span></code><a class="headerlink" href="#logisticreg.Logistic.test_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.train_confusion">
+<code class="sig-name descname"><span class="pre">train_confusion</span></code><a class="headerlink" href="#logisticreg.Logistic.train_confusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="logisticreg.Logistic.test_confusion">
+<code class="sig-name descname"><span class="pre">test_confusion</span></code><a class="headerlink" href="#logisticreg.Logistic.test_confusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A confusion matrix of the classifier evaluated on test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="logisticreg.Logistic.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the coefficient estimate on the training data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="logisticreg.Logistic.loglikelihood">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">loglikelihood</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.loglikelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute empirical log likelihood for each coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables</p></li>
+<li><p><strong>labels</strong> (<em>numpy.ndarray</em>) – The given output labels</p></li>
+<li><p><strong>coefficients</strong> (<em>numpy.ndarray</em>) – Vector of coefficients for logistic regression.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>loglikelihood</strong> – The value of the log likelihood with given data and coefficient.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="logisticreg.Logistic.mle_finder">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">mle_finder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.mle_finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.mle_finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the MLE for a logistic model; return the coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables</p></li>
+<li><p><strong>labels</strong> (<em>numpy.ndarray</em>) – The given output labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mle</strong> – The coefficient that solves the logistic regression problem for
+the given data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>We use the BFGS algorithm as implemented in scipy to maximize
+the log-likelihood.
+This requires negating the log likelihood as we use minimization.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code></p>
 </div>
-<div class="section" id="k-nearest-neighbor-classification">
-<span id="knnclass"></span><h2>K-Nearest Neighbor Classification<a class="headerlink" href="#k-nearest-neighbor-classification" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="py method">
+<dt id="logisticreg.Logistic.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.predict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Compute estimated output P(Y =1|X=x, beta_hat)</dt><dd><p>of logistic regression.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>coefficients</strong> (<em>numpy.ndarray</em>) – Vector of coefficients for logistic regression solution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>p</strong> – Predicted output (probability) for each observation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="id0">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">logisticreg.</span></code><code class="sig-name descname"><span class="pre">Logistic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a logistic regression classifier.
+We only list non-inherited attributes. We use an optimizer
+from scipy to manually compute the maximum likelihood estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The minimum probability needed to classify a datapoint as a 1.</p></li>
+<li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="id1">
+<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coefficients in the logistic regression model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id2">
+<code class="sig-name descname"><span class="pre">threshold</span></code><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minimum probability needed to classify a datapoint as a 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id3">
+<code class="sig-name descname"><span class="pre">train_probs</span></code><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted probabilities each training observation has label 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id4">
+<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd><p>The classified labels for the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id5">
+<code class="sig-name descname"><span class="pre">test_probs</span></code><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted probabilities each test observation has label 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id6">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd><p>The labels predicted for the given test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id7">
+<code class="sig-name descname"><span class="pre">train_accuracy</span></code><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id8">
+<code class="sig-name descname"><span class="pre">test_accuracy</span></code><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id9">
+<code class="sig-name descname"><span class="pre">train_confusion</span></code><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id10">
+<code class="sig-name descname"><span class="pre">test_confusion</span></code><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd><p>A confusion matrix of the classifier evaluated on test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id11">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the coefficient estimate on the training data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id12">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">loglikelihood</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute empirical log likelihood for each coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables</p></li>
+<li><p><strong>labels</strong> (<em>numpy.ndarray</em>) – The given output labels</p></li>
+<li><p><strong>coefficients</strong> (<em>numpy.ndarray</em>) – Vector of coefficients for logistic regression.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>loglikelihood</strong> – The value of the log likelihood with given data and coefficient.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id13">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">mle_finder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.mle_finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the MLE for a logistic model; return the coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables</p></li>
+<li><p><strong>labels</strong> (<em>numpy.ndarray</em>) – The given output labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mle</strong> – The coefficient that solves the logistic regression problem for
+the given data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>We use the BFGS algorithm as implemented in scipy to maximize
+the log-likelihood.
+This requires negating the log likelihood as we use minimization.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id14">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Compute estimated output P(Y =1|X=x, beta_hat)</dt><dd><p>of logistic regression.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>coefficients</strong> (<em>numpy.ndarray</em>) – Vector of coefficients for logistic regression solution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>p</strong> – Predicted output (probability) for each observation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-knn_classify">
+<span id="k-nearest-neighbor-classification"></span><span id="knnclass"></span><h2>K-Nearest Neighbor Classification<a class="headerlink" href="#module-knn_classify" title="Permalink to this headline">¶</a></h2>
+<p>This module builds a class for k-nearest neighbor classification.</p>
+<dl class="py class">
+<dt id="knn_classify.KNNClassify">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">knn_classify.</span></code><code class="sig-name descname"><span class="pre">KNNClassify</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knn_classify.KNNClassify" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a k-nearest neighbor classifier.
+We only list non-inherited attributes. We include regression
+functionality as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use in the algorithm.</p></li>
+<li><p><strong>classify</strong> (<em>bool</em>) – Whether we are using this class for classification or regression.
+True by default. We will use instants with classify == False
+for a KNNRegression class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="knn_classify.KNNClassify.k">
+<code class="sig-name descname"><span class="pre">k</span></code><a class="headerlink" href="#knn_classify.KNNClassify.k" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of neighbors to use in the algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="knn_classify.KNNClassify.test_predictions">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#knn_classify.KNNClassify.test_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The labels predicted for the given test data (for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="knn_classify.KNNClassify.test_accuracy">
+<code class="sig-name descname"><span class="pre">test_accuracy</span></code><a class="headerlink" href="#knn_classify.KNNClassify.test_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on test data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="knn_classify.KNNClassify.test_confusion">
+<code class="sig-name descname"><span class="pre">test_confusion</span></code><a class="headerlink" href="#knn_classify.KNNClassify.test_confusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A confusion matrix of the classifier evaluated on test data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="knn_classify.KNNClassify.test_predictions_reg">
+<code class="sig-name descname"><span class="pre">test_predictions_reg</span></code><a class="headerlink" href="#knn_classify.KNNClassify.test_predictions_reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted output on test data (for regression).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="knn_classify.KNNClassify.test_error">
+<code class="sig-name descname"><span class="pre">test_error</span></code><a class="headerlink" href="#knn_classify.KNNClassify.test_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test MSE of model fit using training data (for regression).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">knnregression.KNNRegression</span></code></dt><dd><p>Class for a regression k-nearest neighbor model.</p>
+</dd>
+</dl>
+</div>
+<dl class="py method">
+<dt id="knn_classify.KNNClassify.classify_point">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">classify_point</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.classify_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knn_classify.KNNClassify.classify_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify a new datapoint based on its k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>current_location</strong> (<em>numpy.ndarray</em>) – Point we would like to classify, using its neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>label_mode</strong> – The predicted label (mode of labels of the k-nearest neighbors).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>We choose the smallest label by default.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id25" title="knn_classify.KNNClassify.estimate_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.estimate_point</span></code></a></dt><dd><p>Find average output value among neighbors instead of most common label (for regression).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="knn_classify.KNNClassify.estimate_point">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">estimate_point</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.estimate_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knn_classify.KNNClassify.estimate_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate (for a regression context) a new datapoint based on its k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>current_location</strong> (<em>numpy.ndarray</em>) – Point we would like to classify, using its neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output_estimate</strong> – The predicted output value of the current location.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id24" title="knn_classify.KNNClassify.classify_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.classify_point</span></code></a></dt><dd><p>Find most common label among neighbors instead of average output value (for classification).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="knn_classify.KNNClassify.k_neighbors_idx">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">k_neighbors_idx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.k_neighbors_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knn_classify.KNNClassify.k_neighbors_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find row indices (in given data) of the k closest neighbors
+to a given data point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables</p></li>
+<li><p><strong>current_location</strong> (<em>numpy.ndarray</em>) – Point we would like to classify, using its neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>k_nearest_idx</strong> – The k indices of the feature_matrix observations closest
+to the current point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>An efficient numpy procedure (using its broadcasting functionality) to compute
+all pairwise differences between two collections of data points is given in <a href="#id31"><span class="problematic" id="id15">[1]_</span></a>.
+We use this, as an alternative to using a manual nested ‘for-loop’ procedure.</p>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id16"><span class="brackets">1</span></dt>
+<dd><p><a class="reference external" href="https://sparrow.dev/pairwise-distance-in-numpy/">https://sparrow.dev/pairwise-distance-in-numpy/</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="knn_classify.KNNClassify.predict_class">
+<code class="sig-name descname"><span class="pre">predict_class</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.predict_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knn_classify.KNNClassify.predict_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify many new datapoints based on their k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>train_output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>test_features</strong> (<em>numpy.ndarray</em>) – Points we would like to classify, using their neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>test_labels</strong> – The predicted labels for each test datapoint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id30" title="knn_classify.KNNClassify.predict_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.predict_value</span></code></a></dt><dd><p>Predict output value instead of label (for regression).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="knn_classify.KNNClassify.predict_value">
+<code class="sig-name descname"><span class="pre">predict_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.predict_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knn_classify.KNNClassify.predict_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify many new datapoints based on their k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>train_output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>test_features</strong> (<em>numpy.ndarray</em>) – Points we would like to classify, using their neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>test_estimates</strong> – The predicted output for each test datapoint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id29" title="knn_classify.KNNClassify.predict_class"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.predict_class</span></code></a></dt><dd><p>Predict label instead of output value (for classification).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="id17">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">knn_classify.</span></code><code class="sig-name descname"><span class="pre">KNNClassify</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a k-nearest neighbor classifier.
+We only list non-inherited attributes. We include regression
+functionality as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use in the algorithm.</p></li>
+<li><p><strong>classify</strong> (<em>bool</em>) – Whether we are using this class for classification or regression.
+True by default. We will use instants with classify == False
+for a KNNRegression class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="id18">
+<code class="sig-name descname"><span class="pre">k</span></code><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of neighbors to use in the algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id19">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
+<dd><p>The labels predicted for the given test data (for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id20">
+<code class="sig-name descname"><span class="pre">test_accuracy</span></code><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on test data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id21">
+<code class="sig-name descname"><span class="pre">test_confusion</span></code><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
+<dd><p>A confusion matrix of the classifier evaluated on test data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id22">
+<code class="sig-name descname"><span class="pre">test_predictions_reg</span></code><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dd><p>The predicted output on test data (for regression).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id23">
+<code class="sig-name descname"><span class="pre">test_error</span></code><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
+<dd><p>The test MSE of model fit using training data (for regression).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">knnregression.KNNRegression</span></code></dt><dd><p>Class for a regression k-nearest neighbor model.</p>
+</dd>
+</dl>
+</div>
+<dl class="py method">
+<dt id="id24">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">classify_point</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.classify_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify a new datapoint based on its k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>current_location</strong> (<em>numpy.ndarray</em>) – Point we would like to classify, using its neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>label_mode</strong> – The predicted label (mode of labels of the k-nearest neighbors).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>We choose the smallest label by default.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id25" title="knn_classify.KNNClassify.estimate_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.estimate_point</span></code></a></dt><dd><p>Find average output value among neighbors instead of most common label (for regression).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id25">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">estimate_point</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.estimate_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate (for a regression context) a new datapoint based on its k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>current_location</strong> (<em>numpy.ndarray</em>) – Point we would like to classify, using its neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output_estimate</strong> – The predicted output value of the current location.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id24" title="knn_classify.KNNClassify.classify_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.classify_point</span></code></a></dt><dd><p>Find most common label among neighbors instead of average output value (for classification).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id26">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">k_neighbors_idx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.k_neighbors_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find row indices (in given data) of the k closest neighbors
+to a given data point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_matrix</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables</p></li>
+<li><p><strong>current_location</strong> (<em>numpy.ndarray</em>) – Point we would like to classify, using its neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>k_nearest_idx</strong> – The k indices of the feature_matrix observations closest
+to the current point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>An efficient numpy procedure (using its broadcasting functionality) to compute
+all pairwise differences between two collections of data points is given in <a href="#id32"><span class="problematic" id="id27">[1]_</span></a>.
+We use this, as an alternative to using a manual nested ‘for-loop’ procedure.</p>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id28"><span class="brackets">1</span></dt>
+<dd><p><a class="reference external" href="https://sparrow.dev/pairwise-distance-in-numpy/">https://sparrow.dev/pairwise-distance-in-numpy/</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id29">
+<code class="sig-name descname"><span class="pre">predict_class</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.predict_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify many new datapoints based on their k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>train_output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>test_features</strong> (<em>numpy.ndarray</em>) – Points we would like to classify, using their neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>test_labels</strong> – The predicted labels for each test datapoint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id30" title="knn_classify.KNNClassify.predict_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.predict_value</span></code></a></dt><dd><p>Predict output value instead of label (for regression).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id30">
+<code class="sig-name descname"><span class="pre">predict_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knn_classify.html#KNNClassify.predict_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify many new datapoints based on their k neighbors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>train_output</strong> (<em>numpy.ndarray</em>) – Labels corresponding to feature_matrix.</p></li>
+<li><p><strong>test_features</strong> (<em>numpy.ndarray</em>) – Points we would like to classify, using their neighbors.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>test_estimates</strong> – The predicted output for each test datapoint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#id29" title="knn_classify.KNNClassify.predict_class"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNNClassify.predict_class</span></code></a></dt><dd><p>Predict label instead of output value (for classification).</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 <hr class="docutils" />
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
@@ -197,6 +1274,9 @@
   <div role="contentinfo">
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
+      <span class="lastupdated">
+        Last updated on Jun 18, 2021.
+      </span>
 
     </p>
   </div>

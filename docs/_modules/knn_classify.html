@@ -369,7 +369,7 @@
 <span class="sd">                                     of label (for regression).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">test_sample_size</span> <span class="o">=</span> <span class="n">test_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">test_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">test_sample_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">test_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">test_sample_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">test_sample_size</span><span class="p">):</span>
             <span class="n">test_labels</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">classify_point</span><span class="p">(</span><span class="n">train_features</span><span class="p">,</span> 
