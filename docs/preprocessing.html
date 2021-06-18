@@ -168,6 +168,23 @@
 <li><p>Generating Bootstrap resamples (In Progress)</p></li>
 </ul>
 <dl class="py function">
+<dt id="preprocessing.cross_validation_folds_idx">
+<code class="sig-prename descclassname"><span class="pre">preprocessing.</span></code><code class="sig-name descname"><span class="pre">cross_validation_folds_idx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocessing.html#cross_validation_folds_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocessing.cross_validation_folds_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partition the (training) dataset into folds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row_count</strong> (<em>int</em>) – Sample size of training data we form folds from.</p></li>
+<li><p><strong>fold_count</strong> (<em>int</em>) – The number of folds to produce; cannot exceed row_count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If more folds are requested than there are observations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="preprocessing.scale_and_center">
 <code class="sig-prename descclassname"><span class="pre">preprocessing.</span></code><code class="sig-name descname"><span class="pre">scale_and_center</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocessing.html#scale_and_center"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocessing.scale_and_center" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center and scale each individual column of the feature matrix
@@ -187,7 +204,7 @@ to have 0 mean and unit variance.</p>
 
 <dl class="py function">
 <dt id="preprocessing.train_test_split">
-<code class="sig-prename descclassname"><span class="pre">preprocessing.</span></code><code class="sig-name descname"><span class="pre">train_test_split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocessing.html#train_test_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocessing.train_test_split" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">preprocessing.</span></code><code class="sig-name descname"><span class="pre">train_test_split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocessing.html#train_test_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocessing.train_test_split" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split the data into training and testing sets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-17T17:17:34-04:00" />
+    <meta property="article:modified_time" content="2021-06-18T01:14:06-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Regression Implementation &mdash; Summer2021ML 1.0 documentation</title>
@@ -91,7 +91,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-linearreg">Linear Regression</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k-nearest-neighbor-regression">K-Nearest Neighbor Regression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-poissonreg">Poisson Regression</a></li>
 </ul>
 </li>
@@ -174,7 +174,7 @@ or k-nearest neighbors regressions. The preprocessing (if applicable)
 is done at this class level.</p>
 <dl class="py class">
 <dt id="regression.Regression">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">Regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.Regression" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">Regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#regression.Regression" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a regression algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -309,7 +309,7 @@ Does not include output.</p>
 
 <dl class="py class">
 <dt id="id0">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">Regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">regression.</span></code><code class="sig-name descname"><span class="pre">Regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/regression.html#Regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a regression algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -661,49 +661,8 @@ using training data.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-knnreg">
-<span id="k-nearest-neighbor-regression"></span><span id="knnreg"></span><h2>K-Nearest Neighbor Regression<a class="headerlink" href="#module-knnreg" title="Permalink to this headline">¶</a></h2>
-<p>This module builds a class for k-nearest neighbor classification.</p>
-<dl class="py class">
-<dt id="knnreg.KNNRegression">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">knnreg.</span></code><code class="sig-name descname"><span class="pre">KNNRegression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knnreg.html#KNNRegression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#knnreg.KNNRegression" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class used to represent a k-nearest neighbor regressor.
-The regression methods and attributes can be found in the
-KNNClassify class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
-<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
-<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
-<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
-True by default.</p></li>
-<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use in the algorithm.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="id21">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">knnreg.</span></code><code class="sig-name descname"><span class="pre">KNNRegression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/knnreg.html#KNNRegression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class used to represent a k-nearest neighbor regressor.
-The regression methods and attributes can be found in the
-KNNClassify class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
-<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
-<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
-<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
-True by default.</p></li>
-<li><p><strong>k</strong> (<em>int</em>) – The number of neighbors to use in the algorithm.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="k-nearest-neighbor-regression">
+<span id="knnreg"></span><h2>K-Nearest Neighbor Regression<a class="headerlink" href="#k-nearest-neighbor-regression" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-poissonreg">
 <span id="poisson-regression"></span><span id="pois"></span><h2>Poisson Regression<a class="headerlink" href="#module-poissonreg" title="Permalink to this headline">¶</a></h2>
@@ -772,8 +731,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id22">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dt id="id21">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on test data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -867,8 +826,8 @@ might expect of the response, conditional on the observed features.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="id23">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">poissonreg.</span></code><code class="sig-name descname"><span class="pre">Poisson</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
+<dt id="id22">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">poissonreg.</span></code><code class="sig-name descname"><span class="pre">Poisson</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a Poisson regression model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -882,8 +841,8 @@ True by default.</p></li>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="id24">
-<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
+<dt id="id23">
+<code class="sig-name descname"><span class="pre">coefficients</span></code><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
 <dd><p>The coefficients in the Poisson regression model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -893,8 +852,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id25">
-<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dt id="id24">
+<code class="sig-name descname"><span class="pre">train_predictions</span></code><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predicted output values for the training data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -904,8 +863,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id26">
-<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
+<dt id="id25">
+<code class="sig-name descname"><span class="pre">test_predictions</span></code><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
 <dd><p>The predicted output values for the test data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -915,8 +874,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id27">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
+<dt id="id26">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on training data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -926,8 +885,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="id28">
-<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id28" title="Permalink to this definition">¶</a></dt>
+<dt id="id27">
+<code class="sig-name descname"><span class="pre">train_error</span></code><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
 <dd><p>The error of model on test data (default is MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -937,14 +896,14 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id29">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
+<dt id="id28">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id28" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the coefficient estimate on the training data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id30">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">loglikelihood</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
+<dt id="id29">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">loglikelihood</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute empirical log likelihood for each coefficient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -964,8 +923,8 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id31">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">mle_finder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.mle_finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id31" title="Permalink to this definition">¶</a></dt>
+<dt id="id30">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">mle_finder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.mle_finder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id30" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the MLE for a Poisson regression model; return the coefficient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -993,8 +952,8 @@ This requires negating the log likelihood as we use minimization.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="id32">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id32" title="Permalink to this definition">¶</a></dt>
+<dt id="id31">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/poissonreg.html#Poisson.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id31" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute estimated means of Poisson regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1045,7 +1004,7 @@ might expect of the response, conditional on the observed features.</p>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 17, 2021.
+        Last updated on Jun 18, 2021.
       </span>
 
     </p>
