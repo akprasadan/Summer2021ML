@@ -92,7 +92,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-logisticreg">Logistic Classifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-knn_classify">K-Nearest Neighbor Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a></li>
@@ -164,6 +164,8 @@
             
   <div class="section" id="classification-algorithms">
 <h1>Classification Algorithms<a class="headerlink" href="#classification-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>This section includes a <a class="reference internal" href="#classif"><span class="std std-ref">Base Classifier</span></a> (a barebones framework for classification), a <a class="reference internal" href="#logist"><span class="std std-ref">Logistic Classifier</span></a>, and a <a class="reference internal" href="#knnclass"><span class="std std-ref">K-Nearest Neighbor Classifier</span></a>. The code is similar to the Regression code,
+except the output types are non-negative integers and we use different evaluation metrics. For example, we report a confusion matrix for each classifier, in addition to accuracy.</p>
 <div class="section" id="base-classifier">
 <span id="classif"></span><h2>Base Classifier<a class="headerlink" href="#base-classifier" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -325,7 +327,7 @@ Does not include output.</p>
 We compute the solution by directly maximizing the log-likelihood.
 We use an existing software implementation to globally maximize the
 likelihood function: BFGS, available in
-scipy.optimize.minimize(method = ‘BFGS)</p>
+scipy.optimize.minimize(method = ‘BFGS’)</p>
 <dl class="py class">
 <dt id="logisticreg.Logistic">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">logisticreg.</span></code><code class="sig-name descname"><span class="pre">Logistic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic" title="Permalink to this definition">¶</a></dt>
@@ -538,7 +540,7 @@ This requires negating the log likelihood as we use minimization.</p>
 
 </div>
 <div class="section" id="module-knn_classify">
-<span id="k-nearest-neighbor-classification"></span><span id="knnclass"></span><h2>K-Nearest Neighbor Classification<a class="headerlink" href="#module-knn_classify" title="Permalink to this headline">¶</a></h2>
+<span id="k-nearest-neighbor-classifier"></span><span id="knnclass"></span><h2>K-Nearest Neighbor Classifier<a class="headerlink" href="#module-knn_classify" title="Permalink to this headline">¶</a></h2>
 <p>This module builds a class for k-nearest neighbor classification.</p>
 <dl class="py class">
 <dt id="knn_classify.KNNClassify">

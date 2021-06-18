@@ -2,7 +2,7 @@
 We compute the solution by directly maximizing the log-likelihood.
 We use an existing software implementation to globally maximize the 
 likelihood function: BFGS, available in 
-scipy.optimize.minimize(method = 'BFGS)
+scipy.optimize.minimize(method = 'BFGS')
 
 '''
 
