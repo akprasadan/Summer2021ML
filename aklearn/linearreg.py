@@ -5,7 +5,6 @@
 import numpy as np
 from regression import Regression
 from numpy.linalg import inv
-from numpy import transpose as trans
 from evaluation_metrics import evaluate_regression_error
 
 
@@ -63,7 +62,7 @@ class Linear(Regression):
         '''
         train_X = self.train_features
         train_y = self.train_output
-        coefficients = inv(trans(train_X) @ train_X) @ trans(train_X) @ train_y
+        coefficients = inv(np.T(train_X) @ train_X) @ np.T(train_X) @ train_y
 
         return coefficients
     
