@@ -166,6 +166,7 @@
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -175,6 +176,10 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="classification.html#qda.QDA.class_covariance">class_covariance() (qda.QDA static method)</a>
+</li>
+      <li><a href="classification.html#qda.QDA.class_feature_covs">class_feature_covs (qda.QDA attribute)</a>
+</li>
       <li>
     classification
 
@@ -226,6 +231,10 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="classification.html#qda.QDA.discriminant">discriminant() (qda.QDA method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
@@ -253,13 +262,19 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clustering.html#kmean.KCluster.feature_means">feature_means (kmean.KCluster attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.feature_means">(qda.QDA attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="classification.html#qda.QDA.features_subsets">features_subsets (qda.QDA attribute)</a>
 </li>
       <li><a href="clustering.html#kmean.KCluster.final_centers">final_centers (kmean.KCluster attribute)</a>
 </li>
-      <li><a href="clustering.html#kmean.KCluster.final_clusters_idx">final_clusters_idx (kmean.KCluster attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clustering.html#kmean.KCluster.final_clusters_idx">final_clusters_idx (kmean.KCluster attribute)</a>
+</li>
       <li><a href="clustering.html#kmean.KCluster.fit">fit() (kmean.KCluster method)</a>
 
       <ul>
@@ -381,6 +396,8 @@
 </li>
         <li><a href="preprocessing.html#module-preprocessing">preprocessing</a>
 </li>
+        <li><a href="classification.html#module-qda">qda</a>
+</li>
         <li><a href="regression.html#module-regression">regression</a>
 </li>
       </ul></li>
@@ -411,6 +428,8 @@
         <li><a href="regression.html#module-poissonreg">module</a>
 </li>
       </ul></li>
+      <li><a href="classification.html#qda.QDA.pooled_covariance">pooled_covariance() (qda.QDA static method)</a>
+</li>
       <li><a href="regression.html#linearreg.Linear.predict">predict() (linearreg.Linear static method)</a>
 
       <ul>
@@ -423,6 +442,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classification.html#knn_classify.KNNClassify.predict_class">predict_class() (knn_classify.KNNClassify method)</a>
 </li>
+      <li><a href="classification.html#qda.QDA.predict_many">predict_many() (qda.QDA method)</a>
+</li>
+      <li><a href="classification.html#qda.QDA.predict_one">predict_one() (qda.QDA method)</a>
+</li>
       <li><a href="classification.html#knn_classify.KNNClassify.predict_value">predict_value() (knn_classify.KNNClassify method)</a>
 </li>
       <li>
@@ -432,6 +455,27 @@
         <li><a href="preprocessing.html#module-preprocessing">module</a>
 </li>
       </ul></li>
+      <li><a href="classification.html#qda.QDA.prior">prior() (qda.QDA static method)</a>
+</li>
+      <li><a href="classification.html#qda.QDA.priors">priors (qda.QDA attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    qda
+
+      <ul>
+        <li><a href="classification.html#module-qda">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="classification.html#qda.QDA">QDA (class in qda)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -486,11 +530,15 @@
       <ul>
         <li><a href="classification.html#logisticreg.Logistic.test_accuracy">(logisticreg.Logistic attribute)</a>
 </li>
+        <li><a href="classification.html#qda.QDA.test_accuracy">(qda.QDA attribute)</a>
+</li>
       </ul></li>
       <li><a href="classification.html#knn_classify.KNNClassify.test_confusion">test_confusion (knn_classify.KNNClassify attribute)</a>
 
       <ul>
         <li><a href="classification.html#logisticreg.Logistic.test_confusion">(logisticreg.Logistic attribute)</a>
+</li>
+        <li><a href="classification.html#qda.QDA.test_confusion">(qda.QDA attribute)</a>
 </li>
       </ul></li>
       <li><a href="classification.html#knn_classify.KNNClassify.test_error">test_error (knn_classify.KNNClassify attribute)</a>
@@ -515,6 +563,8 @@
         <li><a href="classification.html#logisticreg.Logistic.test_predictions">(logisticreg.Logistic attribute)</a>
 </li>
         <li><a href="regression.html#poissonreg.Poisson.test_predictions">(poissonreg.Poisson attribute)</a>
+</li>
+        <li><a href="classification.html#qda.QDA.test_predictions">(qda.QDA attribute)</a>
 </li>
       </ul></li>
       <li><a href="classification.html#knn_classify.KNNClassify.test_predictions_reg">test_predictions_reg (knn_classify.KNNClassify attribute)</a>
@@ -542,9 +592,17 @@
 </li>
       </ul></li>
       <li><a href="classification.html#logisticreg.Logistic.train_accuracy">train_accuracy (logisticreg.Logistic attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.train_accuracy">(qda.QDA attribute)</a>
 </li>
+      </ul></li>
       <li><a href="classification.html#logisticreg.Logistic.train_confusion">train_confusion (logisticreg.Logistic attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.train_confusion">(qda.QDA attribute)</a>
 </li>
+      </ul></li>
       <li><a href="regression.html#id0">train_error (linearreg.Linear attribute)</a>, <a href="regression.html#linearreg.Linear.train_error">[1]</a>
 
       <ul>
@@ -563,6 +621,8 @@
         <li><a href="regression.html#regression.Regression.train_output">(regression.Regression attribute)</a>
 </li>
       </ul></li>
+      <li><a href="classification.html#qda.QDA.train_prediction">train_prediction (qda.QDA attribute)</a>
+</li>
       <li><a href="regression.html#linearreg.Linear.train_predictions">train_predictions (linearreg.Linear attribute)</a>
 
       <ul>
