@@ -38,7 +38,7 @@ class Linear(Regression):
         The error of model on test data (default is MSE).
 
     '''
-    def __init__(self, features, output, split_proportion, 
+    def __init__(self, features, output, split_proportion=0.75, 
                  standardized=True):
         super().__init__(features, output, split_proportion, standardized)
         self.coefficients = self.fit()
@@ -62,7 +62,7 @@ class Linear(Regression):
         '''
         train_X = self.train_features
         train_y = self.train_output
-        coefficients = inv(np.T(train_X) @ train_X) @ np.T(train_X) @ train_y
+        coefficients = inv(train_X.T @ train_X) @ train_X.T @ train_y
 
         return coefficients
     
@@ -83,6 +83,6 @@ class Linear(Regression):
             Predicted output for each observation.
         '''
 
-        prediction = trans(features) @ coefficients
+        prediction = features @ coefficients
         return prediction
     

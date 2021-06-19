@@ -30,7 +30,6 @@ def evaluate_accuracy(predicted_output, true_output):
     return accuracy
 
 
-@jit(nopython=True) 
 def confusion_matrix(number_labels, predicted_output, true_output):
     """Calculate contingency table of predicted labels and true labels.
 
@@ -53,7 +52,6 @@ def confusion_matrix(number_labels, predicted_output, true_output):
     
     Notes
     ------
-    We use numba to speed up the double 'for-loop' we use to fill the matrix.
     The true output and predicted output row vectors are stacked over 
     each other. This 2 by sample_size numpy array is stored as output_combined.
     To identify how often we predict j when the truth is i, we count 
@@ -65,6 +63,7 @@ def confusion_matrix(number_labels, predicted_output, true_output):
     .. [1] https://stackoverflow.com/a/40382459
     """
     confusion_matrix = np.zeros(shape=(number_labels, number_labels), dtype = np.int8)
+    print(true_output, predicted_output)
     output_combined = np.stack((true_output, predicted_output), axis=1)  
 
     for row_index in range(number_labels):  #

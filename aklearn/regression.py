@@ -51,16 +51,18 @@ class Regression:
 
     """
     def __init__(self, features, output, split_proportion=0.75, standardized=True):
-        self.sample_size, 
-        self.train_size, 
-        self.test_size, 
-        self.train_rows, 
-        self.test_rows, 
-        self.train_features, 
-        self.test_features, 
-        self.train_output, 
-        self.test_output = train_test_split(features, output, split_proportion)
-        self.dimension = self.train_rows.shape[1]
+        train_test_split_data = train_test_split(features, output, split_proportion)
+
+        self.sample_size = train_test_split_data.sample_size
+        self.train_size = train_test_split_data.train_size
+        self.test_size = train_test_split_data.test_size
+        self.train_rows = train_test_split_data.train_rows
+        self.test_rows = train_test_split_data.test_rows
+        self.train_features = train_test_split_data.train_features
+        self.test_features = train_test_split_data.test_features
+        self.train_output = train_test_split_data.train_output
+        self.test_output = train_test_split_data.test_output
+        self.dimension = self.train_features.shape[1]
 
         if standardized:
             self.standardize()
@@ -72,3 +74,5 @@ class Regression:
         '''
         self.train_features = scale_and_center(self.train_features)
         self.test_features = scale_and_center(self.test_features)
+
+

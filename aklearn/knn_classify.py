@@ -5,7 +5,6 @@ import numpy as np
 from scipy.stats import mode
 from classification import Classification
 from evaluation_metrics import evaluate_accuracy, confusion_matrix, evaluate_regression_error
-from numba import jit
 
 class KNNClassify(Classification):
     '''
@@ -56,7 +55,7 @@ class KNNClassify(Classification):
     knnregression.KNNRegression : Class for a regression k-nearest neighbor model.
     '''
 
-    def __init__(self, features, output, split_proportion,
+    def __init__(self, features, output, split_proportion=0.75,
                  number_labels=None, standardized=True, k=3, 
                  classify=True):
         super().__init__(features, output, split_proportion, number_labels, 
@@ -81,7 +80,6 @@ class KNNClassify(Classification):
                                                         self.test_output)
 
     @staticmethod
-    @jit(nopython=True)
     def k_neighbors_idx(features, current_location, k):
         '''Find row indices (in given data) of the k closest neighbors 
         to a given data point.
@@ -111,16 +109,13 @@ class KNNClassify(Classification):
         ------------
         .. [1] https://sparrow.dev/pairwise-distance-in-numpy/
         '''
-
+        current_location = np.reshape(current_location, (1, current_location.shape[0]))
         pairwise_differences = features[:, None, :] - current_location[None, :, :]
-        distance_matrix = np.linalg.norm(pairwise_differences)
-        
-        k_nearest_idx = np.argsort(distance_matrix)[:k]
-
+        distance_matrix = np.linalg.norm(pairwise_differences, axis = -1).ravel()
+        k_nearest_idx = np.argsort(distance_matrix, axis = 0)[:k]
         return k_nearest_idx
     
     @staticmethod
-    @jit(nopython=True)
     def classify_point(features, output, current_location, k):
         '''Classify a new datapoint based on its k neighbors.
         
@@ -151,13 +146,12 @@ class KNNClassify(Classification):
         '''
 
         k_nearest_idx = KNNClassify.k_neighbors_idx(features, current_location, k)
-        nearest_k_labels = output[k_nearest_idx, :]
+        nearest_k_labels = output[k_nearest_idx]
         label_mode = mode(nearest_k_labels)[0]
 
         return label_mode
 
     @staticmethod
-    @jit(nopython=True)
     def estimate_point(features, output, current_location, k):
         '''Estimate (for a regression context) a new datapoint based on its k neighbors.
         
@@ -184,12 +178,10 @@ class KNNClassify(Classification):
         '''
 
         k_nearest_idx = KNNClassify.k_neighbors_idx(features, current_location, k)
-        output_estimate = np.mean(output[k_nearest_idx, :])
+        output_estimate = np.mean(output[k_nearest_idx])
 
         return output_estimate
 
-
-    @jit(nopython=True)
     def predict_class(train_features, train_output, test_features, k):
         '''Classify many new datapoints based on their k neighbors.
         
@@ -214,16 +206,15 @@ class KNNClassify(Classification):
                                      of label (for regression).
         '''
         test_sample_size = test_features.shape[0]
-        test_labels = np.zeros((test_sample_size, 1), dtype = np.int8)
+        test_labels = np.zeros(test_sample_size, dtype = np.int8)
 
         for row in range(test_sample_size):
             test_labels[row] = KNNClassify.classify_point(train_features, 
                                                            train_output,
-                                                           test_features[i, :],
+                                                           test_features[row, :],
                                                            k)
         return test_labels
 
-    @jit(nopython=True)
     def predict_value(train_features, train_output, test_features, k):
         '''Classify many new datapoints based on their k neighbors.
         
@@ -249,14 +240,17 @@ class KNNClassify(Classification):
                                     value (for classification).
         '''
         test_sample_size = test_features.shape[0]
-        test_estimates = np.zeros((test_sample_size, 1))
+        test_estimates = np.zeros(test_sample_size)
 
         for row in range(test_sample_size):
             test_estimates[row] = KNNClassify.estimate_point(train_features, 
                                                            train_output,
-                                                           test_features[i, :],
+                                                           test_features[row, :],
                                                            k)
         return test_estimates
+
+
+
         
 
 

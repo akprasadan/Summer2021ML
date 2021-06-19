@@ -26,8 +26,8 @@ class KNNRegression(KNNClassify):
         The number of neighbors to use in the algorithm.
     '''
 
-    def __init__(self, features, output, split_proportion,
+    def __init__(self, features, output, split_proportion=0.75,
                 standardized=True, k=3, classify = False):
         super().__init__(features, output, split_proportion, 
                          standardized)
-                
+
