@@ -1,0 +1,16 @@
+Welcome to Summer2021ML's documentation!
+========================================
+
+.. toctree::
+   regression
+   classification
+   evaluation_metrics
+   preprocessing
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
