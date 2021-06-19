@@ -1,0 +1,27 @@
+Regression Implementation
+========================================
+
+.. toctree::
+   :maxdepth: 2
+
+.. automodule:: regression
+   :members:
+
+.. autoclass:: regression.Regression
+   :members:
+   :undoc-members:
+
+.. automodule:: linearreg
+   :members:
+
+.. autoclass:: linearreg.Linear
+   :members:
+   :undoc-members:
+
+
+
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

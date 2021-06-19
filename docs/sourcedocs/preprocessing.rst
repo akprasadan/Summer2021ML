@@ -1,0 +1,17 @@
+.. _data_prep:
+
+Data Preprocessing 
+========================================
+
+.. toctree::
+   :maxdepth: 2
+
+.. automodule:: preprocessing
+   :members:
+
+
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
