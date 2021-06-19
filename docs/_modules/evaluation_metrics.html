@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a></li>
 </ul>
 
             
@@ -185,8 +186,7 @@
     <span class="k">return</span> <span class="n">accuracy</span></div>
 
 
-<div class="viewcode-block" id="confusion_matrix"><a class="viewcode-back" href="../evaluation_metrics.html#evaluation_metrics.confusion_matrix">[docs]</a><span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-<span class="k">def</span> <span class="nf">confusion_matrix</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">,</span> <span class="n">true_output</span><span class="p">):</span>
+<div class="viewcode-block" id="confusion_matrix"><a class="viewcode-back" href="../evaluation_metrics.html#evaluation_metrics.confusion_matrix">[docs]</a><span class="k">def</span> <span class="nf">confusion_matrix</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">,</span> <span class="n">true_output</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate contingency table of predicted labels and true labels.</span>
 
 <span class="sd">    If there are L labels, then for 1 &lt;= i, j &lt;= L, the (i, j) entry </span>
@@ -208,7 +208,6 @@
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    ------</span>
-<span class="sd">    We use numba to speed up the double &#39;for-loop&#39; we use to fill the matrix.</span>
 <span class="sd">    The true output and predicted output row vectors are stacked over </span>
 <span class="sd">    each other. This 2 by sample_size numpy array is stored as output_combined.</span>
 <span class="sd">    To identify how often we predict j when the truth is i, we count </span>
@@ -220,6 +219,7 @@
 <span class="sd">    .. [1] https://stackoverflow.com/a/40382459</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">true_output</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">)</span>
     <span class="n">output_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">true_output</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  
 
     <span class="k">for</span> <span class="n">row_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_labels</span><span class="p">):</span>  <span class="c1">#</span>

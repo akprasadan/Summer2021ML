@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-18T01:14:06-04:00" />
+    <meta property="article:modified_time" content="2021-06-19T11:48:19-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Model Evaluation &mdash; Summer2021ML 1.0 documentation</title>
@@ -187,8 +187,7 @@ contains the number of times we predicted j when the true class is i.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>We use numba to speed up the double ‘for-loop’ we use to fill the matrix.
-The true output and predicted output row vectors are stacked over
+<p>The true output and predicted output row vectors are stacked over
 each other. This 2 by sample_size numpy array is stored as output_combined.
 To identify how often we predict j when the truth is i, we count
 the number of times the column vector [i, j] appears in output_combined.
@@ -266,7 +265,7 @@ Default is the Euclidean L_2 norm.</p></li>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 18, 2021.
+        Last updated on Jun 19, 2021.
       </span>
 
     </p>

@@ -194,7 +194,7 @@
 <span class="sd">        The error of model on test data (default is MSE).</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> 
                  <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">standardized</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
@@ -218,7 +218,7 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">train_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span>
         <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span>
-        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span> <span class="o">@</span> <span class="n">train_X</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span> <span class="o">@</span> <span class="n">train_y</span>
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">train_X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">train_X</span><span class="p">)</span> <span class="o">@</span> <span class="n">train_X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">train_y</span>
 
         <span class="k">return</span> <span class="n">coefficients</span></div>
     
@@ -239,7 +239,7 @@
 <span class="sd">            Predicted output for each observation.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
-        <span class="n">prediction</span> <span class="o">=</span> <span class="n">trans</span><span class="p">(</span><span class="n">features</span><span class="p">)</span> <span class="o">@</span> <span class="n">coefficients</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">features</span> <span class="o">@</span> <span class="n">coefficients</span>
         <span class="k">return</span> <span class="n">prediction</span></div></div>
     
 </pre></div>

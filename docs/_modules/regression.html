@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a></li>
 </ul>
 
             
@@ -206,16 +207,18 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_rows</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_rows</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_rows</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">train_test_split_data</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">sample_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_rows</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_rows</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">train_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span> <span class="o">=</span> <span class="n">train_test_split_data</span><span class="o">.</span><span class="n">test_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">standardized</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
@@ -227,6 +230,8 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">)</span></div></div>
+
+
 </pre></div>
 
            </div>
