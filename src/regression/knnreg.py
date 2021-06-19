@@ -1,7 +1,7 @@
 '''This module builds a class for k-nearest neighbor classification.
 '''
 
-from knn_classify import KNNClassify
+from src.classification.knn_classify import KNNClassify
 import numpy as np
 
 

@@ -6,9 +6,9 @@ The preprocessing (if applicable) is done at this class level.
 
 import numpy as np
 from numpy.lib.shape_base import split
-from preprocessing import train_test_split, scale_and_center
-from evaluation_metrics import evaluate_accuracy
-from exceptions import ClassInstantiationChecks
+from src.helperfunctions.preprocessing import train_test_split, scale_and_center
+from src.helperfunctions.evaluation_metrics import evaluate_accuracy
+from src.helperfunctions.exceptions import ClassInstantiationChecks
 
 class Classification:
     """

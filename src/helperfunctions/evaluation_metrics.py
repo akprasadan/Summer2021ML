@@ -5,9 +5,7 @@ Each method compares the predicted data to true data.
 '''
 
 import numpy as np
-from numba import jit
-import norms as norms
-
+from src.helperfunctions import norms
 
 def evaluate_accuracy(predicted_output, true_output):
     """Calculate the proportion of labels a classifier correctly predicts.
@@ -63,7 +61,6 @@ def confusion_matrix(number_labels, predicted_output, true_output):
     .. [1] https://stackoverflow.com/a/40382459
     """
     confusion_matrix = np.zeros(shape=(number_labels, number_labels), dtype = np.int8)
-    print(true_output, predicted_output)
     output_combined = np.stack((true_output, predicted_output), axis=1)  
 
     for row_index in range(number_labels):  #

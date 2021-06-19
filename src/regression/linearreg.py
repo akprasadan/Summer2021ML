@@ -3,9 +3,9 @@
 '''
 
 import numpy as np
-from regression import Regression
+from src.regression.regression import Regression
 from numpy.linalg import inv
-from evaluation_metrics import evaluate_regression_error
+from src.helperfunctions.evaluation_metrics import evaluate_regression_error
 
 
 class Linear(Regression):

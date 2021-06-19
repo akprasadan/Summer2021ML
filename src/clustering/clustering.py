@@ -5,7 +5,7 @@ is done at this class level.
 '''
 
 import numpy as np
-from preprocessing import train_test_split, scale_and_center
+from src.helperfunctions.preprocessing import train_test_split, scale_and_center
 
 
 class Clustering:

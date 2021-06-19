@@ -1,5 +1,5 @@
 import numpy as np 
-from clustering import Clustering
+from src.clustering.clustering import Clustering
 
 class KCluster(Clustering):
     '''

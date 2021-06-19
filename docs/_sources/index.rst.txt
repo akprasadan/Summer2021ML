@@ -1,4 +1,4 @@
-Welcome to Summer2021ML's documentation!
+Welcome to Aklearn's documentation!
 ========================================
 
 Building a Machine Learning (ML) Library From Scratch

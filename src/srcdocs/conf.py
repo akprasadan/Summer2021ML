@@ -13,7 +13,10 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-
+sys.path.insert(0, os.path.abspath('../regression'))
+sys.path.insert(0, os.path.abspath('../classification'))
+sys.path.insert(0, os.path.abspath('../clustering'))
+sys.path.insert(0, os.path.abspath('../helperfunctions'))
 
 # -- Project information -----------------------------------------------------
 

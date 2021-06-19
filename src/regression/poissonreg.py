@@ -7,8 +7,8 @@ scipy.optimize.minimize(method = 'BFGS)
 '''
 
 import numpy as np
-from regression import Regression
-from evaluation_metrics import evaluate_regression_error
+from src.regression.regression import Regression
+from src.helperfunctions.evaluation_metrics import evaluate_regression_error
 from scipy.optimize import minimize
 from scipy.optimize.optimize import _minimize_bfgs
 

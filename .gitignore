@@ -1,17 +1,9 @@
 *.pyc
-real_world_data_projects/
-env/
-.vscode/
-aklearn/setup.py
-aklearn/__init__.py
-aklearn/myproject.egg-info/
 
-!aklearn/maindocs
-aklearn/maindocs/*
-!aklearn/maindocs/_build/
-aklearn/maindocs/_build/*
-!aklearn/maindocs/_build/html/
-aklearn/maindocs/_build/html/*
-!aklearn/maindocs/_build/html/index.html
+/venv/
+.vscode/
+.aklearn.egg-info/
+.github
+.gitignore
 
 

@@ -2,9 +2,8 @@
 '''
 
 import numpy as np
-from classification import Classification
-from evaluation_metrics import evaluate_accuracy, confusion_matrix
-from numba import jit
+from src.classification.classification import Classification
+from src.helperfunctions.evaluation_metrics import evaluate_accuracy, confusion_matrix
 
 class QDA(Classification):
     '''

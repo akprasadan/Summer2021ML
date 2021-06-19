@@ -9,8 +9,8 @@ scipy.optimize.minimize(method = 'BFGS')
 import numpy as np
 from scipy.optimize import minimize
 from scipy.optimize.optimize import _minimize_bfgs
-from classification import Classification
-from evaluation_metrics import evaluate_accuracy, confusion_matrix
+from src.classification.classification import Classification
+from src.helperfunctions.evaluation_metrics import evaluate_accuracy, confusion_matrix
 
 
 class Logistic(Classification):

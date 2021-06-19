@@ -3,8 +3,8 @@
 
 import numpy as np
 from scipy.stats import mode
-from classification import Classification
-from evaluation_metrics import evaluate_accuracy, confusion_matrix, evaluate_regression_error
+from src.classification.classification import Classification
+from src.helperfunctions.evaluation_metrics import evaluate_accuracy, confusion_matrix, evaluate_regression_error
 
 class KNNClassify(Classification):
     '''
