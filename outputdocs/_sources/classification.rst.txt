@@ -1,6 +1,17 @@
 Classification Algorithms
 ========================================
 
+This section includes:
+
+- :ref:`classif` (a barebones framework for classification) 
+- :ref:`logist`
+- :ref:`knnclass`
+- :ref:`qdaclass` 
+
+The code is similar to the Regression code, except the output types are non-negative integers and we use different evaluation metrics. For example, we report a confusion matrix for each classifier, in addition to accuracy.
+
+.. _classif: 
+
 Base Classifier
 ---------------
 
@@ -10,9 +21,7 @@ Base Classifier
 .. automodule:: classification
    :members:
 
-.. autoclass:: classification.Classification
-   :members:
-   :undoc-members:
+.. _logist:
 
 Logistic Classifier
 ------------------------------------
@@ -20,19 +29,21 @@ Logistic Classifier
 .. automodule:: logisticreg
    :members:
 
-.. autoclass:: logisticreg.Logistic
-   :members:
-   :undoc-members:
+.. _knnclass:
 
-K-Nearest Neighbor Classification
+K-Nearest Neighbor Classifier
 ------------------------------------
 
 .. automodule:: knn_classify
    :members:
 
-.. autoclass:: knn_classify.KNNClassify
+.. _qdaclass:
+
+Quadratic Discriminant Analysis
+------------------------------------
+
+.. automodule:: qda
    :members:
-   :undoc-members:
 
 ==================
 
