@@ -59,14 +59,14 @@ class QDA(Classification):
     lda.LDA : Use the more restrictive linear discriminant analysis
     '''
 
-    def __init__(self, features, output, split_proportion,
+    def __init__(self, features, output, split_proportion=0.75,
                  number_labels=None, standardized=True):
         super().__init__(features, output, split_proportion, number_labels, 
                          standardized)
-        self.priors = [QDA.prior(self.train_output, i) for i in range(number_labels)]
-        self.features_subsets = np.stack([self.train_features[output == k] for k in range(np.number)], axis = -1)
-        self.class_feature_covs = np.stack([QDA.class_covariance(self.features_subsets[:,:, k]) for k in range(number_labels)], axis = -1)
-        self.feature_means = np.mean(self.features_subsets, axis = 1)
+        self.priors = [QDA.prior(self.train_output, i) for i in range(self.number_labels)]
+        self.features_subsets = [self.train_features[self.train_output == k] for k in range(self.number_labels)]
+        self.class_feature_covs = [QDA.class_covariance(self.features_subsets[k]) for k in range(self.number_labels)]
+        self.feature_means = [np.mean(self.features_subsets[i], axis = 1) for i in range(self.number_labels)]
         self.train_predictions = self.predict_many(self.train_features)
         self.test_predictions = self.predict_many(self.test_features)
         self.train_accuracy = evaluate_accuracy(self.train_predictions, 
@@ -117,14 +117,15 @@ class QDA(Classification):
             The class-specific covariance matrix for QDA.
         '''
 
-        sample_size = features_subset.shape[0]
-        class_mean = np.mean(features_subset, axis=1)
-        centered_features_subset = features_subset - class_mean
-        unscaled_class_cov = centered_features_subset @ np.T(centered_features_subset)
+        sample_size, dim = features_subset.shape
+        class_mean = np.mean(features_subset, axis=0)
+
+        centered_features_subset = features_subset - np.broadcast_to(class_mean, (sample_size, dim))
+        unscaled_class_cov = centered_features_subset @ centered_features_subset.T
         if sample_size == 1:
             class_cov = 1/(sample_size) * unscaled_class_cov
         else: class_cov = 1/(sample_size - 1) * unscaled_class_cov
-
+        print(class_cov, np.corrcoef(class_cov))
         return class_cov
     
     @staticmethod
@@ -176,13 +177,14 @@ class QDA(Classification):
             The value of the discriminant function at this point.
         '''
 
-        class_cov = self.class_feature_covs[:, :, k]
-        mean_term = self.feature_means[:, k]
+        class_cov = self.class_feature_covs[k]
+        print(class_cov, np.linalg.det(class_cov))
+        mean_term = self.feature_means[k]
         det_term = np.linalg.det(class_cov)
         inv_term = np.linalg.inv(class_cov)
         prior_term = np.log(self.priors[k])
 
-        discrim_term = -0.5*det_term - 0.5*np.T(point - mean_term) @ inv_term @ (point - mean_term) + prior_term
+        discrim_term = -0.5*det_term - 0.5*(point - mean_term).T @ inv_term @ (point - mean_term) + prior_term
 
         return discrim_term
   
@@ -221,3 +223,6 @@ class QDA(Classification):
         return labels
 
     
+x = np.random.rand(5,4)
+y = np.random.randint(2, size = 5)
+QDA(x, y)

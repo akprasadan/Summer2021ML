@@ -20,7 +20,7 @@ def scale_and_center(features):
     ----------
     features : numpy.ndarray
         Design matrix of explanatory variables.
-    
+
     Returns
     -------
     features : numpy.ndarray
@@ -32,10 +32,12 @@ def scale_and_center(features):
         column_mean = np.mean(features[:, column])*np.ones(n_rows)
         column_std_dev = np.std(features[:, column])
         centered_column = features[:, column] - column_mean
-        centered_and_scaled_column = centered_column / column_std_dev
-
-        features[:, column] = centered_and_scaled_column
-            
+        if np.std(features[:, column]) == 0:
+            features[:, column] = centered_column
+        else:
+            centered_and_scaled_column = centered_column / column_std_dev
+            features[:, column] = centered_and_scaled_column
+    
     return features
 
 
@@ -114,8 +116,8 @@ def cross_validation_folds_idx(row_count, fold_count):
     # Indices that have not been assigned to a fold yet; will be updated
     row_indices = np.arange(row_count) 
 
-    # Array to store our folds: each row stores indices in that fold
-    folds = np.zeroes((fold_count, rows_per_fold), dtype = np.int8)
+    # Array to store our folds: each row stores indices in that folds
+    folds = np.zeroes((fold_count, rows_per_fold), dtype=np.int8)
 
     for fold in fold_count:
         fold_rows = np.random.choice(row_indices, size=rows_per_fold, replace=False)

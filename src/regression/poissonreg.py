@@ -42,7 +42,7 @@ class Poisson(Regression):
         The error of model on test data (default is MSE).
 
     '''
-    def __init__(self, features, output, split_proportion, 
+    def __init__(self, features, output, split_proportion=0.75, 
                  standardized=True):
         super().__init__(features, output, split_proportion, standardized)
         self.coefficients = self.fit()
@@ -117,8 +117,7 @@ class Poisson(Regression):
             value = -Poisson.loglikelihood(features, counts, 
                                             coefficient)
             return value
-
-        dimension = np.ones(counts.shape[1], dtype = np.int8)
+        dimension = np.ones(features.shape[1], dtype = np.int8)
         optimum = _minimize_bfgs(negative_log_likelihood, dimension)
         mle = optimum.x  # Obtain argmin
         return mle
@@ -165,4 +164,4 @@ class Poisson(Regression):
         exp_dot_prods = np.exp(dot_prods)
         
         return exp_dot_prods
-    
+

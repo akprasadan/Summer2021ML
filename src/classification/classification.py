@@ -60,7 +60,7 @@ class Classification:
         # Default procedure is to assume all labels appear in output
         # If labels are missing in data, specify number_labels manually
         if number_labels is None:  
-            self.number_labels = len(np.unique(output)) 
+            self.number_labels = len(np.unique(output))
         else: 
             self.number_labels = number_labels
 
