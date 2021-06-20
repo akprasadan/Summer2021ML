@@ -1,4 +1,4 @@
-import k_means as km
+'''import k_means as km
 import numpy as np
 
 example1 = km.KCluster()
@@ -46,3 +46,4 @@ def test_predict_method():
         model.predict(X)
         assert np.array_equal(model.predicted_means, model.training_data_means)
 
+'''

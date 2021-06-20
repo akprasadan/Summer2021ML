@@ -202,7 +202,7 @@ class QDA(Classification):
             The predicted class of the point.
         '''
 
-        discrims = np.array([self.discriminant(point, k) for k in range(self.number_labels)], dtype = np.int8)
+        discrims = np.array([self.discriminant(point, k) for k in range(self.number_labels)], dtype=np.int8)
         label = np.where(dicrims = np.min(discrims))[0]
         return label
     
