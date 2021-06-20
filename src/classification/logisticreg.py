@@ -9,6 +9,7 @@ scipy.optimize.minimize(method = 'BFGS')
 import numpy as np
 from scipy.optimize import minimize
 from scipy.optimize.optimize import _minimize_bfgs
+from scipy.special import expit
 from src.classification.classification import Classification
 from src.helperfunctions.evaluation_metrics import evaluate_accuracy, confusion_matrix
 
@@ -60,11 +61,12 @@ class Logistic(Classification):
 
     '''
 
-    def __init__(self, features, output, split_proportion, threshold=0.5, 
+    def __init__(self, features, output, split_proportion=0.75, threshold=0.5, 
                  number_labels=None, standardized=True):
         super().__init__(features, output, split_proportion, number_labels, 
                          standardized)
         self.coefficients = self.fit()
+        print(self.coefficients)
         self.threshold = threshold
         self.train_probs = Logistic.predict(self.train_features, 
                                             self.coefficients)
@@ -86,8 +88,50 @@ class Logistic(Classification):
                                                self.test_output)
 
     @staticmethod
-    def loglikelihood(features, labels, coefficient):
-        '''Compute empirical log likelihood for each coefficient.
+    def logsumexp(x, y):
+        '''Implements the log-sum-exp (LSE) function using a numerically stable formulation.
+
+        Parameters
+        -----------
+        x : float
+            An input to the LSE function
+        y : float
+            An input to the LSE function
+
+        Returns
+        --------
+        lse : float
+            The evaluation of LSE at x and y
+
+        Notes
+        ------
+        The LSE function provides an alternative to a numerically unstable calculation
+        relying on the sigmoid function f(x) = -log(1+exp(-x)), as exp(-x) may blow up.
+        Instead, we use LSE(x, y) = log(exp(x)+exp(y)) and the fact that
+        f(x) = -LSE(0, -x). A full explanation is given here _[5]. We then
+        use a numerically preferable version of the LSE, given in _[6]. 
+
+        References
+        -----------
+        .. [5] https://lingpipe-blog.com/2012/02/16/howprevent-overflow-underflow-logistic-regression/
+        .. [6] https://en.wikipedia.org/wiki/LogSumExp#log-sum-exp_trick_for_log-domain_calculations
+    '''
+    
+        z = np.array([x, y])
+        max_input = np.max(z)
+
+        # The quantity z_diff can be exponentiated with much less difficulty.
+        z_diff = z - max_input
+        
+        exp_diff = np.exp(z_diff)
+        lse = max_input + np.log(np.sum(exp_diff))
+
+        return lse
+
+
+    @staticmethod
+    def lse_alternative(features, labels, coefficient):
+        '''Compute log MLE for each coefficient using log sum exponential.
 
         Parameters
         ----------
@@ -101,14 +145,24 @@ class Logistic(Classification):
         Returns
         -------
         loglikelihood : float
-            The value of the log likelihood with given data and coefficient.
-        '''
+            The value of the log sigmoid with given data and coefficient.
 
-        coeff_matrix = np.tile(coefficient, (features.shape[0], 1))
-        dot_prods = np.sum(features * coeff_matrix, axis=1)
-        log_h = np.log(1/(1+np.exp(-dot_prods)))
-        summands = np.multiply(log_h, labels)+np.multiply(1-log_h, 1-labels)
-        loglikelihood = np.mean(summands)
+        Notes
+        ------
+        We use the LSE for numerical ease (see Logistic.logsumexp for references).
+        The mathematical formulas are given in _[5].
+        '''
+        lse_terms = np.zeros((features.shape[0]))
+        for row in range(features.shape[0]):
+            x_beta = np.dot(features[row, :], coefficient)
+            if labels[row] == 1:
+                print(Logistic.logsumexp(0, -x_beta))
+                lse_terms[row] = np.log(Logistic.logsumexp(0, -x_beta))
+            elif labels[row] == 0:
+                print(Logistic.logsumexp(0, x_beta))
+                lse_terms[row] = np.log(Logistic.logsumexp(0, x_beta)) 
+
+        loglikelihood = np.sum(lse_terms)
 
         return loglikelihood
 
@@ -144,13 +198,15 @@ class Logistic(Classification):
         def negative_log_likelihood(coefficient):
             ''' The negative log likelihood function that we minimize.
             '''
-            value = -Logistic.loglikelihood(features, labels, 
+            value = -Logistic.lse_alternative(features, labels, 
                                             coefficient)
             return value
 
-        dimension = np.ones(labels.shape[1], dtype = np.int8)
-        optimum = _minimize_bfgs(negative_log_likelihood, dimension)
+        # Initialize a coefficient to begin the maximization at
+        coeff_init = np.ones((features.shape[1]), dtype = np.int8)
+        optimum = _minimize_bfgs(negative_log_likelihood, coeff_init)
         mle = optimum.x  # Obtain argmin
+        
         return mle
 
     def fit(self):
@@ -181,8 +237,19 @@ class Logistic(Classification):
         '''
         coeff_matrix = np.tile(coefficients, (features.shape[0], 1))
         dot_prods = np.sum(features * coeff_matrix, axis=1)
-        p = 1/(1+np.exp(-dot_prods))
+        p = expit(dot_prods)
 
         return p
     
+
+X = np.random.rand(5,2)
+y = np.random.randint(2, size=5)
+from scipy.special import logsumexp
+
+
+
+test = Logistic(X, y, standardized=False)
+
+
+
 
