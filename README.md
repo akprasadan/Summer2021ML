@@ -1,3 +1,6 @@
+
+![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=akprasadan&show_icons=true)
+
 # Building a ML Library From Scratch: Aklearn
 
 My goal for the Summer of 2021 is to upgrade my Python and data science skills, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, sklearn, and general data analysis/visualization. In addition, I want to explore the 'ecosystem' of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others).
