@@ -26,16 +26,16 @@ def test_constant_columns():
 def test_compare_sklearn():
     '''Check on randomly generated examples whether sklearn and aklearn agree
     on standardization.'''
+    for _ in range(0, 10):
+        n_cols = 30
+        n_rows = 40
+        constant = 5
+        random_data = constant*np.random.rand(n_rows, n_cols) - constant*np.ones((n_rows, n_cols))
+        scaler = StandardScaler()
+        scaler.fit(random_data)
+        normalized_sklearn = scaler.transform(random_data)
+        normalized_aklearn = scale_and_center(random_data)
+        difference = np.subtract(normalized_sklearn, normalized_aklearn)
+        infty_norm_difference = np.abs(difference).max()
 
-    n_cols = 30
-    n_rows = 40
-    constant = 5
-    random_data = constant*np.random.rand(n_rows, n_cols) - constant*np.ones((n_rows, n_cols))
-    scaler = StandardScaler()
-    scaler.fit(random_data)
-    normalized_sklearn = scaler.transform(random_data)
-    normalized_aklearn = scale_and_center(random_data)
-    difference = np.subtract(normalized_sklearn, normalized_aklearn)
-    infty_norm_difference = np.abs(difference).max()
-
-    assert infty_norm_difference < 1e-5
+        assert infty_norm_difference < 1e-5

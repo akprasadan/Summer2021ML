@@ -15,9 +15,6 @@ The code is similar to the Classification code, except the output types are arbi
 Base Regression
 ------------------
 
-.. toctree::
-   :maxdepth: 2
-
 .. automodule:: regression
    :members:
 

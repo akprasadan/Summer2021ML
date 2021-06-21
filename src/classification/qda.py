@@ -125,7 +125,6 @@ class QDA(Classification):
         if sample_size == 1:
             class_cov = 1/(sample_size) * unscaled_class_cov
         else: class_cov = 1/(sample_size - 1) * unscaled_class_cov
-        print(class_cov, np.corrcoef(class_cov))
         return class_cov
     
     @staticmethod
@@ -178,7 +177,6 @@ class QDA(Classification):
         '''
 
         class_cov = self.class_feature_covs[k]
-        print(class_cov, np.linalg.det(class_cov))
         mean_term = self.feature_means[k]
         det_term = np.linalg.det(class_cov)
         inv_term = np.linalg.inv(class_cov)
@@ -223,6 +221,3 @@ class QDA(Classification):
         return labels
 
     
-x = np.random.rand(5,4)
-y = np.random.randint(2, size = 5)
-QDA(x, y)

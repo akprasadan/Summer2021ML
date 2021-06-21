@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-19T12:56:04-04:00" />
+    <meta property="article:modified_time" content="2021-06-20T12:14:28-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Model Evaluation &mdash; Aklearn 1.0 documentation</title>
@@ -89,13 +89,42 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classification.html">Classification Algorithms</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Evaluation</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="quickguide.html">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#starting-ingredients">Starting Ingredients</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-regression">Base Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-linearreg">Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-poissonreg">Poisson Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="classification.html">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-classification">Base Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-logisticreg">Logistic Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evaluate-regression-error">Evaluate Regression Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-0">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -158,19 +187,54 @@
   </ul>
 
   
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="preprocessing.html" class="btn btn-neutral float-right" title="Data Preprocessing" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      
+      
+        <a href="classification.html" class="btn btn-neutral float-left" title="Classification Algorithms" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+      
+  </div>
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="model-evaluation">
-<h1>Model Evaluation<a class="headerlink" href="#model-evaluation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
-<span class="target" id="module-evaluation_metrics"></span><p>This module provides functionality to evaluate the
+  <div class="section" id="module-evaluation_metrics">
+<span id="model-evaluation"></span><h1>Model Evaluation<a class="headerlink" href="#module-evaluation_metrics" title="Permalink to this headline">¶</a></h1>
+<p>This module provides functionality to evaluate the
 performance of a machine learning model.
 Each method compares the predicted data to true data.</p>
-<dl class="py function">
+<div class="section" id="evaluate-accuracy">
+<h2>Evaluate Accuracy<a class="headerlink" href="#evaluate-accuracy" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="py function">
+<dt class="sig sig-object py" id="evaluation_metrics.evaluate_accuracy">
+<span class="sig-prename descclassname"><span class="pre">evaluation_metrics.</span></span><span class="sig-name descname"><span class="pre">evaluate_accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evaluation_metrics.html#evaluate_accuracy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evaluation_metrics.evaluate_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the proportion of labels a classifier correctly predicts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicted_output</strong> (<em>numpy.ndarray</em>) – The predictions made by the classifier.</p></li>
+<li><p><strong>true_output</strong> (<em>int</em>) – The true labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>accuracy</strong> – Proportion correctly predicted, between 0 and 1 (inclusive).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="evaluate-confusion-matrix">
+<h2>Evaluate Confusion Matrix<a class="headerlink" href="#evaluate-confusion-matrix" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="py function">
 <dt class="sig sig-object py" id="evaluation_metrics.confusion_matrix">
 <span class="sig-prename descclassname"><span class="pre">evaluation_metrics.</span></span><span class="sig-name descname"><span class="pre">confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evaluation_metrics.html#confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evaluation_metrics.confusion_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate contingency table of predicted labels and true labels.</p>
@@ -205,27 +269,12 @@ I consulted <a class="footnote-reference brackets" href="#id2" id="id1">1</a> to
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="evaluation_metrics.evaluate_accuracy">
-<span class="sig-prename descclassname"><span class="pre">evaluation_metrics.</span></span><span class="sig-name descname"><span class="pre">evaluate_accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evaluation_metrics.html#evaluate_accuracy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evaluation_metrics.evaluate_accuracy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the proportion of labels a classifier correctly predicts.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>predicted_output</strong> (<em>numpy.ndarray</em>) – The predictions made by the classifier.</p></li>
-<li><p><strong>true_output</strong> (<em>int</em>) – The true labels.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>accuracy</strong> – Proportion correctly predicted, between 0 and 1 (inclusive).</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
+</div></blockquote>
+</div>
+<div class="section" id="evaluate-regression-error">
+<h2>Evaluate Regression Error<a class="headerlink" href="#evaluate-regression-error" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="py function">
 <dt class="sig sig-object py" id="evaluation_metrics.evaluate_regression_error">
 <span class="sig-prename descclassname"><span class="pre">evaluation_metrics.</span></span><span class="sig-name descname"><span class="pre">evaluate_regression_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">predicted_output</span></em>, <em class="sig-param"><span class="pre">true_output</span></em>, <em class="sig-param"><span class="pre">norm=&lt;function</span> <span class="pre">euclidean_2&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evaluation_metrics.html#evaluate_regression_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evaluation_metrics.evaluate_regression_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the error with respect to a norm of regression output.</p>
@@ -247,11 +296,13 @@ Default is the Euclidean L_2 norm.</p></li>
 </dl>
 </dd></dl>
 
+</div></blockquote>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+</div>
 </div>
 
 
@@ -270,7 +321,7 @@ Default is the Euclidean L_2 norm.</p></li>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 19, 2021.
+        Last updated on Jun 20, 2021.
       </span>
 
     </p>

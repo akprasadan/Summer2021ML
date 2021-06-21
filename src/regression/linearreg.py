@@ -1,11 +1,13 @@
-'''This module is for performing linear regression models.
+'''This module is for performing linear regression.
 
 '''
+
 from src.helperfunctions.preprocessing import scale_and_center
-import numpy as np
 from src.regression.regression import Regression
-from numpy.linalg import inv
 from src.helperfunctions.evaluation_metrics import evaluate_regression_error
+
+import numpy as np
+from numpy.linalg import inv
 
 
 class Linear(Regression):
@@ -15,7 +17,7 @@ class Linear(Regression):
     Parameters
     -----------
     features : numpy.ndarray
-        Design matrix of explanatory variables, including vector of 1s in first column.
+        Design matrix of explanatory variables, not including a column of 1s for the intercept.
     output : numpy.ndarray
         Labels of data corresponding to feature matrix.
     split_proportion : float
@@ -23,6 +25,9 @@ class Linear(Regression):
     standardized : bool
         Whether to center/scale the data (train/test done separately).
         True by default.
+        
+        .. Caution:: Don't include the all ones column, as standardization will result in a singular matrix.
+
 
     Attributes
     ----------
@@ -43,12 +48,14 @@ class Linear(Regression):
                  standardized=True):
         if standardized:
             self.features = scale_and_center(features)
+
         # Add column for intercept
         self.features = np.append(np.ones((features.shape[0], 1)),
                                   features,
                                   axis=1)
 
-        super().__init__(self.features, output, split_proportion, standardized=False)
+        super().__init__(self.features, output, split_proportion, 
+                         standardized=False)
 
         # First element is the intercept term
         self.coefficients = self.fit()

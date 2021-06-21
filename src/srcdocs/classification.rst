@@ -15,9 +15,6 @@ The code is similar to the Regression code, except the output types are non-nega
 Base Classifier
 ---------------
 
-.. toctree::
-   :maxdepth: 2
-
 .. automodule:: classification
    :members:
 

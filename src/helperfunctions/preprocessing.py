@@ -94,6 +94,7 @@ def train_test_split(features, output, split_proportion):
 
     return split_values
 
+
 def cross_validation_folds_idx(row_count, fold_count):
     '''Partition the (training) dataset into folds.
 

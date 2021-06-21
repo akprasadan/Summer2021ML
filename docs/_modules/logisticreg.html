@@ -86,6 +86,7 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickguide.html">A Five Minute Tutorial to Using Aklearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
@@ -168,6 +169,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize.optimize</span> <span class="kn">import</span> <span class="n">_minimize_bfgs</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">expit</span>
 <span class="kn">from</span> <span class="nn">src.classification.classification</span> <span class="kn">import</span> <span class="n">Classification</span>
 <span class="kn">from</span> <span class="nn">src.helperfunctions.evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span>
 
@@ -219,7 +221,7 @@
 
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
                  <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
                          <span class="n">standardized</span><span class="p">)</span>
@@ -244,9 +246,51 @@
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Logistic.loglikelihood"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.loglikelihood">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">loglikelihood</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Compute empirical log likelihood for each coefficient.</span>
+<div class="viewcode-block" id="Logistic.logsumexp"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.logsumexp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">logsumexp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Implements the log-sum-exp (LSE) function using a numerically stable formulation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            An input to the LSE function</span>
+<span class="sd">        y : float</span>
+<span class="sd">            An input to the LSE function</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        lse : float</span>
+<span class="sd">            The evaluation of LSE at x and y</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        The LSE function provides an alternative to a numerically unstable calculation</span>
+<span class="sd">        relying on the sigmoid function f(x) = -log(1+exp(-x)), as exp(-x) may blow up.</span>
+<span class="sd">        Instead, we use LSE(x, y) = log(exp(x)+exp(y)) and the fact that</span>
+<span class="sd">        f(x) = -LSE(0, -x). A full explanation is given here _[5]. We then</span>
+<span class="sd">        use a numerically preferable version of the LSE, given in _[6]. </span>
+
+<span class="sd">        References</span>
+<span class="sd">        -----------</span>
+<span class="sd">        .. [5] https://lingpipe-blog.com/2012/02/16/howprevent-overflow-underflow-logistic-regression/</span>
+<span class="sd">        .. [6] https://en.wikipedia.org/wiki/LogSumExp#log-sum-exp_trick_for_log-domain_calculations</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+        <span class="n">max_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># The quantity z_diff can be exponentiated with much less difficulty.</span>
+        <span class="n">z_diff</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">max_input</span>
+        
+        <span class="n">exp_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z_diff</span><span class="p">)</span>
+        <span class="n">lse</span> <span class="o">=</span> <span class="n">max_input</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">exp_diff</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">lse</span></div>
+
+
+<div class="viewcode-block" id="Logistic.lse_alternative"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.lse_alternative">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">lse_alternative</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute log MLE for each coefficient using log sum exponential.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -260,14 +304,24 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        loglikelihood : float</span>
-<span class="sd">            The value of the log likelihood with given data and coefficient.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">            The value of the log sigmoid with given data and coefficient.</span>
 
-        <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficient</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">features</span> <span class="o">*</span> <span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">log_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dot_prods</span><span class="p">)))</span>
-        <span class="n">summands</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">log_h</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">log_h</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">labels</span><span class="p">)</span>
-        <span class="n">loglikelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">summands</span><span class="p">)</span>
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+<span class="sd">        We use the LSE for numerical ease (see Logistic.logsumexp for references).</span>
+<span class="sd">        The mathematical formulas are given in _[5].</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">lse_terms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">x_beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="p">:],</span> <span class="n">coefficient</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">x_beta</span><span class="p">))</span>
+                <span class="n">lse_terms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">x_beta</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">labels</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_beta</span><span class="p">))</span>
+                <span class="n">lse_terms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_beta</span><span class="p">))</span> 
+
+        <span class="n">loglikelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lse_terms</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">loglikelihood</span></div>
 
@@ -303,13 +357,15 @@
         <span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">coefficient</span><span class="p">):</span>
             <span class="sd">&#39;&#39;&#39; The negative log likelihood function that we minimize.</span>
 <span class="sd">            &#39;&#39;&#39;</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">Logistic</span><span class="o">.</span><span class="n">loglikelihood</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> 
+            <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">Logistic</span><span class="o">.</span><span class="n">lse_alternative</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> 
                                             <span class="n">coefficient</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">value</span>
 
-        <span class="n">dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-        <span class="n">optimum</span> <span class="o">=</span> <span class="n">_minimize_bfgs</span><span class="p">(</span><span class="n">negative_log_likelihood</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+        <span class="c1"># Initialize a coefficient to begin the maximization at</span>
+        <span class="n">coeff_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+        <span class="n">optimum</span> <span class="o">=</span> <span class="n">_minimize_bfgs</span><span class="p">(</span><span class="n">negative_log_likelihood</span><span class="p">,</span> <span class="n">coeff_init</span><span class="p">)</span>
         <span class="n">mle</span> <span class="o">=</span> <span class="n">optimum</span><span class="o">.</span><span class="n">x</span>  <span class="c1"># Obtain argmin</span>
+        
         <span class="k">return</span> <span class="n">mle</span></div>
 
 <div class="viewcode-block" id="Logistic.fit"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -340,10 +396,20 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">features</span> <span class="o">*</span> <span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dot_prods</span><span class="p">))</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">expit</span><span class="p">(</span><span class="n">dot_prods</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">p</span></div></div>
     
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">logsumexp</span>
+
+
+
+
+
+
 
 </pre></div>
 

@@ -3,12 +3,20 @@
 Data Preprocessing 
 ========================================
 
-.. toctree::
-   :maxdepth: 2
 
 .. automodule:: preprocessing
-   :members:
 
+Standardize Data
+---------------------
+   .. autofunction:: scale_and_center
+   
+Train/Test Split
+-----------------
+   .. autofunction:: train_test_split
+
+Cross-Validation Folds
+-----------------------
+   .. autofunction:: cross_validation_folds_idx
 
 ==================
 

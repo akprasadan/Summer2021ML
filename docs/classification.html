@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-19T12:56:04-04:00" />
+    <meta property="article:modified_time" content="2021-06-20T12:32:01-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Classification Algorithms &mdash; Aklearn 1.0 documentation</title>
@@ -89,19 +89,42 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Classification Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#base-classifier">Base Classifier</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="quickguide.html">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#starting-ingredients">Starting Ingredients</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-regression">Base Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-linearreg">Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-poissonreg">Poisson Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-classification">Base Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-logisticreg">Logistic Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-qda">Quadratic Discriminant Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-regression-error">Evaluate Regression Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-0">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -164,6 +187,15 @@
   </ul>
 
   
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="evaluation_metrics.html" class="btn btn-neutral float-right" title="Model Evaluation" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      
+      
+        <a href="regression.html" class="btn btn-neutral float-left" title="Regression Implementation" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+      
+  </div>
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -179,11 +211,9 @@
 <li><p><a class="reference internal" href="#qdaclass"><span class="std std-ref">Quadratic Discriminant Analysis</span></a></p></li>
 </ul>
 <p>The code is similar to the Regression code, except the output types are non-negative integers and we use different evaluation metrics. For example, we report a confusion matrix for each classifier, in addition to accuracy.</p>
-<div class="section" id="base-classifier">
-<span id="classif"></span><h2>Base Classifier<a class="headerlink" href="#base-classifier" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-</div>
-<span class="target" id="module-classification"></span><p>This module builds a base class for classification problems, such as logistic
+<div class="section" id="module-classification">
+<span id="base-classifier"></span><span id="classif"></span><h2>Base Classifier<a class="headerlink" href="#module-classification" title="Permalink to this headline">¶</a></h2>
+<p>This module builds a base class for classification problems, such as logistic
 regression or k-nearest neighbors classification.
 The preprocessing (if applicable) is done at this class level.</p>
 <dl class="py class">
@@ -343,7 +373,7 @@ likelihood function: BFGS, available in
 scipy.optimize.minimize(method = ‘BFGS’)</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="logisticreg.Logistic">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">logisticreg.</span></span><span class="sig-name descname"><span class="pre">Logistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">logisticreg.</span></span><span class="sig-name descname"><span class="pre">Logistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a logistic regression classifier.
 We only list non-inherited attributes. We use an optimizer
 from scipy to manually compute the maximum likelihood estimator.</p>
@@ -477,9 +507,44 @@ True by default.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="logisticreg.Logistic.loglikelihood">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">loglikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.loglikelihood" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute empirical log likelihood for each coefficient.</p>
+<dt class="sig sig-object py" id="logisticreg.Logistic.logsumexp">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">logsumexp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.logsumexp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.logsumexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements the log-sum-exp (LSE) function using a numerically stable formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) – An input to the LSE function</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – An input to the LSE function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>lse</strong> – The evaluation of LSE at x and y</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The LSE function provides an alternative to a numerically unstable calculation
+relying on the sigmoid function f(x) = -log(1+exp(-x)), as exp(-x) may blow up.
+Instead, we use LSE(x, y) = log(exp(x)+exp(y)) and the fact that
+f(x) = -LSE(0, -x). A full explanation is given here _[5]. We then
+use a numerically preferable version of the LSE, given in _[6].</p>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">5</span></dt>
+<dd><p><a class="reference external" href="https://lingpipe-blog.com/2012/02/16/howprevent-overflow-underflow-logistic-regression/">https://lingpipe-blog.com/2012/02/16/howprevent-overflow-underflow-logistic-regression/</a></p>
+</dd>
+<dt class="label" id="id2"><span class="brackets">6</span></dt>
+<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/LogSumExp#log-sum-exp_trick_for_log-domain_calculations">https://en.wikipedia.org/wiki/LogSumExp#log-sum-exp_trick_for_log-domain_calculations</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logisticreg.Logistic.lse_alternative">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">lse_alternative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.lse_alternative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.lse_alternative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute log MLE for each coefficient using log sum exponential.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -489,12 +554,15 @@ True by default.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>loglikelihood</strong> – The value of the log likelihood with given data and coefficient.</p>
+<dd class="field-even"><p><strong>loglikelihood</strong> – The value of the log sigmoid with given data and coefficient.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>We use the LSE for numerical ease (see Logistic.logsumexp for references).
+The mathematical formulas are given in _[5].</p>
 </dd></dl>
 
 <dl class="py method">
@@ -648,7 +716,7 @@ for a KNNRegression class.</p></li>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">knnregression.KNNRegression</span></code></dt><dd><p>Class for a regression k-nearest neighbor model.</p>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">knnregression.KNNRegression</span></code></dt><dd><p>Class for a k-nearest neighbor regression model.</p>
 </dd>
 </dl>
 </div>
@@ -735,11 +803,11 @@ to the current point.</p>
 </dl>
 <p class="rubric">Notes</p>
 <p>An efficient numpy procedure (using its broadcasting functionality) to compute
-all pairwise differences between two collections of data points is given in <a class="footnote-reference brackets" href="#id2" id="id1">1</a>.
+all pairwise differences between two collections of data points is given in <a class="footnote-reference brackets" href="#id4" id="id3">1</a>.
 We use this, as an alternative to using a manual nested ‘for-loop’ procedure.</p>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
-<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id3">1</a></span></dt>
 <dd><p><a class="reference external" href="https://sparrow.dev/pairwise-distance-in-numpy/">https://sparrow.dev/pairwise-distance-in-numpy/</a></p>
 </dd>
 </dl>
@@ -811,7 +879,7 @@ We use this, as an alternative to using a manual nested ‘for-loop’ procedure
 <p>This module builds a class for k-nearest neighbor classification.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="qda.QDA">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">qda.</span></span><span class="sig-name descname"><span class="pre">QDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qda.html#QDA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qda.QDA" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">qda.</span></span><span class="sig-name descname"><span class="pre">QDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qda.html#QDA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qda.QDA" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a quadratic discriminant analysis classifier.
 We only list non-inherited attributes. We include regression
 functionality as well.</p>
@@ -1089,7 +1157,7 @@ of the rows of training data with class i.</p>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 19, 2021.
+        Last updated on Jun 20, 2021.
       </span>
 
     </p>

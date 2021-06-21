@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-19T12:56:04-04:00" />
+    <meta property="article:modified_time" content="2021-06-19T18:35:10-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Welcome to Aklearn’s documentation! &mdash; Aklearn 1.0 documentation</title>
@@ -42,7 +42,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Regression Implementation" href="regression.html" /> 
+    <link rel="next" title="A Five Minute Tutorial to Using Aklearn" href="quickguide.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,11 +88,42 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classification.html">Classification Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickguide.html">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#starting-ingredients">Starting Ingredients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-regression">Base Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-linearreg">Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-poissonreg">Poisson Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="classification.html">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-classification">Base Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-logisticreg">Logistic Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-regression-error">Evaluate Regression Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-0">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -155,6 +186,13 @@
   </ul>
 
   
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="quickguide.html" class="btn btn-neutral float-right" title="A Five Minute Tutorial to Using Aklearn" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      
+      
+  </div>
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -164,8 +202,15 @@
 <h1>Welcome to Aklearn’s documentation!<a class="headerlink" href="#welcome-to-aklearn-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="building-a-machine-learning-ml-library-from-scratch">
 <h2>Building a Machine Learning (ML) Library From Scratch<a class="headerlink" href="#building-a-machine-learning-ml-library-from-scratch" title="Permalink to this headline">¶</a></h2>
-<p>This website contains documentation for my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn!); I will solve GLMs by numerically optimizing the likelihood functions, but I won’t attempt to implement the numerical optimizer itself. The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.</p>
-<p>My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the ‘ecosystem’ of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to Github. I will use Sphinx to automatically carry over my documentation to this website, which was produced by both Sphinx and Read the Docs. A <a class="reference internal" href="#toc"><span class="std std-ref">Table of Contents</span></a> is provided below.</p>
+<p>This website contains documentation for my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn!); for instance, I will solve GLMs by numerically optimizing the likelihood functions, but I won’t attempt to implement the numerical optimizer itself. The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.</p>
+<p>My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the ‘ecosystem’ of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to Github. I will use Sphinx to automatically carry over my documentation to this website, which was produced by both Sphinx and Read the Docs.</p>
+</div>
+<div class="section" id="i-want-to-get-started">
+<h2>I Want to Get Started<a class="headerlink" href="#i-want-to-get-started" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>See the <a class="reference internal" href="#toc"><span class="std std-ref">Table of Contents</span></a></p></li>
+<li><p>Check out <a class="reference internal" href="quickguide.html#quickstartlabel"><span class="std std-ref">A Five Minute Tutorial to Using Aklearn</span></a></p></li>
+</ul>
 </div>
 <div class="section" id="progress-so-far-in-both-workflow-and-explicit-code">
 <h2>Progress So Far (in both workflow and explicit code)<a class="headerlink" href="#progress-so-far-in-both-workflow-and-explicit-code" title="Permalink to this headline">¶</a></h2>
@@ -203,34 +248,39 @@
 <span id="toc"></span><h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="regression.html#base-regression">Base Regression</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="quickguide.html">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickguide.html#starting-ingredients">Starting Ingredients</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-regression">Base Regression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regression.html#module-linearreg">Linear Regression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regression.html#module-poissonreg">Poisson Regression</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="classification.html">Classification Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="classification.html#base-classifier">Base Classifier</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-classification">Base Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-logisticreg">Logistic Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-regression-error">Evaluate Regression Error</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clustering.html#base-clustering-class">Base Clustering Class</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clustering.html#module-0">k-Means Clustering Algorithm</a></li>
 </ul>
 </li>
@@ -252,7 +302,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="regression.html" class="btn btn-neutral float-right" title="Regression Implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quickguide.html" class="btn btn-neutral float-right" title="A Five Minute Tutorial to Using Aklearn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

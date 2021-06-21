@@ -6,9 +6,6 @@ Clustering Algorithms
 Base Clustering Class
 ----------------------
 
-.. toctree::
-   :maxdepth: 2
-
 .. automodule:: clustering
    :members:
 
@@ -19,3 +16,9 @@ k-Means Clustering Algorithm
 
 .. automodule:: clustering
    :members:
+
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

@@ -7,12 +7,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>preprocessing &mdash; Summer2021ML 1.0 documentation</title>
+  <title>preprocessing &mdash; Aklearn 1.0 documentation</title>
   
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
@@ -51,7 +54,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> Summer2021ML
+            <a href="../index.html" class="icon icon-home"> Aklearn
           
 
           
@@ -87,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a></li>
 </ul>
 
             
@@ -102,7 +106,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Summer2021ML</a>
+          <a href="../index.html">Aklearn</a>
         
       </nav>
 
@@ -166,32 +170,34 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
 
-<div class="viewcode-block" id="scale_and_center"><a class="viewcode-back" href="../preprocessing.html#preprocessing.scale_and_center">[docs]</a><span class="k">def</span> <span class="nf">scale_and_center</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">):</span>
+<div class="viewcode-block" id="scale_and_center"><a class="viewcode-back" href="../preprocessing.html#preprocessing.scale_and_center">[docs]</a><span class="k">def</span> <span class="nf">scale_and_center</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Center and scale each individual column of the feature matrix </span>
 <span class="sd">    to have 0 mean and unit variance.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    feature_matrix : numpy.ndarray</span>
+<span class="sd">    features : numpy.ndarray</span>
 <span class="sd">        Design matrix of explanatory variables.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    feature_matrix : numpy.ndarray</span>
+<span class="sd">    features : numpy.ndarray</span>
 <span class="sd">        Design matrix of scaled and centered explanatory variables.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="n">feature_matrix</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols</span><span class="p">):</span>
-        <span class="n">column_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_rows</span><span class="p">)</span>
-        <span class="n">column_std_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
-        <span class="n">centered_column</span> <span class="o">=</span> <span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">-</span> <span class="n">column_mean</span>
-        <span class="n">centered_and_scaled_column</span> <span class="o">=</span> <span class="n">centered_column</span> <span class="o">/</span> <span class="n">column_std_dev</span>
-
-        <span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">centered_and_scaled_column</span>
-            
-    <span class="k">return</span> <span class="n">feature_matrix</span></div>
+        <span class="n">column_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_rows</span><span class="p">)</span>
+        <span class="n">column_std_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
+        <span class="n">centered_column</span> <span class="o">=</span> <span class="n">features</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">-</span> <span class="n">column_mean</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">features</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">centered_column</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">centered_and_scaled_column</span> <span class="o">=</span> <span class="n">centered_column</span> <span class="o">/</span> <span class="n">column_std_dev</span>
+            <span class="n">features</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">centered_and_scaled_column</span>
+    
+    <span class="k">return</span> <span class="n">features</span></div>
 
 
 <div class="viewcode-block" id="train_test_split"><a class="viewcode-back" href="../preprocessing.html#preprocessing.train_test_split">[docs]</a><span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">):</span>
@@ -247,6 +253,7 @@
 
     <span class="k">return</span> <span class="n">split_values</span></div>
 
+
 <div class="viewcode-block" id="cross_validation_folds_idx"><a class="viewcode-back" href="../preprocessing.html#preprocessing.cross_validation_folds_idx">[docs]</a><span class="k">def</span> <span class="nf">cross_validation_folds_idx</span><span class="p">(</span><span class="n">row_count</span><span class="p">,</span> <span class="n">fold_count</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Partition the (training) dataset into folds.</span>
 
@@ -269,8 +276,8 @@
     <span class="c1"># Indices that have not been assigned to a fold yet; will be updated</span>
     <span class="n">row_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">row_count</span><span class="p">)</span> 
 
-    <span class="c1"># Array to store our folds: each row stores indices in that fold</span>
-    <span class="n">folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeroes</span><span class="p">((</span><span class="n">fold_count</span><span class="p">,</span> <span class="n">rows_per_fold</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+    <span class="c1"># Array to store our folds: each row stores indices in that folds</span>
+    <span class="n">folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeroes</span><span class="p">((</span><span class="n">fold_count</span><span class="p">,</span> <span class="n">rows_per_fold</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="n">fold_count</span><span class="p">:</span>
         <span class="n">fold_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">row_indices</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">rows_per_fold</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

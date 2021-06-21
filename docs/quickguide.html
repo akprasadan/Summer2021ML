@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>A Five Minute Tutorial to Using Aklearn &mdash; Aklearn 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Regression Implementation" href="regression.html" />
+    <link rel="prev" title="Welcome to Aklearn’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Aklearn
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-ingredients">Starting Ingredients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-regression">Base Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-linearreg">Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regression.html#module-poissonreg">Poisson Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="classification.html">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-classification">Base Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-logisticreg">Logistic Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation_metrics.html">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html#evaluate-regression-error">Evaluate Regression Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-0">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Aklearn</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>A Five Minute Tutorial to Using Aklearn</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="regression.html" class="btn btn-neutral float-right" title="Regression Implementation" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Aklearn’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="a-five-minute-tutorial-to-using-aklearn">
+<span id="quickstartlabel"></span><h1>A Five Minute Tutorial to Using Aklearn<a class="headerlink" href="#a-five-minute-tutorial-to-using-aklearn" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-this-library-for">
+<h2>What is this library for?<a class="headerlink" href="#what-is-this-library-for" title="Permalink to this headline">¶</a></h2>
+<p>Aklearn is a library to apply your favorite machine learning algorithms, with the help of some basic data preparation and model evaluation functionality. It is a personal project of mine to improve my coding and machine learning skills. The code is likely not complete as you are reading this, and there are plenty of bugs and non-functioning code. Nevertheless, I’m writing this for future practice, so I’ll pretend everything is working just fine.</p>
+</div>
+<div class="section" id="starting-ingredients">
+<h2>Starting Ingredients<a class="headerlink" href="#starting-ingredients" title="Permalink to this headline">¶</a></h2>
+<p>Most of the algorithms have highly similar usage, so let’s examine an example workflow.</p>
+<ul>
+<li><p>Step 1: Identify our problem and obtain the data.</p>
+<ul class="simple">
+<li><p>We want predict the price of Boston housing using some covariates.</p></li>
+<li><p>We will want to make sure our data are numpy arrays</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># We&#39;ll import the data from sklearn</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="c1"># Define feature matrix X and output vector y</span>
+<span class="c1"># sklearn will automatically assign them appropriately</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Step 2: Choose a model.</p>
+<ul class="simple">
+<li><p>Let’s do a standard linear regression, for simplicity of this tutorial. We will instantiate a <code class="docutils literal notranslate"><span class="pre">Linear(features,</span> <span class="pre">output,</span> <span class="pre">split_proportion,</span> <span class="pre">standardized)</span></code> object. This will require:</p>
+<ul>
+<li><p>A feature matrix: set <code class="docutils literal notranslate"><span class="pre">features</span> <span class="pre">=</span> <span class="pre">X</span></code>.</p></li>
+<li><p>An output vector: set <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">=</span> <span class="pre">y</span></code>.</p></li>
+<li><p>The proportion of data to train on: we’ll set 75% for training, so <code class="docutils literal notranslate"><span class="pre">split_proportion</span> <span class="pre">=</span> <span class="pre">0.75</span></code>.</p></li>
+<li><p>Whether or not we wish to standardize X before hand (default is yes): set <code class="docutils literal notranslate"><span class="pre">standardized</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Step 3: Fit the model and evaluate.</p>
+<ul class="simple">
+<li><p>As soon as we instantiate our model, it will fit on the training data, give us the coefficient vector along with the train and test error.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="n">features</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+               <span class="n">output</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> 
+               <span class="n">split_proportion</span> <span class="o">=</span> <span class="mf">0.75</span><span class="p">,</span> 
+               <span class="n">standardize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">coefficients</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coefficients</span>
+<span class="n">train_error</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train_error</span>
+<span class="n">test_error</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test_error</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="regression.html" class="btn btn-neutral float-right" title="Regression Implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Aklearn’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Akshay Prasadan.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

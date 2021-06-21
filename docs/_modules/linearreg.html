@@ -86,11 +86,42 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickguide.html">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickguide.html#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickguide.html#starting-ingredients">Starting Ingredients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-regression">Base Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-linearreg">Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-poissonreg">Poisson Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-classification">Base Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-logisticreg">Logistic Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation_metrics.html#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation_metrics.html#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation_metrics.html#evaluate-regression-error">Evaluate Regression Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../clustering.html#module-0">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -157,14 +188,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for linearreg</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;This module is for performing linear regression models.</span>
+<span></span><span class="sd">&#39;&#39;&#39;This module is for performing linear regression.</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">src.helperfunctions.preprocessing</span> <span class="kn">import</span> <span class="n">scale_and_center</span>
 <span class="kn">from</span> <span class="nn">src.regression.regression</span> <span class="kn">import</span> <span class="n">Regression</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span>
 <span class="kn">from</span> <span class="nn">src.helperfunctions.evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_regression_error</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span>
 
 
 <div class="viewcode-block" id="Linear"><a class="viewcode-back" href="../regression.html#linearreg.Linear">[docs]</a><span class="k">class</span> <span class="nc">Linear</span><span class="p">(</span><span class="n">Regression</span><span class="p">):</span>
@@ -174,7 +207,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
 <span class="sd">    features : numpy.ndarray</span>
-<span class="sd">        Design matrix of explanatory variables.</span>
+<span class="sd">        Design matrix of explanatory variables, not including a column of 1s for the intercept.</span>
 <span class="sd">    output : numpy.ndarray</span>
 <span class="sd">        Labels of data corresponding to feature matrix.</span>
 <span class="sd">    split_proportion : float</span>
@@ -182,11 +215,15 @@
 <span class="sd">    standardized : bool</span>
 <span class="sd">        Whether to center/scale the data (train/test done separately).</span>
 <span class="sd">        True by default.</span>
+<span class="sd">        </span>
+<span class="sd">        .. Caution:: Don&#39;t include the all ones column, as standardization will result in a singular matrix.</span>
+
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    coefficients : numpy.ndarray</span>
 <span class="sd">        The coefficients in the logistic regression model.</span>
+<span class="sd">        The first coefficient is the intercept.</span>
 <span class="sd">    train_predictions : numpy.ndarray</span>
 <span class="sd">        The predicted output values for the training data.</span>
 <span class="sd">    test_predictions : numpy.ndarray</span>
@@ -197,34 +234,47 @@
 <span class="sd">        The error of model on test data (default is MSE).</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
                  <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">standardized</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">standardized</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="c1"># Add column for intercept</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span>
+                                  <span class="n">features</span><span class="p">,</span>
+                                  <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
+                         <span class="n">standardized</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># First element is the intercept term</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span> <span class="o">=</span> <span class="n">Linear</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span> <span class="o">=</span> <span class="n">Linear</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
                                                 <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">Linear</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">Linear</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span>
                                                <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_error</span> <span class="o">=</span> <span class="n">evaluate_regression_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_error</span> <span class="o">=</span> <span class="n">evaluate_regression_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span><span class="p">,</span>
                                                      <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_error</span> <span class="o">=</span> <span class="n">evaluate_regression_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_error</span> <span class="o">=</span> <span class="n">evaluate_regression_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
-    
+
 <div class="viewcode-block" id="Linear.fit"><a class="viewcode-back" href="../regression.html#linearreg.Linear.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Calculate the coefficient solving the least squares problem </span>
+        <span class="sd">&#39;&#39;&#39;Calculate the coefficient solving the least squares problem</span>
 <span class="sd">        using training data.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        coefficients : numpy.ndarray</span>
-<span class="sd">            Vector of coefficients of length self.dimension</span>
+<span class="sd">            Vector of coefficients of length self.dimension.</span>
+<span class="sd">            The first element is the intercept term.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">train_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span>
         <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span>
         <span class="n">coefficients</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">train_X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">train_X</span><span class="p">)</span> <span class="o">@</span> <span class="n">train_X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">train_y</span>
 
         <span class="k">return</span> <span class="n">coefficients</span></div>
-    
+
 <div class="viewcode-block" id="Linear.predict"><a class="viewcode-back" href="../regression.html#linearreg.Linear.predict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Compute estimated output y = X*beta_hat of linear regression.</span>
@@ -244,7 +294,7 @@
 
         <span class="n">prediction</span> <span class="o">=</span> <span class="n">features</span> <span class="o">@</span> <span class="n">coefficients</span>
         <span class="k">return</span> <span class="n">prediction</span></div></div>
-    
+
 </pre></div>
 
            </div>

@@ -211,7 +211,7 @@
 
 <span class="sd">    See Also</span>
 <span class="sd">    ---------</span>
-<span class="sd">    knnregression.KNNRegression : Class for a regression k-nearest neighbor model.</span>
+<span class="sd">    knnregression.KNNRegression : Class for a k-nearest neighbor regression model.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
@@ -220,16 +220,17 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
                          <span class="n">standardized</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
-        <span class="k">if</span> <span class="n">classify</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">predict_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
-                                                        <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>
-                                                        <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span>
-                                                        <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">classify</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">predict_class</span><span class="p">(</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions_reg</span> <span class="o">=</span> <span class="n">KNNClassify</span><span class="o">.</span><span class="n">predict_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
                                                         <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>

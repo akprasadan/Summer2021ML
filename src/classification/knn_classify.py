@@ -52,7 +52,7 @@ class KNNClassify(Classification):
 
     See Also
     ---------
-    knnregression.KNNRegression : Class for a regression k-nearest neighbor model.
+    knnregression.KNNRegression : Class for a k-nearest neighbor regression model.
     '''
 
     def __init__(self, features, output, split_proportion=0.75,
@@ -61,16 +61,17 @@ class KNNClassify(Classification):
         super().__init__(features, output, split_proportion, number_labels, 
                          standardized)
         self.k = k
-        if classify == True:
-            self.test_predictions = KNNClassify.predict_class(self.train_features,
-                                                        self.train_output,
-                                                        self.test_features,
-                                                        self.k)
+        if classify:
+            self.test_predictions = KNNClassify.predict_class(
+                                                self.train_features,
+                                                self.train_output,
+                                                self.test_features,
+                                                self.k)
             self.test_accuracy = evaluate_accuracy(self.test_predictions, 
-                                               self.test_output)
+                                                   self.test_output)
             self.test_confusion = confusion_matrix(self.number_labels, 
-                                               self.test_predictions, 
-                                               self.test_output)
+                                                   self.test_predictions, 
+                                                   self.test_output)
         else:
             self.test_predictions_reg = KNNClassify.predict_value(self.train_features,
                                                         self.train_output,

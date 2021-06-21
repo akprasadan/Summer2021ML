@@ -4,9 +4,15 @@ Welcome to Aklearn's documentation!
 Building a Machine Learning (ML) Library From Scratch
 ------------------------------------------------------------
 
-This website contains documentation for my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn!); I will solve GLMs by numerically optimizing the likelihood functions, but I won't attempt to implement the numerical optimizer itself. The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.
+This website contains documentation for my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn!); for instance, I will solve GLMs by numerically optimizing the likelihood functions, but I won't attempt to implement the numerical optimizer itself. The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.
 
-My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the 'ecosystem' of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to Github. I will use Sphinx to automatically carry over my documentation to this website, which was produced by both Sphinx and Read the Docs. A :ref:`TOC` is provided below.
+My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the 'ecosystem' of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to Github. I will use Sphinx to automatically carry over my documentation to this website, which was produced by both Sphinx and Read the Docs. 
+
+I Want to Get Started
+-------------------------
+
+- See the :ref:`TOC` 
+- Check out :ref:`quickstartlabel`
 
 Progress So Far (in both workflow and explicit code)
 -----------------------------------------------------
@@ -43,11 +49,12 @@ Table of Contents
 ===================
 
 .. toctree::
-   regression
-   classification
-   evaluation_metrics
-   preprocessing
-   clustering
+   quickguide.md
+   regression.rst
+   classification.rst
+   evaluation_metrics.rst
+   preprocessing.rst
+   clustering.rst
 
 
 Indices and tables

@@ -66,7 +66,6 @@ class Logistic(Classification):
         super().__init__(features, output, split_proportion, number_labels, 
                          standardized)
         self.coefficients = self.fit()
-        print(self.coefficients)
         self.threshold = threshold
         self.train_probs = Logistic.predict(self.train_features, 
                                             self.coefficients)
@@ -248,7 +247,6 @@ from scipy.special import logsumexp
 
 
 
-test = Logistic(X, y, standardized=False)
 
 
 
