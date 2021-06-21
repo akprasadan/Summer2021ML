@@ -14,7 +14,7 @@ Base Clustering Class
 k-Means Clustering Algorithm
 ---------------------------------
 
-.. automodule:: clustering
+.. automodule:: kmean
    :members:
 
 ==================

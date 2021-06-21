@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-20T12:14:28-04:00" />
+    <meta property="article:modified_time" content="2021-06-21T11:12:54-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Clustering Algorithms &mdash; Aklearn 1.0 documentation</title>
@@ -121,7 +121,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Clustering Algorithms</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-clustering">Base Clustering Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-0">k-Means Clustering Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-kmean">k-Means Clustering Algorithm</a></li>
 </ul>
 </li>
 </ul>
@@ -249,26 +249,16 @@ Does not include output.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-0">
-<span id="k-means-clustering-algorithm"></span><span id="kmean"></span><h2>k-Means Clustering Algorithm<a class="headerlink" href="#module-0" title="Permalink to this headline">¶</a></h2>
-<p>This module builds a a base class for clustering problems, such as k-means. The preprocessing (if applicable)
-is done at this class level.</p>
+<div class="section" id="module-kmean">
+<span id="k-means-clustering-algorithm"></span><span id="kmean"></span><h2>k-Means Clustering Algorithm<a class="headerlink" href="#module-kmean" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">clustering.</span></span><span class="sig-name descname"><span class="pre">Clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering.html#Clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class used to represent a clustering algorithm.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
-<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data. True by default.</p></li>
-</ul>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="kmean.KCluster">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">kmean.</span></span><span class="sig-name descname"><span class="pre">KCluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to represent a k-means clustering model.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">sample_size</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
-<dd><p>The sample size of all given data (train and test).</p>
+<dt class="sig sig-object py" id="kmean.KCluster.k">
+<span class="sig-name descname"><span class="pre">k</span></span><a class="headerlink" href="#kmean.KCluster.k" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many clusters to use in the algorithm</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
@@ -277,22 +267,142 @@ is done at this class level.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">dimension</span></span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of dimensions of the data, or columns of design matrix.
-Does not include output.</p>
+<dt class="sig sig-object py" id="kmean.KCluster.final_clusters_idx">
+<span class="sig-name descname"><span class="pre">final_clusters_idx</span></span><a class="headerlink" href="#kmean.KCluster.final_clusters_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store which cluster each observation belongs to</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="kmean.KCluster.final_centers">
+<span class="sig-name descname"><span class="pre">final_centers</span></span><a class="headerlink" href="#kmean.KCluster.final_centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>A self.k by self.dimension matrix storing the positions of the cluster centers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="kmean.KCluster.number_iterations">
+<span class="sig-name descname"><span class="pre">number_iterations</span></span><a class="headerlink" href="#kmean.KCluster.number_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many steps the algorithm took to converge</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="kmean.KCluster.threshold">
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#kmean.KCluster.threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>How small the error needs to be to end the convergence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="kmean.KCluster.feature_means">
+<span class="sig-name descname"><span class="pre">feature_means</span></span><a class="headerlink" href="#kmean.KCluster.feature_means" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store the predicted position each observation is centered around.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering.html#Clustering.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Separately scale/center the train and test data so each feature
-(column of observations) has 0 mean and unit variance.</p>
+<dt class="sig sig-object py" id="kmean.KCluster.compute_distance_matrix">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">compute_distance_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster.compute_distance_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster.compute_distance_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute distances of each of n row vectors in a matrix to each of k vectors representing ‘centers.’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – n by d array, where d is the dimension of dataset, n is the sample size</p></li>
+<li><p><strong>centers</strong> (<em>numpy.ndarray</em>) – k by d array, where k is the number of clusters and d is the dimension</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>distance_matrix</strong> – An n by k array.
+The (i,j) entry is the distance from the i-th row of X to the jth row of centers.
+We use the l_2 Euclidean norm for d dimensions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>An efficient numpy procedure (using its broadcasting functionality) to compute
+all pairwise differences between two collections of data points is given in <a class="footnote-reference brackets" href="#id2" id="id1">4</a>.
+We use this, as an alternative to using a manual nested ‘for-loop’ procedure.</p>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">4</a></span></dt>
+<dd><p><a class="reference external" href="https://sparrow.dev/pairwise-distance-in-numpy/">https://sparrow.dev/pairwise-distance-in-numpy/</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kmean.KCluster.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit k-means to a dataset up to a predetermined threshold of convergence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kmean.KCluster.update_clusters">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">update_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster.update_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster.update_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a current set of k centers, compute which cluster each
+row vector of the data matrix is closest to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – n by d array, where d is the dimension of dataset, n is the sample size</p></li>
+<li><p><strong>centers</strong> (<em>numpy.ndarray</em>) – k by d array, where k is the number of centers</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>closest_center_idx</strong> – A vector of length n whose i-th entry is the integer p minimizing
+distance of ith row of features to the pth cluster point.
+We use the d-dimensional l_2 Euclidean norm.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kmean.KCluster.update_means">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">update_means</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_center_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster.update_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster.update_means" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – n by d array, where d is the dimension of dataset,
+n is the sample size</p></li>
+<li><p><strong>closest_center_idx</strong> (<em>numpy.ndarray</em>) – n by 1 array</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The number of centers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cluster_means</strong> – A k by d array.
+The i-th row is the d-dimensional element-wise mean of
+all row vectors of X in cluster i.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -321,7 +431,7 @@ Does not include output.</p>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 20, 2021.
+        Last updated on Jun 21, 2021.
       </span>
 
     </p>

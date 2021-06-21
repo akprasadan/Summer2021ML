@@ -119,7 +119,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-0">k-Means Clustering Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-kmean">k-Means Clustering Algorithm</a></li>
 </ul>
 </li>
 </ul>
@@ -204,6 +204,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  
 </div>
 <h2 id="C">C</h2>
@@ -228,12 +229,12 @@
     clustering
 
       <ul>
-        <li><a href="clustering.html#module-0">module</a>, <a href="clustering.html#module-clustering">[1]</a>
+        <li><a href="clustering.html#module-clustering">module</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clustering.html#clustering.Clustering">Clustering (class in clustering)</a>, <a href="clustering.html#id0">[1]</a>
+      <li><a href="clustering.html#clustering.Clustering">Clustering (class in clustering)</a>
 </li>
       <li><a href="regression.html#linearreg.Linear.coefficients">coefficients (linearreg.Linear attribute)</a>
 
@@ -243,6 +244,8 @@
         <li><a href="regression.html#poissonreg.Poisson.coefficients">(poissonreg.Poisson attribute)</a>
 </li>
       </ul></li>
+      <li><a href="clustering.html#kmean.KCluster.compute_distance_matrix">compute_distance_matrix() (kmean.KCluster static method)</a>
+</li>
       <li><a href="evaluation_metrics.html#evaluation_metrics.confusion_matrix">confusion_matrix() (in module evaluation_metrics)</a>
 </li>
       <li><a href="preprocessing.html#preprocessing.cross_validation_folds_idx">cross_validation_folds_idx() (in module preprocessing)</a>
@@ -256,7 +259,7 @@
       <li><a href="classification.html#classification.Classification.dimension">dimension (classification.Classification attribute)</a>
 
       <ul>
-        <li><a href="clustering.html#clustering.Clustering.dimension">(clustering.Clustering attribute)</a>, <a href="clustering.html#id2">[1]</a>
+        <li><a href="clustering.html#clustering.Clustering.dimension">(clustering.Clustering attribute)</a>
 </li>
         <li><a href="regression.html#regression.Regression.dimension">(regression.Regression attribute)</a>
 </li>
@@ -292,15 +295,25 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classification.html#qda.QDA.feature_means">feature_means (qda.QDA attribute)</a>
+      <li><a href="clustering.html#kmean.KCluster.feature_means">feature_means (kmean.KCluster attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.feature_means">(qda.QDA attribute)</a>
 </li>
+      </ul></li>
       <li><a href="classification.html#qda.QDA.features_subsets">features_subsets (qda.QDA attribute)</a>
+</li>
+      <li><a href="clustering.html#kmean.KCluster.final_centers">final_centers (kmean.KCluster attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="regression.html#linearreg.Linear.fit">fit() (linearreg.Linear method)</a>
+      <li><a href="clustering.html#kmean.KCluster.final_clusters_idx">final_clusters_idx (kmean.KCluster attribute)</a>
+</li>
+      <li><a href="clustering.html#kmean.KCluster.fit">fit() (kmean.KCluster method)</a>
 
       <ul>
+        <li><a href="regression.html#linearreg.Linear.fit">(linearreg.Linear method)</a>
+</li>
         <li><a href="classification.html#logisticreg.Logistic.fit">(logisticreg.Logistic method)</a>
 </li>
         <li><a href="regression.html#poissonreg.Poisson.fit">(poissonreg.Poisson method)</a>
@@ -312,10 +325,25 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classification.html#knn_classify.KNNClassify.k">k (knn_classify.KNNClassify attribute)</a>
+      <li><a href="clustering.html#kmean.KCluster.k">k (kmean.KCluster attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#knn_classify.KNNClassify.k">(knn_classify.KNNClassify attribute)</a>
 </li>
+      </ul></li>
       <li><a href="classification.html#knn_classify.KNNClassify.k_neighbors_idx">k_neighbors_idx() (knn_classify.KNNClassify static method)</a>
 </li>
+      <li><a href="clustering.html#kmean.KCluster">KCluster (class in kmean)</a>
+</li>
+      <li>
+    kmean
+
+      <ul>
+        <li><a href="clustering.html#module-kmean">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     knn_classify
 
@@ -323,8 +351,6 @@
         <li><a href="classification.html#module-knn_classify">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classification.html#knn_classify.KNNClassify">KNNClassify (class in knn_classify)</a>
 </li>
       <li>
@@ -386,9 +412,11 @@
       <ul>
         <li><a href="classification.html#module-classification">classification</a>
 </li>
-        <li><a href="clustering.html#module-0">clustering</a>, <a href="clustering.html#module-clustering">[1]</a>
+        <li><a href="clustering.html#module-clustering">clustering</a>
 </li>
         <li><a href="evaluation_metrics.html#module-evaluation_metrics">evaluation_metrics</a>
+</li>
+        <li><a href="clustering.html#module-kmean">kmean</a>
 </li>
         <li><a href="classification.html#module-knn_classify">knn_classify</a>
 </li>
@@ -412,6 +440,10 @@
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clustering.html#kmean.KCluster.number_iterations">number_iterations (kmean.KCluster attribute)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classification.html#classification.Classification.number_labels">number_labels (classification.Classification attribute)</a>
 </li>
@@ -504,7 +536,7 @@
       <li><a href="classification.html#classification.Classification.sample_size">sample_size (classification.Classification attribute)</a>
 
       <ul>
-        <li><a href="clustering.html#clustering.Clustering.sample_size">(clustering.Clustering attribute)</a>, <a href="clustering.html#id1">[1]</a>
+        <li><a href="clustering.html#clustering.Clustering.sample_size">(clustering.Clustering attribute)</a>
 </li>
         <li><a href="regression.html#regression.Regression.sample_size">(regression.Regression attribute)</a>
 </li>
@@ -516,7 +548,7 @@
       <li><a href="classification.html#classification.Classification.standardize">standardize() (classification.Classification method)</a>
 
       <ul>
-        <li><a href="clustering.html#clustering.Clustering.standardize">(clustering.Clustering method)</a>, <a href="clustering.html#id3">[1]</a>
+        <li><a href="clustering.html#clustering.Clustering.standardize">(clustering.Clustering method)</a>
 </li>
         <li><a href="regression.html#regression.Regression.standardize">(regression.Regression method)</a>
 </li>
@@ -587,8 +619,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classification.html#logisticreg.Logistic.threshold">threshold (logisticreg.Logistic attribute)</a>
+      <li><a href="clustering.html#kmean.KCluster.threshold">threshold (kmean.KCluster attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#logisticreg.Logistic.threshold">(logisticreg.Logistic attribute)</a>
 </li>
+      </ul></li>
       <li><a href="classification.html#logisticreg.Logistic.train_accuracy">train_accuracy (logisticreg.Logistic attribute)</a>
 
       <ul>
@@ -644,6 +680,18 @@
 </li>
       </ul></li>
       <li><a href="preprocessing.html#preprocessing.train_test_split">train_test_split() (in module preprocessing)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clustering.html#kmean.KCluster.update_clusters">update_clusters() (kmean.KCluster static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clustering.html#kmean.KCluster.update_means">update_means() (kmean.KCluster static method)</a>
 </li>
   </ul></td>
 </tr></table>
