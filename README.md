@@ -30,3 +30,8 @@ You can find all the documentation [here](https://akprasadan.github.io/Summer202
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+![](https://github.com/akprasadan/aklearn/workflows/Project%20Tests/badge.svg)
+
+![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=akprasadan&show_icons=true)
+
