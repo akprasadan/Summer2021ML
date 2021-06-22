@@ -69,9 +69,10 @@ Table of Contents
    quickguide.md
    regression.rst
    classification.rst
+   clustering.rst
    evaluation_metrics.rst
    preprocessing.rst
-   clustering.rst
+   
 
 
 Indices and tables

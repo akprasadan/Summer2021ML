@@ -1,8 +1,8 @@
 *.pyc
 
 /venv/
-.vscode/
-.aklearn.egg-info/
+.vscode
+.aklearn.egg-info
 .github
 .gitignore
 

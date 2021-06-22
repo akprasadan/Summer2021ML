@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-21T11:12:54-04:00" />
+    <meta property="article:modified_time" content="2021-06-22T00:00:21-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Model Evaluation &mdash; Aklearn 1.0 documentation</title>
@@ -43,7 +43,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Data Preprocessing" href="preprocessing.html" />
-    <link rel="prev" title="Classification Algorithms" href="classification.html" /> 
+    <link rel="prev" title="Clustering Algorithms" href="clustering.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -108,6 +108,11 @@
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-kmean">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Model Evaluation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#evaluate-accuracy">Evaluate Accuracy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
@@ -118,11 +123,6 @@
 <li class="toctree-l2"><a class="reference internal" href="preprocessing.html#standardize-data">Standardize Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="preprocessing.html#train-test-split">Train/Test Split</a></li>
 <li class="toctree-l2"><a class="reference internal" href="preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-clustering">Base Clustering Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering.html#module-kmean">k-Means Clustering Algorithm</a></li>
 </ul>
 </li>
 </ul>
@@ -192,7 +192,7 @@
         <a href="preprocessing.html" class="btn btn-neutral float-right" title="Data Preprocessing" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
       
       
-        <a href="classification.html" class="btn btn-neutral float-left" title="Classification Algorithms" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="clustering.html" class="btn btn-neutral float-left" title="Clustering Algorithms" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
       
   </div>
   
@@ -312,7 +312,7 @@ Default is the Euclidean L_2 norm.</p></li>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="preprocessing.html" class="btn btn-neutral float-right" title="Data Preprocessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="classification.html" class="btn btn-neutral float-left" title="Classification Algorithms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="clustering.html" class="btn btn-neutral float-left" title="Clustering Algorithms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
@@ -321,7 +321,7 @@ Default is the Euclidean L_2 norm.</p></li>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 21, 2021.
+        Last updated on Jun 22, 2021.
       </span>
 
     </p>
