@@ -238,7 +238,7 @@ Each method compares the predicted data to true data.</p>
 <dt class="sig sig-object py" id="evaluation_metrics.confusion_matrix">
 <span class="sig-prename descclassname"><span class="pre">evaluation_metrics.</span></span><span class="sig-name descname"><span class="pre">confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evaluation_metrics.html#confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evaluation_metrics.confusion_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate contingency table of predicted labels and true labels.</p>
-<p>If there are L labels, then for 1 &lt;= i, j &lt;= L, the (i, j) entry
+<p>If there are L labels, then for 0 &lt;= i, j &lt;= L - 1, the (i, j) entry
 contains the number of times we predicted j when the true class is i.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -288,7 +288,7 @@ Default is the Euclidean L_2 norm.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>error</strong> – Measurement of error of regression model.</p>
+<dd class="field-even"><p><strong>error</strong> – Measurement of error of regression model. (squared norm)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>

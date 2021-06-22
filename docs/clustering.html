@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-21T11:12:54-04:00" />
+    <meta property="article:modified_time" content="2021-06-21T11:17:24-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Clustering Algorithms &mdash; Aklearn 1.0 documentation</title>
@@ -356,7 +356,8 @@ We use this, as an alternative to using a manual nested ‘for-loop’ procedure
 <dl class="py method">
 <dt class="sig sig-object py" id="kmean.KCluster.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit k-means to a dataset up to a predetermined threshold of convergence.</p>
+<dd><p>Fit k-means to a dataset up to a predetermined threshold
+of convergence.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -385,7 +386,8 @@ We use the d-dimensional l_2 Euclidean norm.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="kmean.KCluster.update_means">
 <em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">update_means</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_center_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kmean.html#KCluster.update_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kmean.KCluster.update_means" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Compute the updated means given a set of new clustering centers.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>features</strong> (<em>numpy.ndarray</em>) – n by d array, where d is the dimension of dataset,

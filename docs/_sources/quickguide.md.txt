@@ -23,6 +23,7 @@ Most of the algorithms have highly similar usage, so let's examine an example wo
     # sklearn will automatically assign them appropriately
     X, y = load_boston(return_X_y=True)
     ```
+
 - Step 2: Choose a model.
     - Let's do a standard linear regression, for simplicity of this tutorial. We will instantiate a `Linear(features, output, split_proportion, standardized)` object. This will require:
         - A feature matrix: set `features = X`.
@@ -31,7 +32,7 @@ Most of the algorithms have highly similar usage, so let's examine an example wo
         - Whether or not we wish to standardize X before hand (default is yes): set `standardized = True`.
 
 - Step 3: Fit the model and evaluate. 
-    - As soon as we instantiate our model, it will fit on the training data, give us the coefficient vector along with the train and test error.
+    - As soon as we instantiate our model, it will fit on the training data, give us the coefficient vector along with the train and test error (the MSE to be precise).
 
     ```
     model = Linear(features = X, 
@@ -43,3 +44,5 @@ Most of the algorithms have highly similar usage, so let's examine an example wo
     train_error = model.train_error
     test_error = model.test_error
     ```
+
+That's it! For a classification algorithm, the steps are similar. Make sure the output labels are integers. Further, if not all output labels appear in the training or testing data, you will have to 

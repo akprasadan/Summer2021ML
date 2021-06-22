@@ -289,6 +289,13 @@ Must lie between 0 and 1.</p></li>
 <li><p><strong>fold_count</strong> (<em>int</em>) – The number of folds to produce; cannot exceed row_count.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>folds</strong> – Each row stores the indices for a fold,
+with column size equal to fold size</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>AssertionError</strong> – If more folds are requested than there are observations</p>
 </dd>

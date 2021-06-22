@@ -86,11 +86,42 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickguide.html">A Five Minute Tutorial to Using Aklearn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickguide.html#what-is-this-library-for">What is this library for?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickguide.html#starting-ingredients">Starting Ingredients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../regression.html">Regression Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-regression">Base Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-linearreg">Linear Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-knnreg">K-Nearest Neighbor Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../regression.html#module-poissonreg">Poisson Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../classification.html">Classification Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-classification">Base Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-logisticreg">Logistic Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation_metrics.html">Model Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation_metrics.html#evaluate-accuracy">Evaluate Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation_metrics.html#evaluate-confusion-matrix">Evaluate Confusion Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation_metrics.html#evaluate-regression-error">Evaluate Regression Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocessing.html">Data Preprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing.html#standardize-data">Standardize Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing.html#train-test-split">Train/Test Split</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing.html#cross-validation-folds">Cross-Validation Folds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../clustering.html#module-clustering">Base Clustering Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../clustering.html#module-kmean">k-Means Clustering Algorithm</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -166,6 +197,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">src.helperfunctions</span> <span class="kn">import</span> <span class="n">norms</span>
 
+
 <div class="viewcode-block" id="evaluate_accuracy"><a class="viewcode-back" href="../evaluation_metrics.html#evaluation_metrics.evaluate_accuracy">[docs]</a><span class="k">def</span> <span class="nf">evaluate_accuracy</span><span class="p">(</span><span class="n">predicted_output</span><span class="p">,</span> <span class="n">true_output</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate the proportion of labels a classifier correctly predicts.</span>
 
@@ -181,6 +213,12 @@
 <span class="sd">    accuracy : float</span>
 <span class="sd">        Proportion correctly predicted, between 0 and 1 (inclusive).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">true_output</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Must pass in 1D Numpy array&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">true_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Predicted and true output must have same size&quot;</span><span class="p">)</span>
+
     <span class="n">number_predictions</span> <span class="o">=</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">correct_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">predicted_output</span> <span class="o">==</span> <span class="n">true_output</span><span class="p">)</span>
     <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct_predictions</span> <span class="o">/</span> <span class="n">number_predictions</span>
@@ -190,7 +228,7 @@
 <div class="viewcode-block" id="confusion_matrix"><a class="viewcode-back" href="../evaluation_metrics.html#evaluation_metrics.confusion_matrix">[docs]</a><span class="k">def</span> <span class="nf">confusion_matrix</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">,</span> <span class="n">true_output</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate contingency table of predicted labels and true labels.</span>
 
-<span class="sd">    If there are L labels, then for 1 &lt;= i, j &lt;= L, the (i, j) entry </span>
+<span class="sd">    If there are L labels, then for 0 &lt;= i, j &lt;= L - 1, the (i, j) entry </span>
 <span class="sd">    contains the number of times we predicted j when the true class is i.</span>
 
 <span class="sd">    Parameters</span>
@@ -219,9 +257,10 @@
 <span class="sd">    -----------</span>
 <span class="sd">    .. [1] https://stackoverflow.com/a/40382459</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-    <span class="n">output_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">true_output</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  
 
+    <span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">),</span> 
+                                <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+    <span class="n">output_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">true_output</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  
     <span class="k">for</span> <span class="n">row_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_labels</span><span class="p">):</span>  <span class="c1">#</span>
         <span class="k">for</span> <span class="n">col_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_labels</span><span class="p">):</span>  <span class="c1"># j</span>
             <span class="n">count</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_combined</span> <span class="o">==</span> <span class="p">(</span><span class="n">row_index</span><span class="p">,</span> <span class="n">col_index</span><span class="p">))</span><span class="o">.</span>\
@@ -248,7 +287,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    error : float</span>
-<span class="sd">        Measurement of error of regression model.</span>
+<span class="sd">        Measurement of error of regression model. (squared norm)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">error</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">predicted_output</span> <span class="o">-</span> <span class="n">true_output</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>

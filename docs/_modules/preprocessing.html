@@ -295,6 +295,12 @@
 <span class="sd">    fold_count : int    </span>
 <span class="sd">        The number of folds to produce; cannot exceed row_count.</span>
 
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    folds : numpy.ndarray  </span>
+<span class="sd">        Each row stores the indices for a fold, </span>
+<span class="sd">        with column size equal to fold size</span>
+
 <span class="sd">    Raises</span>
 <span class="sd">    -------</span>
 <span class="sd">    AssertionError</span>
@@ -302,16 +308,19 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">assert</span> <span class="n">fold_count</span> <span class="o">&lt;=</span> <span class="n">row_count</span><span class="p">,</span> <span class="s2">&quot;There cannot be more folds than the sample size.&quot;</span>
+
     <span class="n">rows_per_fold</span> <span class="o">=</span> <span class="n">row_count</span> <span class="o">//</span> <span class="n">fold_count</span> 
 
     <span class="c1"># Indices that have not been assigned to a fold yet; will be updated</span>
     <span class="n">row_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">row_count</span><span class="p">)</span> 
 
     <span class="c1"># Array to store our folds: each row stores indices in that folds</span>
-    <span class="n">folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeroes</span><span class="p">((</span><span class="n">fold_count</span><span class="p">,</span> <span class="n">rows_per_fold</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+    <span class="n">folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">fold_count</span><span class="p">,</span> <span class="n">rows_per_fold</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="n">fold_count</span><span class="p">:</span>
-        <span class="n">fold_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">row_indices</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">rows_per_fold</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fold_count</span><span class="p">):</span>
+        <span class="n">fold_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">row_indices</span><span class="p">,</span> 
+                                     <span class="n">size</span><span class="o">=</span><span class="n">rows_per_fold</span><span class="p">,</span> 
+                                     <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">row_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">row_indices</span><span class="p">,</span> <span class="n">fold_rows</span><span class="p">)</span>
         <span class="n">folds</span><span class="p">[</span><span class="n">fold</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">fold_rows</span>
     

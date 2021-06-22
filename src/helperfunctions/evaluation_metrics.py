@@ -7,6 +7,7 @@ Each method compares the predicted data to true data.
 import numpy as np
 from src.helperfunctions import norms
 
+
 def evaluate_accuracy(predicted_output, true_output):
     """Calculate the proportion of labels a classifier correctly predicts.
 
@@ -22,6 +23,12 @@ def evaluate_accuracy(predicted_output, true_output):
     accuracy : float
         Proportion correctly predicted, between 0 and 1 (inclusive).
     """
+    if predicted_output.ndim >= 2 or true_output.ndim >= 2:
+        raise TypeError("Must pass in 1D Numpy array")
+    
+    if predicted_output.shape[0] != true_output.shape[0]:
+        raise TypeError("Predicted and true output must have same size")
+
     number_predictions = predicted_output.shape[0]
     correct_predictions = np.count_nonzero(predicted_output == true_output)
     accuracy = correct_predictions / number_predictions
@@ -31,7 +38,7 @@ def evaluate_accuracy(predicted_output, true_output):
 def confusion_matrix(number_labels, predicted_output, true_output):
     """Calculate contingency table of predicted labels and true labels.
 
-    If there are L labels, then for 1 <= i, j <= L, the (i, j) entry 
+    If there are L labels, then for 0 <= i, j <= L - 1, the (i, j) entry 
     contains the number of times we predicted j when the true class is i.
 
     Parameters
@@ -60,9 +67,10 @@ def confusion_matrix(number_labels, predicted_output, true_output):
     -----------
     .. [1] https://stackoverflow.com/a/40382459
     """
-    confusion_matrix = np.zeros(shape=(number_labels, number_labels), dtype = np.int8)
-    output_combined = np.stack((true_output, predicted_output), axis=0)  
 
+    confusion_matrix = np.zeros(shape=(number_labels, number_labels), 
+                                dtype=np.int8)
+    output_combined = np.stack((true_output, predicted_output), axis=1)  
     for row_index in range(number_labels):  #
         for col_index in range(number_labels):  # j
             count = (output_combined == (row_index, col_index)).\
@@ -89,7 +97,7 @@ def evaluate_regression_error(predicted_output, true_output,
     Returns
     -------
     error : float
-        Measurement of error of regression model.
+        Measurement of error of regression model. (squared norm)
     """
 
     error = norm(predicted_output - true_output)**2

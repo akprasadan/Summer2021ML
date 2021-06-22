@@ -292,7 +292,8 @@
 
 <div class="viewcode-block" id="KCluster.update_means"><a class="viewcode-back" href="../clustering.html#kmean.KCluster.update_means">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">update_means</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">closest_center_idx</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;Compute the updated means given a set of new clustering centers.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
 <span class="sd">        features : numpy.ndarray</span>
@@ -314,6 +315,8 @@
         <span class="n">d</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">cluster_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
 
+        <span class="c1"># Take d-dimensional mean of all points belonging to cluster i</span>
+        <span class="c1"># Store in row i</span>
         <span class="k">for</span> <span class="n">cluster_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
             <span class="n">cluster_subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">closest_center_idx</span> <span class="o">==</span> <span class="n">cluster_index</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">cluster_means</span><span class="p">[</span><span class="n">cluster_index</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">cluster_subset</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
@@ -322,29 +325,33 @@
 
 <div class="viewcode-block" id="KCluster.fit"><a class="viewcode-back" href="../clustering.html#kmean.KCluster.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Fit k-means to a dataset up to a predetermined threshold of convergence. </span>
+<span class="sd">        Fit k-means to a dataset up to a predetermined threshold </span>
+<span class="sd">        of convergence. </span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="c1"># Pick which rows of our data we will initialize as clusters (uniformly random)</span>
-        <span class="n">initial_data_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random_choice</span><span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">initial_data_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random_choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
         <span class="n">initial_data_idx</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
         <span class="c1"># Store these row vectors as our first set of means, comprising the first cluster</span>
         <span class="c1"># An k times d array</span>
-        <span class="n">initial_means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">initial_data_idx</span><span class="p">,</span> <span class="p">:]</span> 
+        <span class="n">initial_means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">initial_data_idx</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="c1"># Initialize arbitrary large error, so first step will always run</span>
         <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Store the error at each step (see docstring)</span>
+
+        <span class="c1"># Error of each step stored here</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span> 
+
         <span class="n">total_steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># How many iterations get performed?</span>
 
         <span class="k">while</span> <span class="n">error</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
             <span class="n">total_steps</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">updated_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_clusters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">initial_means</span><span class="p">)</span>
             <span class="n">updated_means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_means</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">updated_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
-            <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">initial_means</span> <span class="o">-</span> <span class="n">updated_means</span><span class="p">)</span> <span class="c1"># How much did the k-means move?</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">initial_means</span> <span class="o">-</span> <span class="n">updated_means</span><span class="p">)</span>  <span class="c1"># How much did the centers move?</span>
             <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-            <span class="n">initial_means</span> <span class="o">=</span> <span class="n">updated_means</span> <span class="c1"># Make the update and start the next round</span>
+            <span class="n">initial_means</span> <span class="o">=</span> <span class="n">updated_means</span>  <span class="c1"># Make the update and begin next round</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">final_clusters_idx</span> <span class="o">=</span> <span class="n">updated_indices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">final_centers</span> <span class="o">=</span> <span class="n">updated_means</span>
@@ -354,10 +361,11 @@
         <span class="n">feature_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_train</span><span class="p">):</span>
-            <span class="c1"># The ith prediction is the jth row of the means, where j = predicted_clusters[i]</span>
+            <span class="c1"># The ith prediction is the jth row of the means, </span>
+            <span class="c1"># where j = predicted_clusters[i]</span>
             <span class="n">feature_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">[</span><span class="n">updated_indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">feature_means</span> <span class="o">=</span> <span class="n">feature_means</span>  </div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_means</span> <span class="o">=</span> <span class="n">feature_means</span> </div></div>
         
 </pre></div>
 

@@ -102,7 +102,8 @@ class KCluster(Clustering):
 
     @staticmethod
     def update_means(features, closest_center_idx, k):
-        '''
+        '''Compute the updated means given a set of new clustering centers.
+
         Parameters
         -----------
         features : numpy.ndarray
@@ -124,6 +125,8 @@ class KCluster(Clustering):
         d = features.shape[1]
         cluster_means = np.zeros((k, d))
 
+        # Take d-dimensional mean of all points belonging to cluster i
+        # Store in row i
         for cluster_index in range(k):
             cluster_subset = np.where(closest_center_idx == cluster_index)[0]
             cluster_means[cluster_index, :] = np.mean(features[cluster_subset, :], axis = 0)
@@ -132,29 +135,33 @@ class KCluster(Clustering):
 
     def fit(self):
         '''
-        Fit k-means to a dataset up to a predetermined threshold of convergence. 
+        Fit k-means to a dataset up to a predetermined threshold 
+        of convergence. 
         '''
 
         # Pick which rows of our data we will initialize as clusters (uniformly random)
-        initial_data_idx = np.random_choice(a = self.sample_size, size = self.k)
+        initial_data_idx = np.random_choice(self.sample_size, self.k)
         initial_data_idx.sort()
 
         # Store these row vectors as our first set of means, comprising the first cluster
         # An k times d array
-        initial_means = self.features[initial_data_idx, :] 
+        initial_means = self.features[initial_data_idx, :]
 
         # Initialize arbitrary large error, so first step will always run
         error = np.inf
-        errors = [] # Store the error at each step (see docstring)
+
+        # Error of each step stored here
+        errors = [] 
+
         total_steps = 0 # How many iterations get performed?
 
         while error > self.threshold:
             total_steps += 1
             updated_indices = self.update_clusters(self.features, initial_means)
             updated_means = self.update_means(self.features, updated_indices, self.k)
-            error = np.linalg.norm(initial_means - updated_means) # How much did the k-means move?
+            error = np.linalg.norm(initial_means - updated_means)  # How much did the centers move?
             errors.append(error)
-            initial_means = updated_means # Make the update and start the next round
+            initial_means = updated_means  # Make the update and begin next round
 
         self.final_clusters_idx = updated_indices
         self.final_centers = updated_means
@@ -164,8 +171,9 @@ class KCluster(Clustering):
         feature_means = np.zeros((self.n_train, self.dimension))
 
         for i in range(self.n_train):
-            # The ith prediction is the jth row of the means, where j = predicted_clusters[i]
+            # The ith prediction is the jth row of the means, 
+            # where j = predicted_clusters[i]
             feature_means[i] = self.means[updated_indices[i], :]
 
-        self.feature_means = feature_means  
+        self.feature_means = feature_means 
         

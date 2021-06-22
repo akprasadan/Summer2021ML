@@ -241,7 +241,7 @@
 </li>
 <li><p>Step 3: Fit the model and evaluate.</p>
 <ul class="simple">
-<li><p>As soon as we instantiate our model, it will fit on the training data, give us the coefficient vector along with the train and test error.</p></li>
+<li><p>As soon as we instantiate our model, it will fit on the training data, give us the coefficient vector along with the train and test error (the MSE to be precise).</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="n">features</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
                <span class="n">output</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> 
@@ -255,6 +255,7 @@
 </div>
 </li>
 </ul>
+<p>That’s it! For a classification algorithm, the steps are similar. Make sure the output labels are integers. Further, if not all output labels appear in the training or testing data, you will have to</p>
 </div>
 </div>
 

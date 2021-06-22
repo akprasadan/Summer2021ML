@@ -105,6 +105,12 @@ def cross_validation_folds_idx(row_count, fold_count):
     fold_count : int    
         The number of folds to produce; cannot exceed row_count.
 
+    Returns
+    --------
+    folds : numpy.ndarray  
+        Each row stores the indices for a fold, 
+        with column size equal to fold size
+
     Raises
     -------
     AssertionError
@@ -112,16 +118,19 @@ def cross_validation_folds_idx(row_count, fold_count):
     '''
 
     assert fold_count <= row_count, "There cannot be more folds than the sample size."
+
     rows_per_fold = row_count // fold_count 
 
     # Indices that have not been assigned to a fold yet; will be updated
     row_indices = np.arange(row_count) 
 
     # Array to store our folds: each row stores indices in that folds
-    folds = np.zeroes((fold_count, rows_per_fold), dtype=np.int8)
+    folds = np.zeros((fold_count, rows_per_fold), dtype=np.int8)
 
-    for fold in fold_count:
-        fold_rows = np.random.choice(row_indices, size=rows_per_fold, replace=False)
+    for fold in range(fold_count):
+        fold_rows = np.random.choice(row_indices, 
+                                     size=rows_per_fold, 
+                                     replace=False)
         row_indices = np.setdiff1d(row_indices, fold_rows)
         folds[fold, :] = fold_rows
     
