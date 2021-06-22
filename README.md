@@ -4,7 +4,7 @@ This repository contains my Summer 2021 project, to build a library to perform m
 
 My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the 'ecosystem' of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to Github. I will use Sphinx to automatically carry over my documentation to this website, which was produced by both Sphinx and Read the Docs. 
 
-You can find all the documentation [here](https://akprasadan.github.io/Summer2021ML/index.html), produced using Sphinx and Read the Docs.
+You can find all the documentation [here](https://akprasadan.github.io/aklearn/index.html), produced using Sphinx and Read the Docs.
 
 ### I Want to Get Started NOW
 
