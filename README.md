@@ -15,15 +15,16 @@ Great. Check out the [website!](https://akprasadan.github.io/aklearn/index.html)
 
 The labellings below are as follows:
  - A single +: code is running without error
- - A pair of ++: code is running and somewhat tested
- - A triple +++: code is running/comphrensively tested
+ - A pair of ++: code is running and somewhat tested 
+ - A triple +++: code is running/comprehensively tested
+ - If applicable, an * indicates the algorithm agrees with sklearn
 
 ### Algorithms
 
-- Classification: KNN (+), Logistic (++), QDA 
-- Regression: Linear (+++), Poisson, KNN (+)
+- Classification: KNN (+), Logistic (++, *), QDA 
+- Regression: Linear (+++, *), Poisson (++, *), KNN (+)
 - Clustering: K-Means (+)
-- Model evaluation techniques: accuracy (+++), confusion matrix (+++), MSE (+++)
+- Model evaluation techniques: accuracy (+++, *), confusion matrix (+++), MSE (+++)
 
 ### Data Engineering and Preparation
 

@@ -42,9 +42,18 @@ class Poisson(Regression):
         The error of model on test data (default is MSE).
 
     '''
-    def __init__(self, features, output, split_proportion=0.75, 
+    def __init__(self, features, output, split_proportion=0.75,
                  standardized=True):
-        super().__init__(features, output, split_proportion, standardized)
+        if standardized:
+            self.features = scale_and_center(features)
+
+        # Add column for intercept
+        self.features = np.append(np.ones((features.shape[0], 1)),
+                                  features,
+                                  axis=1)
+
+        super().__init__(self.features, output, split_proportion, 
+                         standardized=False)
         self.coefficients = self.fit()
         self.train_predictions = Poisson.predict(self.train_features, 
                                                 self.coefficients)
@@ -164,4 +173,14 @@ class Poisson(Regression):
         exp_dot_prods = np.exp(dot_prods)
         
         return exp_dot_prods
+
+X = np.random.rand(40,5)
+y = np.random.randint(0, 30, 40)
+model = Poisson(X,y, standardized = False, split_proportion=1)
+print(model.coefficients)
+
+from sklearn import linear_model
+clf = linear_model.PoissonRegressor(alpha = 0)
+clf.fit(X, y)
+print(clf.intercept_, clf.coef_)
 
