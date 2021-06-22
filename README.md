@@ -8,7 +8,7 @@ You can find all the documentation [here](https://akprasadan.github.io/Summer202
 
 ### I Want to Get Started NOW
 
-- Check out the [documentation website](https://akprasadan.github.io/Summer2021ML/index.html)
+- Check out the [documentation website](https://akprasadan.github.io/aklearn/index.html)
 
 
 ## Progress So Far 
