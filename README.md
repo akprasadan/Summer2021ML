@@ -57,7 +57,7 @@ Eventually...
 - Support vector machines
 - Stacking functionality
 - A neural network implementation
-- Awesome docs
+- Awesome docs!
 
 
 ## License
