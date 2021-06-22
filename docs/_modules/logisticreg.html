@@ -190,18 +190,22 @@
   <h1>Source code for logisticreg</h1><div class="highlight"><pre>
 <span></span><span class="sd">&#39;&#39;&#39;This module builds a class for logistic regression problems.</span>
 <span class="sd">We compute the solution by directly maximizing the log-likelihood.</span>
-<span class="sd">We use an existing software implementation to globally maximize the </span>
-<span class="sd">likelihood function: BFGS, available in </span>
-<span class="sd">scipy.optimize.minimize(method = &#39;BFGS&#39;)</span>
+<span class="sd">To do, we implement the Newton-Raphson method, following the treatment</span>
+<span class="sd">in the [1]_.</span>
 
+<span class="sd">References</span>
+<span class="sd">-----------</span>
+<span class="sd">Hastie, T., Tibshirani, R., &amp; Friedman, J. (2001). The Elements of Statistical Learning. Springer New York Inc..</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize.optimize</span> <span class="kn">import</span> <span class="n">_minimize_bfgs</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">expit</span>
 <span class="kn">from</span> <span class="nn">src.classification.classification</span> <span class="kn">import</span> <span class="n">Classification</span>
 <span class="kn">from</span> <span class="nn">src.helperfunctions.evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span> <span class="nn">src.helperfunctions.preprocessing</span> <span class="kn">import</span> <span class="n">scale_and_center</span>
 
 
 <div class="viewcode-block" id="Logistic"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic">[docs]</a><span class="k">class</span> <span class="nc">Logistic</span><span class="p">(</span><span class="n">Classification</span><span class="p">):</span>
@@ -228,6 +232,13 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+<span class="sd">    tolerance : float</span>
+<span class="sd">        One of two possible stopping criterion for the Newton-Raphson algorithm.</span>
+<span class="sd">        It sets the required change in L_2 norm between successive coefficients.</span>
+<span class="sd">        The algorithm will terminate no matter if the max_steps is reached.</span>
+<span class="sd">    max_steps : int</span>
+<span class="sd">        The maximum number of steps permitted for the Newton-Raphson algorithm.</span>
+<span class="sd">        The algorithm terminates earlier if the tolerance is achieved, however,</span>
 <span class="sd">    coefficients : numpy.ndarray</span>
 <span class="sd">        The coefficients in the logistic regression model.</span>
 <span class="sd">    threshold : float</span>
@@ -252,19 +263,31 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
-                 <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
-                         <span class="n">standardized</span><span class="p">)</span>
+                 <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+                 <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">standardized</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="c1"># Add column for intercept</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span>
+                                  <span class="n">features</span><span class="p">,</span>
+                                  <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> 
+                         <span class="n">standardized</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="o">=</span> <span class="n">max_steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">probability_estimate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
                                             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span> 
-                                                  <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> \
+            <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_size</span><span class="p">)])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">probability_estimate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">,</span> 
                                            <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span> 
-                                                <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> \
+            <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span><span class="p">,</span> 
                                                 <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
@@ -275,171 +298,132 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">test_confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
                                                <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Logistic.logsumexp"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.logsumexp">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">logsumexp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Implements the log-sum-exp (LSE) function using a numerically stable formulation.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        x : float</span>
-<span class="sd">            An input to the LSE function</span>
-<span class="sd">        y : float</span>
-<span class="sd">            An input to the LSE function</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        --------</span>
-<span class="sd">        lse : float</span>
-<span class="sd">            The evaluation of LSE at x and y</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        ------</span>
-<span class="sd">        The LSE function provides an alternative to a numerically unstable calculation</span>
-<span class="sd">        relying on the sigmoid function f(x) = -log(1+exp(-x)), as exp(-x) may blow up.</span>
-<span class="sd">        Instead, we use LSE(x, y) = log(exp(x)+exp(y)) and the fact that</span>
-<span class="sd">        f(x) = -LSE(0, -x). A full explanation is given here _[5]. We then</span>
-<span class="sd">        use a numerically preferable version of the LSE, given in _[6]. </span>
-
-<span class="sd">        References</span>
-<span class="sd">        -----------</span>
-<span class="sd">        .. [5] https://lingpipe-blog.com/2012/02/16/howprevent-overflow-underflow-logistic-regression/</span>
-<span class="sd">        .. [6] https://en.wikipedia.org/wiki/LogSumExp#log-sum-exp_trick_for_log-domain_calculations</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    
-        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
-        <span class="n">max_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-
-        <span class="c1"># The quantity z_diff can be exponentiated with much less difficulty.</span>
-        <span class="n">z_diff</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">max_input</span>
-        
-        <span class="n">exp_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">z_diff</span><span class="p">)</span>
-        <span class="n">lse</span> <span class="o">=</span> <span class="n">max_input</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">exp_diff</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">lse</span></div>
-
-
-<div class="viewcode-block" id="Logistic.lse_alternative"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.lse_alternative">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">lse_alternative</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Compute log MLE for each coefficient using log sum exponential.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        features : numpy.ndarray</span>
-<span class="sd">            Design matrix of explanatory variables</span>
-<span class="sd">        labels : numpy.ndarray</span>
-<span class="sd">            The given output labels</span>
-<span class="sd">        coefficients : numpy.ndarray</span>
-<span class="sd">            Vector of coefficients for logistic regression.</span>
+<div class="viewcode-block" id="Logistic.probability_estimate"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.probability_estimate">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">probability_estimate</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute P(y = 1|x, beta) = 1/(1+exp(-beta^Tx)).</span>
+<span class="sd">        It can be used for both training and for prediction.</span>
 <span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        loglikelihood : float</span>
-<span class="sd">            The value of the log sigmoid with given data and coefficient.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        ------</span>
-<span class="sd">        We use the LSE for numerical ease (see Logistic.logsumexp for references).</span>
-<span class="sd">        The mathematical formulas are given in _[5].</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">lse_terms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">x_beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="p">:],</span> <span class="n">coefficient</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">x_beta</span><span class="p">))</span>
-                <span class="n">lse_terms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">x_beta</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">labels</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_beta</span><span class="p">))</span>
-                <span class="n">lse_terms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Logistic</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_beta</span><span class="p">))</span> 
-
-        <span class="n">loglikelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lse_terms</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">loglikelihood</span></div>
-
-<div class="viewcode-block" id="Logistic.mle_finder"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.mle_finder">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">mle_finder</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Find the MLE for a logistic model; return the coefficient.</span>
-
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+<span class="sd">        -------------</span>
 <span class="sd">        features : numpy.ndarray</span>
-<span class="sd">            Design matrix of explanatory variables</span>
-<span class="sd">        labels : numpy.ndarray</span>
-<span class="sd">            The given output labels</span>
+<span class="sd">            A design matrix of observations to condition on.</span>
+<span class="sd">        coefficients : numpy.ndarray</span>
+<span class="sd">            A vector of possible coefficients</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        mle : float</span>
-<span class="sd">            The coefficient that solves the logistic regression problem for </span>
-<span class="sd">            the given data.</span>
+<span class="sd">        estimate : float</span>
+<span class="sd">            The estimated probability of an label of 1 for each observation,</span>
+<span class="sd">            conditional on the data and coefficient.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">features</span> <span class="o">@</span> <span class="n">coefficients</span>
+        <span class="n">estimates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">dot_prods</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">:</span>
+                <span class="n">estimates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">dot_prods</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">40</span><span class="p">:</span>
+                <span class="n">estimates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">estimates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dot_prods</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">estimates</span></div>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        We use the BFGS algorithm as implemented in scipy to maximize</span>
-<span class="sd">        the log-likelihood.</span>
-<span class="sd">        This requires negating the log likelihood as we use minimization.</span>
+<div class="viewcode-block" id="Logistic.weighted_matrix"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.weighted_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">weighted_matrix</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute weight matrix for the weighted least squares problem</span>
+<span class="sd">        used in the Newton-Raphson algorithm of solving logistic regression.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            A design matrix of observations (including all 1s column)</span>
+<span class="sd">        coefficients : numpy.ndarray</span>
+<span class="sd">            A vector of possible coefficients</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wt_matrix : numpy.ndarray</span>
+<span class="sd">            Diagonal matrix with ith entries p(1-p), where</span>
+<span class="sd">            p = P(y = 1|X = x_i, beta).</span>
 
 <span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-<span class="sd">        scipy.optimize.minimize</span>
+<span class="sd">        ---------</span>
+<span class="sd">        Logistic.newton_raphson_update : Implement a single step of the Newton-Raphson algorithm.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">probability_estimate</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)</span>
+        <span class="n">wt_matrix_one</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)</span>
+       
+        <span class="n">wt_matrix_two</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">probabilities</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">coefficient</span><span class="p">):</span>
-            <span class="sd">&#39;&#39;&#39; The negative log likelihood function that we minimize.</span>
-<span class="sd">            &#39;&#39;&#39;</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">Logistic</span><span class="o">.</span><span class="n">lse_alternative</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> 
-                                            <span class="n">coefficient</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">value</span>
+        <span class="c1"># Since diagonal, matrix multiplication is same as entry-wise multiplication </span>
+        <span class="n">wt_matrix</span> <span class="o">=</span> <span class="n">wt_matrix_one</span> <span class="o">@</span> <span class="n">wt_matrix_two</span>  
+       
+        <span class="k">return</span> <span class="n">wt_matrix</span></div>
+    
+<div class="viewcode-block" id="Logistic.newton_raphson_update"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.newton_raphson_update">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">newton_raphson_update</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">beta_old</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute a single step of the Newton-Raphson algorithm to compute</span>
+<span class="sd">        the coefficient maximizing the likelihood for the logistic model.</span>
 
-        <span class="c1"># Initialize a coefficient to begin the maximization at</span>
-        <span class="n">coeff_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-        <span class="n">optimum</span> <span class="o">=</span> <span class="n">_minimize_bfgs</span><span class="p">(</span><span class="n">negative_log_likelihood</span><span class="p">,</span> <span class="n">coeff_init</span><span class="p">)</span>
-        <span class="n">mle</span> <span class="o">=</span> <span class="n">optimum</span><span class="o">.</span><span class="n">x</span>  <span class="c1"># Obtain argmin</span>
-        
-        <span class="k">return</span> <span class="n">mle</span></div>
+<span class="sd">        This algorithm is a root finder, i.e., finds a solution to f(x)=0</span>
+<span class="sd">        for some function f. In this case, we set f to be the derivative of the</span>
+<span class="sd">        log likelihood (i.e., the score function), to find the MLE. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        beta_old : numpy.ndarray</span>
+<span class="sd">            The coefficients we would like to update</span>
+<span class="sd">        features : numpy.ndarray</span>
+<span class="sd">            A design matrix of explanatory variables</span>
+<span class="sd">        output : numpy.ndarray</span>
+<span class="sd">            The labels corresponding to our observed features</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        beta_new : numpy.ndarray</span>
+<span class="sd">            The updated coefficients.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">features</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">weighted_matrix</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">beta_old</span><span class="p">)</span>  <span class="c1"># Weight matrix</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">output</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">probability_estimate</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">beta_old</span><span class="p">)</span>
+        <span class="n">beta_new</span> <span class="o">=</span> <span class="n">beta_old</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">probabilities</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">beta_new</span></div>
 
 <div class="viewcode-block" id="Logistic.fit"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Calculate the coefficient estimate on the training data.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-
-        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">mle_finder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
-                                           <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">coefficients</span></div>
-
-<div class="viewcode-block" id="Logistic.predict"><a class="viewcode-back" href="../classification.html#logisticreg.Logistic.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Compute estimated output P(Y =1|X=x, beta_hat) </span>
-<span class="sd">           of logistic regression.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        features : numpy.ndarray</span>
-<span class="sd">            Design matrix of explanatory variables.</span>
-<span class="sd">        coefficients : numpy.ndarray</span>
-<span class="sd">            Vector of coefficients for logistic regression solution.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        p : numpy.ndarray</span>
-<span class="sd">            Predicted output (probability) for each observation.</span>
+<span class="sd">        --------</span>
+<span class="sd">        beta_new : numpy.ndarray</span>
+<span class="sd">            The estimated coefficients for logistic regression.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">coeff_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">dot_prods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">features</span> <span class="o">*</span> <span class="n">coeff_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">expit</span><span class="p">(</span><span class="n">dot_prods</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">p</span></div></div>
-    
+        <span class="n">beta_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">logsumexp</span>
+        <span class="c1"># Proportion of 1s in the data</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">train_size</span>
 
+        <span class="c1"># A recommended initial starting point for the intercept</span>
+        <span class="n">beta_init</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">ratio</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">ratio</span><span class="p">))</span>
 
+        <span class="c1"># Guarantee we always make the first step</span>
+        <span class="n">coeff_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span> 
 
+        <span class="c1"># Keep track of the steps taken</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="mi">1</span>
 
+        <span class="k">while</span> <span class="n">coeff_change</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="ow">and</span> <span class="n">steps</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span><span class="p">:</span>
+            <span class="n">beta_new</span> <span class="o">=</span> <span class="n">Logistic</span><span class="o">.</span><span class="n">newton_raphson_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span> 
+                                                      <span class="n">beta_init</span><span class="p">,</span>
+                                                      <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">)</span>
+            <span class="n">coeff_change</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">beta_new</span> <span class="o">-</span> <span class="n">beta_init</span><span class="p">)</span>
+            <span class="n">beta_init</span> <span class="o">=</span> <span class="n">beta_new</span>
+            <span class="n">steps</span> <span class="o">+=</span> <span class="mi">1</span>
 
-
+        <span class="k">return</span> <span class="n">beta_new</span></div></div>
 
 </pre></div>
 

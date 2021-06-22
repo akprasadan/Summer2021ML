@@ -27,9 +27,15 @@ def evaluate_accuracy(predicted_output, true_output):
         raise TypeError("Must pass in 1D Numpy array")
     
     if predicted_output.shape[0] != true_output.shape[0]:
-        raise TypeError("Predicted and true output must have same size")
-
+        raise TypeError("Predicted and true output must have same size", \
+            'Dimensions of predictions: ', predicted_output.shape,\
+            'Dimensions of true output: ', true_output.shape)
+    
     number_predictions = predicted_output.shape[0]
+
+    if number_predictions == 0:
+        return "None made"
+        
     correct_predictions = np.count_nonzero(predicted_output == true_output)
     accuracy = correct_predictions / number_predictions
     return accuracy

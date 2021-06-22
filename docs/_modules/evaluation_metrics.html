@@ -217,9 +217,15 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Must pass in 1D Numpy array&quot;</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">true_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Predicted and true output must have same size&quot;</span><span class="p">)</span>
-
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Predicted and true output must have same size&quot;</span><span class="p">,</span> \
+            <span class="s1">&#39;Dimensions of predictions: &#39;</span><span class="p">,</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>\
+            <span class="s1">&#39;Dimensions of true output: &#39;</span><span class="p">,</span> <span class="n">true_output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    
     <span class="n">number_predictions</span> <span class="o">=</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">number_predictions</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;None made&quot;</span>
+        
     <span class="n">correct_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">predicted_output</span> <span class="o">==</span> <span class="n">true_output</span><span class="p">)</span>
     <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct_predictions</span> <span class="o">/</span> <span class="n">number_predictions</span>
     <span class="k">return</span> <span class="n">accuracy</span></div>
