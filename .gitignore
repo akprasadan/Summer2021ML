@@ -1,9 +1,9 @@
 *.pyc
 
 /venv/
-.vscode
-.aklearn.egg-info
-.github
-.gitignore
+**/.vscode/
+**/.aklearn.egg-info/
+**/.gitignore/
+**/.github/workflows/
 
 
