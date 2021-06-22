@@ -22,16 +22,16 @@ You can find all the documentation [here](https://akprasadan.github.io/Summer202
 
 ### Algorithms
 
-- A :ref:`reg` class, and child classes including :ref:`lin`, :ref:`pois`, and :ref:`knnreg`.
-- A :ref:`classif` class, and child classes including :ref:`logist`, :ref:`knnclass`, and :ref:`qdaclass`.
-- A :ref:`cluster` class, and a :ref:`kmean` child class.
-- Model evaluation techniques
+- Classification: KNN, Logistic, QDA
+- Regression: Linear, Poisson, KNN
+- Clustering: K-Means
+- Model evaluation techniques: accuracy, confusion matrix, MSE
 
 ### Data Engineering and Preparation
 
-- Train/test splitting functionality in :ref:`data_prep`.
-- Cross-validation fold generation
-- Scaling/standardizing data
+- Train/test splitting
+- Cross-validation folds
+- Data Standardization
 
 ### Unit Testing (the successful ones)
 
@@ -39,24 +39,28 @@ You can find all the documentation [here](https://akprasadan.github.io/Summer202
 - The preprocessing functionality (see previous heading)
 - Model evaluation (accuracy + confusion matrix)
 
-
 ## To Do
 
-By July 2021, I would like to have:
+Immediate concerns:
+- Logistic regression is non-functioning due to numerical overflow errors
+- QDA is not able to run
+- Need to decide on how classification labels should be required to be structured, or what preprocessing may still be needed
 
-- Linear discriminant analysis (re-using my QDA code)
-- LASSO? Other penalized estimators
--  bootstrapping functionality
+By the middle of July, 2021, I would like to have:
+
+- Linear discriminant analysis (re-using my QDA code) (easy)
+- LASSO or other penalized estimators (harder)
+- Bootstrapping functionality (easy-ish)
 - Abstract tuning class and incorporation into child classes
 - Start to add more exposition and examples into the website, for (hypothetical) users
 
 Eventually...
 
-- Classification trees, bagging, random forests
+- Classification trees, bagging, random forests (the latter two are easy once I do the first)
 - Boosting
 - Support vector machines
-- Stacking functionality
-- A neural network implementation
+- Stacking functionality (fairly easy)
+- A neural network implementation (hard)
 - Awesome docs!
 
 
