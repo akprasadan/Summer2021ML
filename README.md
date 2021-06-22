@@ -1,4 +1,4 @@
-# Building a Machine Learning (ML) Library From Scratch: [Aklearn](https://akprasadan.github.io/Summer2021ML/index.html)
+# Building a Machine Learning (ML) Library From Scratch: [Aklearn](https://akprasadan.github.io/aklearn/index.html)
 
 This repository contains my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn!); for instance, I will solve GLMs by numerically optimizing the likelihood functions, but I won't attempt to implement the numerical optimizer itself. The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.
 
