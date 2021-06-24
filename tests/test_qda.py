@@ -1,3 +1,5 @@
+'''This module tests our quadratic discriminant classifier.'''
+
 from src.classification.qda import QDA
 import numpy as np
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
@@ -56,3 +58,4 @@ def test_with_sklearn():
         akpredictions = model.train_predictions
         proportion_agree = np.sum(skpredictions == akpredictions) / n
         assert proportion_agree == 1
+

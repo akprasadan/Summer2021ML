@@ -5,10 +5,11 @@ import numpy as np
 from numpy.lib.shape_base import split
 from src.classification.classification import Classification
 from src.helperfunctions.evaluation_metrics import evaluate_accuracy, confusion_matrix
+from src.classification.qda import QDA
 
-class QDA(Classification):
+class LDA(QDA):
     '''
-    A class used to represent a quadratic discriminant analysis classifier.
+    A class used to represent a linear discriminant analysis classifier.
     We only list non-inherited attributes. We include regression
     functionality as well.
 
@@ -28,6 +29,9 @@ class QDA(Classification):
     
     Attributes
     ----------
+
+    covariance_matrix : numpy.ndarray
+        The pooled covariance matrix used in the discriminant function
     train_prediction : numpy.ndarray
         The labels predicted for the given test data (for classification).
     test_predictions : numpy.ndarray
@@ -46,14 +50,16 @@ class QDA(Classification):
 
     See Also
     ---------
-    lda.LDA : Use the more restrictive linear discriminant analysis
+    qda.QDA : Use the more flexible quadratic discriminant analysis
     '''
 
     def __init__(self, features, output, split_proportion=0.75,
                  number_labels=None, standardized=True):
-        super().__init__(features, output, split_proportion, number_labels, 
-                         standardized)
-
+        super().__init__(features, output, split_proportion=0.75,
+                 number_labels=None, standardized=True)
+        self.covariance_matrix = LDA.pooled_covariance(self.train_features,
+                                                       self.train_output,
+                                                       self.number_labels)
         self.train_predictions = self.predict_many(self.train_features)
         self.test_predictions = self.predict_many(self.test_features)
         self.train_accuracy = evaluate_accuracy(self.train_predictions, 
@@ -67,53 +73,39 @@ class QDA(Classification):
                                             self.test_predictions, 
                                             self.test_output)
     
+
     @staticmethod
-    def prior(output, k):
-        ''' Count the empirical proportion of labels of class k among output data.
+    def pooled_covariance(features, output, num_labels):
+        ''' Calculate the pooled covariance matrix (used for all classes).
         
         Parameters
         -----------
-        output : numpy.ndarray
-            The labels corresponding to some dataset
-        k : int 
-            The class label we are interested in
-
-        Returns
-        --------
-        proportion : float
-            The fraction of class k observations
-        '''
-
-        frequency = np.count_nonzero(output == k)
-        proportion = frequency / output.shape[0]
-
-        return proportion
-          
-    @staticmethod
-    def class_covariance(features_subset):
-        ''' Calculate a covariance matrix for a mono-labeled feature array.
-        
-        Parameters
-        -----------
-        features_subset : numpy.ndarray
+        features : numpy.ndarray
             The design matrix of explanatory variables.
+        output : numpy.ndarray
+            The output labels corresponding to features.
+        num_labels : numpy.ndarray
+            The number of labels present in the data
 
         Returns
         --------
-        class_cov : numpy.ndarray
-            The class-specific covariance matrix for QDA.
+        pooled_cov : numpy.ndarray
+            The pooled covariance matrix for LDA.
         '''
 
-        sample_size, dim = features_subset.shape
-        class_mean = np.mean(features_subset, axis=0)
-        centered_features_subset = features_subset - class_mean
-        unscaled_class_cov = centered_features_subset.T @ centered_features_subset
+        dimension = features.shape[1]
+        sample_size = features.shape[0]
+        init_cov = np.zeros((dimension, dimension))
 
-        if sample_size == 1:
-            class_cov = 1/(sample_size) * unscaled_class_cov
-        else: 
-            class_cov = 1/(sample_size - 1) * unscaled_class_cov
-        return class_cov
+        for k in range(num_labels):
+            features_subset = features[output == k]
+            sample_size_subset = features_subset.shape[0]
+            class_cov = QDA.class_covariance(features_subset)
+            init_cov += class_cov * (sample_size_subset - 1)
+        
+        pooled_cov = 1/(sample_size - num_labels) * init_cov
+
+        return pooled_cov
 
     def discriminant(self, point, k):
         ''' Evaluate the kth quadratic discriminant function at a point.
@@ -130,16 +122,16 @@ class QDA(Classification):
         discrim : float
             The value of the discriminant function at this point.
         '''
+
         feature_subset = self.train_features[self.train_output == k]
-        class_cov = QDA.class_covariance(feature_subset)
         mean_term = np.mean(feature_subset, axis = 0)
-        log_det_term = -0.5*(np.log(np.linalg.det(class_cov)))
-        inv_term = np.linalg.inv(class_cov)
+
+        inv_term = np.linalg.inv(self.covariance_matrix)
         prior_term = np.log(QDA.prior(self.train_output, k))
-        quadratic_term = -0.5*(point - mean_term).T @ inv_term @ (point - mean_term)
+        
 
-        discrim = log_det_term + quadratic_term + prior_term
-
+        discrim = prior_term + point.T @ inv_term @ mean_term - \
+            0.5 * mean_term.T @ inv_term @ mean_term
         return discrim
   
     def predict_one(self, point):
@@ -159,25 +151,13 @@ class QDA(Classification):
         discrims = np.array([self.discriminant(point, k) for k in range(self.number_labels)])
         label = np.where(discrims == np.max(discrims))[0][0]
         return label
-    
-    def predict_many(self, points):
-        '''Predict the label of a matrix of test points given a trained model.
 
-        Parameters
-        -----------
-        points : numpy.ndarray
-            The test datapoints we wish to classify.
+from sklearn import datasets
 
-        Returns
-        --------
-        label : int
-            The predicted classes of the points.
-        '''
-        try:
-            labels = np.apply_along_axis(self.predict_one, 1, points).astype(np.int8)
-            return labels
-        except:
-            return 
+iris = datasets.load_iris()
 
-
+X = iris.data
+y = iris.target
+model = LDA(X, y, split_proportion=1)
+model2 = QDA(X, y, split_proportion=1)
 
