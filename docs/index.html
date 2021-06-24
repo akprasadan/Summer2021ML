@@ -200,20 +200,47 @@
             
   <div class="section" id="welcome-to-aklearn-s-documentation">
 <h1>Welcome to Aklearn’s documentation!<a class="headerlink" href="#welcome-to-aklearn-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="building-a-machine-learning-ml-library-from-scratch">
-<h2>Building a Machine Learning (ML) Library From Scratch<a class="headerlink" href="#building-a-machine-learning-ml-library-from-scratch" title="Permalink to this headline">¶</a></h2>
-<p>This website contains documentation for my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn!); for instance, I will solve GLMs by numerically optimizing the likelihood functions, but I won’t attempt to implement the numerical optimizer itself. The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.</p>
-<p>My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the ‘ecosystem’ of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to Github. I will use Sphinx to automatically carry over my documentation to this website, which was produced by both Sphinx and Read the Docs.</p>
+<div class="section" id="building-a-machine-learning-ml-library-from-scratch-aklearn">
+<h2>Building a Machine Learning (ML) Library From Scratch: Aklearn<a class="headerlink" href="#building-a-machine-learning-ml-library-from-scratch-aklearn" title="Permalink to this headline">¶</a></h2>
+<p>This repository contains my Summer 2021 project, to build a library to perform machine learning (ML) in Python, in the spirit of Tidymodels in R or Sklearn in Python. As much as possible, I will implement all algorithms from scratch (no calling sklearn, except maybe for tests). The algorithms will be organized using Python classes to keep the code D-R-Y, and will be supplemented by classes offering data processing, train-test splitting, cross-validating, and model evaluation functionality.</p>
+<p>My motivation for this project is to upgrade my skills in data science and programming in Python, to complement what I have already learned in R. I want to particularly improve my abilities with object oriented programming, numpy, numba, and general data analysis/visualization. In addition, I want to explore the ‘ecosystem’ of software engineering: using version control, good code organization, detailed and effective documentation, and usability (for others). Thus, for the first time on my own volition, I will use Git on my computer for version control, using a 2 branch (development and main) workflow, and push changes to <a class="reference external" href="https://github.com/akprasadan/aklearn">Github</a>. I will use Sphinx to automatically carry over my documentation to this website which was produced by both Sphinx and Read the Docs.  Additionally, I provide example usage.</p>
 </div>
 <div class="section" id="i-want-to-get-started">
 <h2>I Want to Get Started<a class="headerlink" href="#i-want-to-get-started" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>See the <a class="reference internal" href="#toc"><span class="std std-ref">Table of Contents</span></a></p></li>
-<li><p>Check out <a class="reference internal" href="quickguide.html#quickstartlabel"><span class="std std-ref">A Five Minute Tutorial to Using Aklearn</span></a></p></li>
+<li><p>Check out <a class="reference internal" href="quickguide.html#quickstartlabel"><span class="std std-ref">A Five Minute Tutorial to Using Aklearn</span></a> for a brief tutorial</p></li>
+<li><p>Head over to <a class="reference external" href="https://github.com/akprasadan/aklearn">my Github epository</a>.</p></li>
 </ul>
 </div>
-<div class="section" id="progress-so-far-in-both-workflow-and-explicit-code">
-<h2>Progress So Far (in both workflow and explicit code)<a class="headerlink" href="#progress-so-far-in-both-workflow-and-explicit-code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="progress-so-far">
+<h2>Progress So Far<a class="headerlink" href="#progress-so-far" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>The labellings below are as follows:</dt><dd><ul class="simple">
+<li><p>A single +: code is running without bugs</p></li>
+<li><p>A pair of ++: code is running and somewhat tested</p></li>
+<li><p>A triple +++: code is running/comprehensively tested</p></li>
+<li><p>If applicable, an * indicates the algorithm agrees with sklearn</p></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="algorithms">
+<h3>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Classification: KNN (+), Logistic (+++, *), QDA (+)</p></li>
+<li><p>Regression: Linear (+++, *), Poisson (++, *), KNN (+)</p></li>
+<li><p>Clustering: K-Means (+)</p></li>
+<li><p>Model evaluation techniques: accuracy (+++, *), confusion matrix (+++, *), MSE (+++)</p></li>
+</ul>
+</div>
+<div class="section" id="data-engineering-and-preparation">
+<h3>Data Engineering and Preparation<a class="headerlink" href="#data-engineering-and-preparation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Train/test splitting (+++)</p></li>
+<li><p>Cross-validation folds (+++)</p></li>
+<li><p>Data Standardization (+++, *)</p></li>
+</ul>
+</div>
 <div class="section" id="workflow">
 <h3>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -222,49 +249,25 @@
 <li><p>Autogenerated documentation: this website; essentially, I write documentation in my code and include text files with additional content, and I run 4 commands (build the HTML website using Sphinx and 3 Git commands) and the webpage automatically collects all of the documentation into this elegant form.</p></li>
 </ul>
 </div>
-<div class="section" id="algorithms">
-<h3>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>A <a class="reference internal" href="regression.html#reg"><span class="std std-ref">Base Regression</span></a> class, and child classes including <a class="reference internal" href="regression.html#lin"><span class="std std-ref">Linear Regression</span></a>, <a class="reference internal" href="regression.html#pois"><span class="std std-ref">Poisson Regression</span></a>, and <a class="reference internal" href="regression.html#knnreg"><span class="std std-ref">K-Nearest Neighbor Regression</span></a>.</p></li>
-<li><p>A <a class="reference internal" href="classification.html#classif"><span class="std std-ref">Base Classifier</span></a> class, and child classes including <a class="reference internal" href="classification.html#logist"><span class="std std-ref">Logistic Classifier</span></a>, <a class="reference internal" href="classification.html#knnclass"><span class="std std-ref">K-Nearest Neighbor Classifier</span></a>, and <a class="reference internal" href="classification.html#qdaclass"><span class="std std-ref">Quadratic Discriminant Analysis</span></a>.</p></li>
-<li><p>A <a class="reference internal" href="clustering.html#cluster"><span class="std std-ref">Base Clustering Class</span></a> class, and a <a class="reference internal" href="clustering.html#kmean"><span class="std std-ref">k-Means Clustering Algorithm</span></a> child class.</p></li>
-<li><p>Model evaluation techniques</p></li>
-</ul>
 </div>
-<div class="section" id="data-engineering-and-preparation">
-<h3>Data Engineering and Preparation<a class="headerlink" href="#data-engineering-and-preparation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="to-do">
+<h2>To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h2>
+<p>By the middle of July, 2021, I would like to have:</p>
 <ul class="simple">
-<li><p>Train/test splitting functionality in <a class="reference internal" href="preprocessing.html#data-prep"><span class="std std-ref">Data Preprocessing</span></a>.</p></li>
-<li><p>Cross-validation fold generation</p></li>
-<li><p>Scaling/standardizing data</p></li>
-</ul>
-</div>
-<div class="section" id="unit-testing-successful">
-<h3>Unit Testing (successful)<a class="headerlink" href="#unit-testing-successful" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Linear regression agrees with sklearn</p></li>
-<li><p>The preprocessing functionality (see previous heading)</p></li>
-<li><p>Model evaluation (accuracy + confusion matrix)</p></li>
-</ul>
-</div>
-</div>
-<div class="section" id="to-do-in-the-next-2-weeks">
-<h2>To Do (in the next 2 weeks):<a class="headerlink" href="#to-do-in-the-next-2-weeks" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Linear discriminant analysis (re-using my QDA code)</p></li>
-<li><p>LASSO? Other penalized estimators</p></li>
-<li><p>bootstrapping functionality</p></li>
+<li><p>Linear discriminant analysis (re-using my QDA code) (easy)</p></li>
+<li><p>LASSO or other penalized estimators (harder)</p></li>
+<li><p>Bootstrapping functionality (easy-ish)</p></li>
 <li><p>Abstract tuning class and incorporation into child classes</p></li>
 <li><p>Start to add more exposition and examples into the website, for (hypothetical) users</p></li>
 </ul>
-</div>
-<div class="section" id="to-do-eventually">
-<h2>To do (eventually):<a class="headerlink" href="#to-do-eventually" title="Permalink to this headline">¶</a></h2>
+<p>Eventually…</p>
 <ul class="simple">
-<li><p>Classification trees, bagging, random forests</p></li>
+<li><p>Classification trees, bagging, random forests (the latter two are easy once I do the first)</p></li>
 <li><p>Boosting</p></li>
 <li><p>Support vector machines</p></li>
-<li><p>Stacking functionality</p></li>
+<li><p>Stacking functionality (fairly easy)</p></li>
+<li><p>A neural network implementation (hard)</p></li>
+<li><p>Awesome docs!</p></li>
 </ul>
 </div>
 </div>

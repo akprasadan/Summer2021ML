@@ -41,10 +41,6 @@ The labellings below are as follows:
 
 ## To Do
 
-Immediate concerns:
-- QDA gives incorrect results
-- Need to decide on how classification labels should be required to be structured, or what preprocessing may still be needed
-
 By the middle of July, 2021, I would like to have:
 
 - Linear discriminant analysis (re-using my QDA code) (easy)

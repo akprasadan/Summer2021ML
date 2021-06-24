@@ -213,6 +213,9 @@
 <span class="sd">    accuracy : float</span>
 <span class="sd">        Proportion correctly predicted, between 0 and 1 (inclusive).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">predicted_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+        
     <span class="k">if</span> <span class="n">predicted_output</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">true_output</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Must pass in 1D Numpy array&quot;</span><span class="p">)</span>
     
@@ -263,7 +266,9 @@
 <span class="sd">    -----------</span>
 <span class="sd">    .. [1] https://stackoverflow.com/a/40382459</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="k">if</span> <span class="n">predicted_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+        
     <span class="n">confusion_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">number_labels</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">),</span> 
                                 <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
     <span class="n">output_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">true_output</span><span class="p">,</span> <span class="n">predicted_output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  

@@ -192,6 +192,7 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.lib.shape_base</span> <span class="kn">import</span> <span class="n">split</span>
 <span class="kn">from</span> <span class="nn">src.classification.classification</span> <span class="kn">import</span> <span class="n">Classification</span>
 <span class="kn">from</span> <span class="nn">src.helperfunctions.evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span>
 
@@ -309,8 +310,9 @@
 
         <span class="n">sample_size</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">features_subset</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">class_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features_subset</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">centered_features_subset</span> <span class="o">=</span> <span class="n">features_subset</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">class_mean</span><span class="p">,</span> <span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
+        <span class="n">centered_features_subset</span> <span class="o">=</span> <span class="n">features_subset</span> <span class="o">-</span> <span class="n">class_mean</span>
         <span class="n">unscaled_class_cov</span> <span class="o">=</span> <span class="n">centered_features_subset</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">centered_features_subset</span>
+
         <span class="k">if</span> <span class="n">sample_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">class_cov</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sample_size</span><span class="p">)</span> <span class="o">*</span> <span class="n">unscaled_class_cov</span>
         <span class="k">else</span><span class="p">:</span> 
@@ -362,21 +364,20 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        --------</span>
-<span class="sd">        discrim_term : float</span>
+<span class="sd">        discrim : float</span>
 <span class="sd">            The value of the discriminant function at this point.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
+
         <span class="n">class_cov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_feature_covs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="n">mean_term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
- 
-        <span class="n">det_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">class_cov</span><span class="p">)</span>
+        <span class="n">log_det_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">class_cov</span><span class="p">))</span>
         <span class="n">inv_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">class_cov</span><span class="p">)</span>
         <span class="n">prior_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priors</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">quadratic_term</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">inv_term</span> <span class="o">@</span> <span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span>
 
-        <span class="n">middle_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">inv_term</span> <span class="o">@</span> <span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span>
-        
-        <span class="n">discrim_term</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">det_term</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">inv_term</span> <span class="o">@</span> <span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span> <span class="o">+</span> <span class="n">prior_term</span>
+        <span class="n">discrim</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">log_det_term</span> <span class="o">-</span> <span class="n">quadratic_term</span> <span class="o">+</span> <span class="n">prior_term</span>
 
-        <span class="k">return</span> <span class="n">discrim_term</span></div>
+        <span class="k">return</span> <span class="n">discrim</span></div>
   
 <div class="viewcode-block" id="QDA.predict_one"><a class="viewcode-back" href="../classification.html#qda.QDA.predict_one">[docs]</a>    <span class="k">def</span> <span class="nf">predict_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Predict the label of a test point given a trained model.</span>
@@ -391,7 +392,8 @@
 <span class="sd">        label : int</span>
 <span class="sd">            The predicted class of the point.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">discrims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">discriminant</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+
+        <span class="n">discrims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">discriminant</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">)])</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">discrims</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">discrims</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">label</span></div>
     
@@ -408,21 +410,14 @@
 <span class="sd">        label : int</span>
 <span class="sd">            The predicted classes of the points.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_one</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">labels</span></div></div>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
-<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_one</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">labels</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> </div></div>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">QDA</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">test_accuracy</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="kn">import</span> <span class="n">LinearDiscriminantAnalysis</span>
-<span class="n">lda</span> <span class="o">=</span> <span class="n">LinearDiscriminantAnalysis</span><span class="p">()</span>
-<span class="n">X_r2</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">X_r2</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+
 </pre></div>
 
            </div>

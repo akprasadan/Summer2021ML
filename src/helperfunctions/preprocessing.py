@@ -26,7 +26,9 @@ def scale_and_center(features):
     features : numpy.ndarray
         Design matrix of scaled and centered explanatory variables.
     '''
-
+    if features.shape[0] == 0:
+        return
+        
     n_rows, n_cols = features.shape
     for column in range(n_cols):
         column_mean = np.mean(features[:, column])*np.ones(n_rows)
@@ -46,7 +48,7 @@ def train_test_split(features, output, split_proportion):
 
     Parameters
     ----------
-    features : numpy.ndarray
+    featurs : numpy.ndarray
         Design matrix of explanatory variables
     output : numpy.ndarray
         The given response variables
@@ -72,13 +74,14 @@ def train_test_split(features, output, split_proportion):
     '''
     sample_size = features.shape[0]
     train_size = np.ceil(sample_size * split_proportion).astype(int)
-    test_size = sample_size - train_size
     train_rows = np.random.choice(sample_size, train_size, 
                                   replace=False)
-    test_rows = np.setdiff1d(np.arange(sample_size), train_rows)
     train_features = features[train_rows]
-    test_features = features[test_rows]
     train_output = output[train_rows]
+    
+    test_size = sample_size - train_size
+    test_rows = np.setdiff1d(np.arange(sample_size), train_rows)
+    test_features = features[test_rows]
     test_output = output[test_rows]
 
     split_information = ['sample_size', 'train_size', 'test_size', 

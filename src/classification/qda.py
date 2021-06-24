@@ -2,6 +2,7 @@
 '''
 
 import numpy as np
+from numpy.lib.shape_base import split
 from src.classification.classification import Classification
 from src.helperfunctions.evaluation_metrics import evaluate_accuracy, confusion_matrix
 
@@ -119,8 +120,9 @@ class QDA(Classification):
 
         sample_size, dim = features_subset.shape
         class_mean = np.mean(features_subset, axis=0)
-        centered_features_subset = features_subset - np.broadcast_to(class_mean, (sample_size, dim))
+        centered_features_subset = features_subset - class_mean
         unscaled_class_cov = centered_features_subset.T @ centered_features_subset
+
         if sample_size == 1:
             class_cov = 1/(sample_size) * unscaled_class_cov
         else: 
@@ -172,21 +174,20 @@ class QDA(Classification):
 
         Returns
         --------
-        discrim_term : float
+        discrim : float
             The value of the discriminant function at this point.
         '''
+
         class_cov = self.class_feature_covs[k]
         mean_term = self.feature_means[k]
- 
-        det_term = np.linalg.det(class_cov)
+        log_det_term = np.log(np.linalg.det(class_cov))
         inv_term = np.linalg.inv(class_cov)
         prior_term = np.log(self.priors[k])
+        quadratic_term = 0.5*(point - mean_term).T @ inv_term @ (point - mean_term)
 
-        middle_term = (point - mean_term).T @ inv_term @ (point - mean_term)
-        
-        discrim_term = -0.5*det_term - 0.5*(point - mean_term).T @ inv_term @ (point - mean_term) + prior_term
+        discrim = -0.5*log_det_term - quadratic_term + prior_term
 
-        return discrim_term
+        return discrim
   
     def predict_one(self, point):
         '''Predict the label of a test point given a trained model.
@@ -201,7 +202,8 @@ class QDA(Classification):
         label : int
             The predicted class of the point.
         '''
-        discrims = np.array([self.discriminant(point, k) for k in range(self.number_labels)], dtype=np.int8)
+
+        discrims = np.array([self.discriminant(point, k) for k in range(self.number_labels)])
         label = np.where(discrims == np.max(discrims))[0][0]
         return label
     
@@ -218,18 +220,11 @@ class QDA(Classification):
         label : int
             The predicted classes of the points.
         '''
-        labels = np.apply_along_axis(self.predict_one, 1, points).astype(np.int8)
-        return labels
-from sklearn import datasets
-iris = datasets.load_iris()
+        try:
+            labels = np.apply_along_axis(self.predict_one, 1, points).astype(np.int8)
+            return labels
+        except:
+            return 
 
-X = iris.data
-y = iris.target
-model = QDA(X, y)
-print(model.test_accuracy)
-from sklearn.metrics import accuracy_score
 
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-lda = LinearDiscriminantAnalysis()
-X_r2 = lda.fit(X, y)
-print(X_r2.score(X,y))
+

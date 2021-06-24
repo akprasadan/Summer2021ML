@@ -23,6 +23,9 @@ def evaluate_accuracy(predicted_output, true_output):
     accuracy : float
         Proportion correctly predicted, between 0 and 1 (inclusive).
     """
+    if predicted_output is None:
+        return
+        
     if predicted_output.ndim >= 2 or true_output.ndim >= 2:
         raise TypeError("Must pass in 1D Numpy array")
     
@@ -73,7 +76,9 @@ def confusion_matrix(number_labels, predicted_output, true_output):
     -----------
     .. [1] https://stackoverflow.com/a/40382459
     """
-
+    if predicted_output is None:
+        return
+        
     confusion_matrix = np.zeros(shape=(number_labels, number_labels), 
                                 dtype=np.int8)
     output_combined = np.stack((true_output, predicted_output), axis=1)  
