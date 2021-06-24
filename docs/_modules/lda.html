@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>qda &mdash; Aklearn 1.0 documentation</title>
+  <title>lda &mdash; Aklearn 1.0 documentation</title>
   
 
   
@@ -173,7 +173,7 @@
         
           <li><a href="index.html">Module code</a> &raquo;</li>
         
-      <li>qda</li>
+      <li>lda</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,7 +188,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for qda</h1><div class="highlight"><pre>
+  <h1>Source code for lda</h1><div class="highlight"><pre>
 <span></span><span class="sd">&#39;&#39;&#39;This module builds a class for k-nearest neighbor classification.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
@@ -196,10 +196,11 @@
 <span class="kn">from</span> <span class="nn">numpy.lib.shape_base</span> <span class="kn">import</span> <span class="n">split</span>
 <span class="kn">from</span> <span class="nn">src.classification.classification</span> <span class="kn">import</span> <span class="n">Classification</span>
 <span class="kn">from</span> <span class="nn">src.helperfunctions.evaluation_metrics</span> <span class="kn">import</span> <span class="n">evaluate_accuracy</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span> <span class="nn">src.classification.qda</span> <span class="kn">import</span> <span class="n">QDA</span>
 
-<div class="viewcode-block" id="QDA"><a class="viewcode-back" href="../classification.html#qda.QDA">[docs]</a><span class="k">class</span> <span class="nc">QDA</span><span class="p">(</span><span class="n">Classification</span><span class="p">):</span>
+<div class="viewcode-block" id="LDA"><a class="viewcode-back" href="../classification.html#lda.LDA">[docs]</a><span class="k">class</span> <span class="nc">LDA</span><span class="p">(</span><span class="n">QDA</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    A class used to represent a quadratic discriminant analysis classifier.</span>
+<span class="sd">    A class used to represent a linear discriminant analysis classifier.</span>
 <span class="sd">    We only list non-inherited attributes. We include regression</span>
 <span class="sd">    functionality as well.</span>
 
@@ -219,6 +220,9 @@
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+
+<span class="sd">    covariance_matrix : numpy.ndarray</span>
+<span class="sd">        The pooled covariance matrix used in the discriminant function</span>
 <span class="sd">    train_prediction : numpy.ndarray</span>
 <span class="sd">        The labels predicted for the given test data (for classification).</span>
 <span class="sd">    test_predictions : numpy.ndarray</span>
@@ -237,14 +241,16 @@
 
 <span class="sd">    See Also</span>
 <span class="sd">    ---------</span>
-<span class="sd">    lda.LDA : Use the more restrictive linear discriminant analysis</span>
+<span class="sd">    qda.QDA : Use the more flexible quadratic discriminant analysis</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
                  <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="p">,</span> <span class="n">number_labels</span><span class="p">,</span> 
-                         <span class="n">standardized</span><span class="p">)</span>
-
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+                 <span class="n">number_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">standardized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covariance_matrix</span> <span class="o">=</span> <span class="n">LDA</span><span class="o">.</span><span class="n">pooled_covariance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">,</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_many</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_many</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_accuracy</span> <span class="o">=</span> <span class="n">evaluate_accuracy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_predictions</span><span class="p">,</span> 
@@ -258,55 +264,41 @@
                                             <span class="bp">self</span><span class="o">.</span><span class="n">test_predictions</span><span class="p">,</span> 
                                             <span class="bp">self</span><span class="o">.</span><span class="n">test_output</span><span class="p">)</span>
     
-<div class="viewcode-block" id="QDA.prior"><a class="viewcode-back" href="../classification.html#qda.QDA.prior">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">prior</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Count the empirical proportion of labels of class k among output data.</span>
+
+<div class="viewcode-block" id="LDA.pooled_covariance"><a class="viewcode-back" href="../classification.html#lda.LDA.pooled_covariance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">pooled_covariance</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">num_labels</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Calculate the pooled covariance matrix (used for all classes).</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
-<span class="sd">        output : numpy.ndarray</span>
-<span class="sd">            The labels corresponding to some dataset</span>
-<span class="sd">        k : int </span>
-<span class="sd">            The class label we are interested in</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        --------</span>
-<span class="sd">        proportion : float</span>
-<span class="sd">            The fraction of class k observations</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-
-        <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">output</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span>
-        <span class="n">proportion</span> <span class="o">=</span> <span class="n">frequency</span> <span class="o">/</span> <span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">proportion</span></div>
-          
-<div class="viewcode-block" id="QDA.class_covariance"><a class="viewcode-back" href="../classification.html#qda.QDA.class_covariance">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">class_covariance</span><span class="p">(</span><span class="n">features_subset</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Calculate a covariance matrix for a mono-labeled feature array.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        features_subset : numpy.ndarray</span>
+<span class="sd">        features : numpy.ndarray</span>
 <span class="sd">            The design matrix of explanatory variables.</span>
+<span class="sd">        output : numpy.ndarray</span>
+<span class="sd">            The output labels corresponding to features.</span>
+<span class="sd">        num_labels : numpy.ndarray</span>
+<span class="sd">            The number of labels present in the data</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        --------</span>
-<span class="sd">        class_cov : numpy.ndarray</span>
-<span class="sd">            The class-specific covariance matrix for QDA.</span>
+<span class="sd">        pooled_cov : numpy.ndarray</span>
+<span class="sd">            The pooled covariance matrix for LDA.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
-        <span class="n">sample_size</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">features_subset</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">class_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features_subset</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">centered_features_subset</span> <span class="o">=</span> <span class="n">features_subset</span> <span class="o">-</span> <span class="n">class_mean</span>
-        <span class="n">unscaled_class_cov</span> <span class="o">=</span> <span class="n">centered_features_subset</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">centered_features_subset</span>
+        <span class="n">dimension</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">sample_size</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">init_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dimension</span><span class="p">,</span> <span class="n">dimension</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">sample_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">class_cov</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sample_size</span><span class="p">)</span> <span class="o">*</span> <span class="n">unscaled_class_cov</span>
-        <span class="k">else</span><span class="p">:</span> 
-            <span class="n">class_cov</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sample_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">unscaled_class_cov</span>
-        <span class="k">return</span> <span class="n">class_cov</span></div>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_labels</span><span class="p">):</span>
+            <span class="n">features_subset</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="n">output</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span>
+            <span class="n">sample_size_subset</span> <span class="o">=</span> <span class="n">features_subset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">class_cov</span> <span class="o">=</span> <span class="n">QDA</span><span class="o">.</span><span class="n">class_covariance</span><span class="p">(</span><span class="n">features_subset</span><span class="p">)</span>
+            <span class="n">init_cov</span> <span class="o">+=</span> <span class="n">class_cov</span> <span class="o">*</span> <span class="p">(</span><span class="n">sample_size_subset</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">pooled_cov</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sample_size</span> <span class="o">-</span> <span class="n">num_labels</span><span class="p">)</span> <span class="o">*</span> <span class="n">init_cov</span>
 
-<div class="viewcode-block" id="QDA.discriminant"><a class="viewcode-back" href="../classification.html#qda.QDA.discriminant">[docs]</a>    <span class="k">def</span> <span class="nf">discriminant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pooled_cov</span></div>
+
+<div class="viewcode-block" id="LDA.discriminant"><a class="viewcode-back" href="../classification.html#lda.LDA.discriminant">[docs]</a>    <span class="k">def</span> <span class="nf">discriminant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Evaluate the kth quadratic discriminant function at a point.</span>
 
 <span class="sd">        Parameters</span>
@@ -321,19 +313,19 @@
 <span class="sd">        discrim : float</span>
 <span class="sd">            The value of the discriminant function at this point.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
+
         <span class="n">feature_subset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_output</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span>
-        <span class="n">class_cov</span> <span class="o">=</span> <span class="n">QDA</span><span class="o">.</span><span class="n">class_covariance</span><span class="p">(</span><span class="n">feature_subset</span><span class="p">)</span>
         <span class="n">mean_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">feature_subset</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">log_det_term</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">class_cov</span><span class="p">)))</span>
-        <span class="n">inv_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">class_cov</span><span class="p">)</span>
+
+        <span class="n">inv_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">)</span>
         <span class="n">prior_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">QDA</span><span class="o">.</span><span class="n">prior</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_output</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
-        <span class="n">quadratic_term</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">inv_term</span> <span class="o">@</span> <span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">mean_term</span><span class="p">)</span>
+        
 
-        <span class="n">discrim</span> <span class="o">=</span> <span class="n">log_det_term</span> <span class="o">+</span> <span class="n">quadratic_term</span> <span class="o">+</span> <span class="n">prior_term</span>
-
+        <span class="n">discrim</span> <span class="o">=</span> <span class="n">prior_term</span> <span class="o">+</span> <span class="n">point</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">inv_term</span> <span class="o">@</span> <span class="n">mean_term</span> <span class="o">-</span> \
+            <span class="mf">0.5</span> <span class="o">*</span> <span class="n">mean_term</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">inv_term</span> <span class="o">@</span> <span class="n">mean_term</span>
         <span class="k">return</span> <span class="n">discrim</span></div>
   
-<div class="viewcode-block" id="QDA.predict_one"><a class="viewcode-back" href="../classification.html#qda.QDA.predict_one">[docs]</a>    <span class="k">def</span> <span class="nf">predict_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+<div class="viewcode-block" id="LDA.predict_one"><a class="viewcode-back" href="../classification.html#lda.LDA.predict_one">[docs]</a>    <span class="k">def</span> <span class="nf">predict_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Predict the label of a test point given a trained model.</span>
 
 <span class="sd">        Parameters</span>
@@ -349,28 +341,16 @@
 
         <span class="n">discrims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">discriminant</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_labels</span><span class="p">)])</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">discrims</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">discrims</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">label</span></div>
-    
-<div class="viewcode-block" id="QDA.predict_many"><a class="viewcode-back" href="../classification.html#qda.QDA.predict_many">[docs]</a>    <span class="k">def</span> <span class="nf">predict_many</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Predict the label of a matrix of test points given a trained model.</span>
+        <span class="k">return</span> <span class="n">label</span></div></div>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-<span class="sd">        points : numpy.ndarray</span>
-<span class="sd">            The test datapoints we wish to classify.</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        --------</span>
-<span class="sd">        label : int</span>
-<span class="sd">            The predicted classes of the points.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_one</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">labels</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">return</span> </div></div>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
 
-
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LDA</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">model2</span> <span class="o">=</span> <span class="n">QDA</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">split_proportion</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 </pre></div>
 

@@ -103,6 +103,7 @@
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-logisticreg">Logistic Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html#module-lda">Linear Discriminant Analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
@@ -213,8 +214,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classification.html#qda.QDA.class_covariance">class_covariance() (qda.QDA static method)</a>
 </li>
-      <li><a href="classification.html#qda.QDA.class_feature_covs">class_feature_covs (qda.QDA attribute)</a>
-</li>
       <li>
     classification
 
@@ -249,6 +248,8 @@
 </li>
       <li><a href="evaluation_metrics.html#evaluation_metrics.confusion_matrix">confusion_matrix() (in module evaluation_metrics)</a>
 </li>
+      <li><a href="classification.html#lda.LDA.covariance_matrix">covariance_matrix (lda.LDA attribute)</a>
+</li>
       <li><a href="preprocessing.html#preprocessing.cross_validation_folds_idx">cross_validation_folds_idx() (in module preprocessing)</a>
 </li>
   </ul></td>
@@ -267,8 +268,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classification.html#qda.QDA.discriminant">discriminant() (qda.QDA method)</a>
+      <li><a href="classification.html#lda.LDA.discriminant">discriminant() (lda.LDA method)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.discriminant">(qda.QDA method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -297,19 +302,13 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clustering.html#kmean.KCluster.feature_means">feature_means (kmean.KCluster attribute)</a>
-
-      <ul>
-        <li><a href="classification.html#qda.QDA.feature_means">(qda.QDA attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="classification.html#qda.QDA.features_subsets">features_subsets (qda.QDA attribute)</a>
 </li>
       <li><a href="clustering.html#kmean.KCluster.final_centers">final_centers (kmean.KCluster attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clustering.html#kmean.KCluster.final_clusters_idx">final_clusters_idx (kmean.KCluster attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clustering.html#kmean.KCluster.fit">fit() (kmean.KCluster method)</a>
 
       <ul>
@@ -369,6 +368,15 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    lda
+
+      <ul>
+        <li><a href="classification.html#module-lda">module</a>
+</li>
+      </ul></li>
+      <li><a href="classification.html#lda.LDA">LDA (class in lda)</a>
+</li>
       <li><a href="regression.html#linearreg.Linear">Linear (class in linearreg)</a>
 </li>
       <li>
@@ -417,6 +425,8 @@
 </li>
         <li><a href="regression.html#module-knnreg">knnreg</a>
 </li>
+        <li><a href="classification.html#module-lda">lda</a>
+</li>
         <li><a href="regression.html#module-linearreg">linearreg</a>
 </li>
         <li><a href="classification.html#module-logisticreg">logisticreg</a>
@@ -459,7 +469,7 @@
         <li><a href="regression.html#module-poissonreg">module</a>
 </li>
       </ul></li>
-      <li><a href="classification.html#qda.QDA.pooled_covariance">pooled_covariance() (qda.QDA static method)</a>
+      <li><a href="classification.html#lda.LDA.pooled_covariance">pooled_covariance() (lda.LDA static method)</a>
 </li>
       <li><a href="regression.html#linearreg.Linear.predict">predict() (linearreg.Linear static method)</a>
 
@@ -473,8 +483,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classification.html#qda.QDA.predict_many">predict_many() (qda.QDA method)</a>
 </li>
-      <li><a href="classification.html#qda.QDA.predict_one">predict_one() (qda.QDA method)</a>
+      <li><a href="classification.html#lda.LDA.predict_one">predict_one() (lda.LDA method)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.predict_one">(qda.QDA method)</a>
 </li>
+      </ul></li>
       <li><a href="classification.html#knn_classify.KNNClassify.predict_value">predict_value() (knn_classify.KNNClassify method)</a>
 </li>
       <li>
@@ -485,8 +499,6 @@
 </li>
       </ul></li>
       <li><a href="classification.html#qda.QDA.prior">prior() (qda.QDA static method)</a>
-</li>
-      <li><a href="classification.html#qda.QDA.priors">priors (qda.QDA attribute)</a>
 </li>
       <li><a href="classification.html#logisticreg.Logistic.probability_estimate">probability_estimate() (logisticreg.Logistic static method)</a>
 </li>
@@ -559,6 +571,8 @@
       <li><a href="classification.html#knn_classify.KNNClassify.test_accuracy">test_accuracy (knn_classify.KNNClassify attribute)</a>
 
       <ul>
+        <li><a href="classification.html#lda.LDA.test_accuracy">(lda.LDA attribute)</a>
+</li>
         <li><a href="classification.html#logisticreg.Logistic.test_accuracy">(logisticreg.Logistic attribute)</a>
 </li>
         <li><a href="classification.html#qda.QDA.test_accuracy">(qda.QDA attribute)</a>
@@ -567,6 +581,8 @@
       <li><a href="classification.html#knn_classify.KNNClassify.test_confusion">test_confusion (knn_classify.KNNClassify attribute)</a>
 
       <ul>
+        <li><a href="classification.html#lda.LDA.test_confusion">(lda.LDA attribute)</a>
+</li>
         <li><a href="classification.html#logisticreg.Logistic.test_confusion">(logisticreg.Logistic attribute)</a>
 </li>
         <li><a href="classification.html#qda.QDA.test_confusion">(qda.QDA attribute)</a>
@@ -589,6 +605,8 @@
       <li><a href="classification.html#knn_classify.KNNClassify.test_predictions">test_predictions (knn_classify.KNNClassify attribute)</a>
 
       <ul>
+        <li><a href="classification.html#lda.LDA.test_predictions">(lda.LDA attribute)</a>
+</li>
         <li><a href="regression.html#linearreg.Linear.test_predictions">(linearreg.Linear attribute)</a>
 </li>
         <li><a href="classification.html#logisticreg.Logistic.test_predictions">(logisticreg.Logistic attribute)</a>
@@ -624,15 +642,19 @@
       </ul></li>
       <li><a href="classification.html#logisticreg.Logistic.tolerance">tolerance (logisticreg.Logistic attribute)</a>
 </li>
-      <li><a href="classification.html#logisticreg.Logistic.train_accuracy">train_accuracy (logisticreg.Logistic attribute)</a>
+      <li><a href="classification.html#lda.LDA.train_accuracy">train_accuracy (lda.LDA attribute)</a>
 
       <ul>
+        <li><a href="classification.html#logisticreg.Logistic.train_accuracy">(logisticreg.Logistic attribute)</a>
+</li>
         <li><a href="classification.html#qda.QDA.train_accuracy">(qda.QDA attribute)</a>
 </li>
       </ul></li>
-      <li><a href="classification.html#logisticreg.Logistic.train_confusion">train_confusion (logisticreg.Logistic attribute)</a>
+      <li><a href="classification.html#lda.LDA.train_confusion">train_confusion (lda.LDA attribute)</a>
 
       <ul>
+        <li><a href="classification.html#logisticreg.Logistic.train_confusion">(logisticreg.Logistic attribute)</a>
+</li>
         <li><a href="classification.html#qda.QDA.train_confusion">(qda.QDA attribute)</a>
 </li>
       </ul></li>
@@ -654,8 +676,12 @@
         <li><a href="regression.html#regression.Regression.train_output">(regression.Regression attribute)</a>
 </li>
       </ul></li>
-      <li><a href="classification.html#qda.QDA.train_prediction">train_prediction (qda.QDA attribute)</a>
+      <li><a href="classification.html#lda.LDA.train_prediction">train_prediction (lda.LDA attribute)</a>
+
+      <ul>
+        <li><a href="classification.html#qda.QDA.train_prediction">(qda.QDA attribute)</a>
 </li>
+      </ul></li>
       <li><a href="regression.html#linearreg.Linear.train_predictions">train_predictions (linearreg.Linear attribute)</a>
 
       <ul>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-24T14:39:14-04:00" />
+    <meta property="article:modified_time" content="2021-06-24T16:29:46-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Classification Algorithms &mdash; Aklearn 1.0 documentation</title>
@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-logisticreg">Logistic Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-qda">Quadratic Discriminant Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lda">Linear Discriminant Analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms</a><ul>
@@ -900,53 +901,6 @@ True by default.</p></li>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="qda.QDA.priors">
-<span class="sig-name descname"><span class="pre">priors</span></span><a class="headerlink" href="#qda.QDA.priors" title="Permalink to this definition">¶</a></dt>
-<dd><p>The estimated probability of being in each class</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="qda.QDA.features_subsets">
-<span class="sig-name descname"><span class="pre">features_subsets</span></span><a class="headerlink" href="#qda.QDA.features_subsets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A 3D array where for each i, features_subsets[:, :, i] is the rows of the training data
-with class i.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="qda.QDA.class_feature_covs">
-<span class="sig-name descname"><span class="pre">class_feature_covs</span></span><a class="headerlink" href="#qda.QDA.class_feature_covs" title="Permalink to this definition">¶</a></dt>
-<dd><p>A 3D array where for each i, class_feature_covs[:, :, i] is the covariance matrix of
-the rows of training data with class i.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="qda.QDA.feature_means">
-<span class="sig-name descname"><span class="pre">feature_means</span></span><a class="headerlink" href="#qda.QDA.feature_means" title="Permalink to this definition">¶</a></dt>
-<dd><p>A 2D array where for each i, feature_means[:, i] is the mean
-of the rows of training data with class i.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="qda.QDA.train_prediction">
 <span class="sig-name descname"><span class="pre">train_prediction</span></span><a class="headerlink" href="#qda.QDA.train_prediction" title="Permalink to this definition">¶</a></dt>
 <dd><p>The labels predicted for the given test data (for classification).</p>
@@ -1018,7 +972,7 @@ of the rows of training data with class i.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">lda.LDA</span></code></dt><dd><p>Use the more restrictive linear discriminant analysis</p>
+<dt><a class="reference internal" href="#lda.LDA" title="lda.LDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lda.LDA</span></code></a></dt><dd><p>Use the more restrictive linear discriminant analysis</p>
 </dd>
 </dl>
 </div>
@@ -1055,27 +1009,6 @@ of the rows of training data with class i.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qda.QDA.pooled_covariance">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">pooled_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qda.html#QDA.pooled_covariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qda.QDA.pooled_covariance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the pooled covariance matrix (used for all classes).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – The design matrix of explanatory variables.</p></li>
-<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – The output labels corresponding to features.</p></li>
-<li><p><strong>num_labels</strong> (<em>numpy.ndarray</em>) – The number of labels present in the data</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>pooled_cov</strong> – The pooled covariance matrix for LDA.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1130,6 +1063,175 @@ of the rows of training data with class i.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lda">
+<span id="linear-discriminant-analysis"></span><h2>Linear Discriminant Analysis<a class="headerlink" href="#module-lda" title="Permalink to this headline">¶</a></h2>
+<p>This module builds a class for k-nearest neighbor classification.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="lda.LDA">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lda.</span></span><span class="sig-name descname"><span class="pre">LDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lda.html#LDA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lda.LDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent a linear discriminant analysis classifier.
+We only list non-inherited attributes. We include regression
+functionality as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – Design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – Labels of data corresponding to feature matrix.</p></li>
+<li><p><strong>split_proportion</strong> (<em>float</em>) – Proportion of data to use for training; between 0 and 1.</p></li>
+<li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
+<li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
+True by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.covariance_matrix">
+<span class="sig-name descname"><span class="pre">covariance_matrix</span></span><a class="headerlink" href="#lda.LDA.covariance_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pooled covariance matrix used in the discriminant function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.train_prediction">
+<span class="sig-name descname"><span class="pre">train_prediction</span></span><a class="headerlink" href="#lda.LDA.train_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The labels predicted for the given test data (for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.test_predictions">
+<span class="sig-name descname"><span class="pre">test_predictions</span></span><a class="headerlink" href="#lda.LDA.test_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The labels predicted for the given test data (for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.train_accuracy">
+<span class="sig-name descname"><span class="pre">train_accuracy</span></span><a class="headerlink" href="#lda.LDA.train_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on test data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.test_accuracy">
+<span class="sig-name descname"><span class="pre">test_accuracy</span></span><a class="headerlink" href="#lda.LDA.test_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accuracy of the classifier evaluated on test data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.train_confusion">
+<span class="sig-name descname"><span class="pre">train_confusion</span></span><a class="headerlink" href="#lda.LDA.train_confusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A confusion matrix of the classifier evaluated on training data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lda.LDA.test_confusion">
+<span class="sig-name descname"><span class="pre">test_confusion</span></span><a class="headerlink" href="#lda.LDA.test_confusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A confusion matrix of the classifier evaluated on test data
+(for classification).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#qda.QDA" title="qda.QDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qda.QDA</span></code></a></dt><dd><p>Use the more flexible quadratic discriminant analysis</p>
+</dd>
+</dl>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="lda.LDA.discriminant">
+<span class="sig-name descname"><span class="pre">discriminant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lda.html#LDA.discriminant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lda.LDA.discriminant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the kth quadratic discriminant function at a point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point</strong> (<em>numpy.ndarray</em>) – The point to evaluate at</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The class label of interest</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>discrim</strong> – The value of the discriminant function at this point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lda.LDA.pooled_covariance">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">pooled_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lda.html#LDA.pooled_covariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lda.LDA.pooled_covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the pooled covariance matrix (used for all classes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – The design matrix of explanatory variables.</p></li>
+<li><p><strong>output</strong> (<em>numpy.ndarray</em>) – The output labels corresponding to features.</p></li>
+<li><p><strong>num_labels</strong> (<em>numpy.ndarray</em>) – The number of labels present in the data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>pooled_cov</strong> – The pooled covariance matrix for LDA.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lda.LDA.predict_one">
+<span class="sig-name descname"><span class="pre">predict_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lda.html#LDA.predict_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lda.LDA.predict_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the label of a test point given a trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> (<em>numpy.ndarray</em>) – The test datapoint we wish to classify.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>label</strong> – The predicted class of the point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>

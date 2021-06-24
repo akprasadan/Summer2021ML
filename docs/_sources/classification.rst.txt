@@ -42,6 +42,12 @@ Quadratic Discriminant Analysis
 .. automodule:: qda
    :members:
 
+Linear Discriminant Analysis
+------------------------------------
+
+.. automodule:: lda
+   :members:
+
 ==================
 
 * :ref:`genindex`
