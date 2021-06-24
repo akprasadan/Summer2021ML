@@ -2,7 +2,7 @@
 
 from src.helperfunctions.evaluation_metrics import confusion_matrix
 import numpy as np
-
+from sklearn import metrics
 
 def test_half_wrong():
     '''In this example, we always predict 0.
@@ -75,12 +75,29 @@ def test_sum():
     '''The elements of the matrix should sum to the test sample size.
 
     We observe n combinations of prediction and truth.'''
+    loop_count = 10
+    num_labels = np.random.randint(2, 10, loop_count)
+    sample_sizes = np.random.randint(100, 200, loop_count)
+    for i in range(loop_count):
+        n = sample_sizes[i]
+        num_label = num_labels[i]
+        predictions = np.random.randint(0, num_label, n) # randint(0,n) excludes n
+        truth = np.random.randint(0, num_label, n)
+        conf_matrix = confusion_matrix(num_label, predictions, truth)
+        assert np.sum(conf_matrix) == n
 
-    n = 100
-    num_labels = 8
-    predictions = np.random.randint(0, num_labels, n) # randint(0,n) excludes n
-    truth = np.random.randint(0, num_labels, n)
-    conf_matrix = confusion_matrix(num_labels, predictions, truth)
-    assert np.sum(conf_matrix) == n
+def test_with_sklearn():
+    '''Ensure that sklearn and aklearn have same 
+    confusion matrix output.'''
 
-
+    loop_count = 10
+    num_labels = np.random.randint(2, 10, loop_count)
+    sample_sizes = np.random.randint(100, 200, loop_count)
+    for i in range(loop_count):
+        n = sample_sizes[i]
+        num_label = num_labels[i]
+        predictions = np.random.randint(0, num_label, n) # randint(0,n) excludes n
+        truth = np.random.randint(0, num_label, n)
+        conf_matrix = confusion_matrix(num_label, predictions, truth)
+        sklearn_conf = metrics.confusion_matrix(truth, predictions)
+        assert np.array_equal(conf_matrix, sklearn_conf)

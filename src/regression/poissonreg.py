@@ -11,6 +11,7 @@ from src.regression.regression import Regression
 from src.helperfunctions.evaluation_metrics import evaluate_regression_error
 from scipy.optimize import minimize
 from scipy.optimize.optimize import _minimize_bfgs
+from src.helperfunctions.preprocessing import scale_and_center
 
 class Poisson(Regression):
     '''
@@ -174,13 +175,5 @@ class Poisson(Regression):
         
         return exp_dot_prods
 
-X = np.random.rand(40,5)
-y = np.random.randint(0, 30, 40)
-model = Poisson(X,y, standardized = False, split_proportion=1)
-print(model.coefficients)
 
-from sklearn import linear_model
-clf = linear_model.PoissonRegressor(alpha = 0)
-clf.fit(X, y)
-print(clf.intercept_, clf.coef_)
 

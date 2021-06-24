@@ -14,23 +14,23 @@ Great. Check out the [website!](https://akprasadan.github.io/aklearn/index.html)
 ## Progress So Far 
 
 The labellings below are as follows:
- - A single +: code is running without error
+ - A single +: code is running without bugs
  - A pair of ++: code is running and somewhat tested 
  - A triple +++: code is running/comprehensively tested
  - If applicable, an * indicates the algorithm agrees with sklearn
 
 ### Algorithms
 
-- Classification: KNN (+), Logistic (++, *), QDA 
+- Classification: KNN (+), Logistic (+++, *), QDA (+)
 - Regression: Linear (+++, *), Poisson (++, *), KNN (+)
 - Clustering: K-Means (+)
-- Model evaluation techniques: accuracy (+++, *), confusion matrix (+++), MSE (+++)
+- Model evaluation techniques: accuracy (+++, *), confusion matrix (+++, *), MSE (+++)
 
 ### Data Engineering and Preparation
 
 - Train/test splitting (+++)
 - Cross-validation folds (+++)
-- Data Standardization (+++)
+- Data Standardization (+++, *)
 
 ### Workflow
 
@@ -42,7 +42,7 @@ The labellings below are as follows:
 ## To Do
 
 Immediate concerns:
-- QDA is not able to run
+- QDA gives incorrect results
 - Need to decide on how classification labels should be required to be structured, or what preprocessing may still be needed
 
 By the middle of July, 2021, I would like to have:

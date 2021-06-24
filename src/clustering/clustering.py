@@ -26,8 +26,8 @@ class Clustering:
     dimension : int
         The number of dimensions of the data, or columns of design matrix.
         Does not include output.
-
     """
+
     def __init__(self, features, standardized=True):
         self.features = features
         self.sample_size = features.shape[0]

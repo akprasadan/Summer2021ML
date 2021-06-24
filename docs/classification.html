@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   
-    <meta property="article:modified_time" content="2021-06-22T17:06:01-04:00" />
+    <meta property="article:modified_time" content="2021-06-23T23:22:26-04:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Classification Algorithms &mdash; Aklearn 1.0 documentation</title>
@@ -369,12 +369,12 @@ Does not include output.</p>
 <p>This module builds a class for logistic regression problems.
 We compute the solution by directly maximizing the log-likelihood.
 To do, we implement the Newton-Raphson method, following the treatment
-in the <a class="footnote-reference brackets" href="#id3" id="id1">1</a>.</p>
+in the <a class="footnote-reference brackets" href="#id4" id="id1">1</a>.</p>
 <p class="rubric">References</p>
 <p>Hastie, T., Tibshirani, R., &amp; Friedman, J. (2001). The Elements of Statistical Learning. Springer New York Inc..</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="logisticreg.Logistic">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">logisticreg.</span></span><span class="sig-name descname"><span class="pre">Logistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">logisticreg.</span></span><span class="sig-name descname"><span class="pre">Logistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_proportion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to represent a logistic regression classifier.
 We only list non-inherited attributes. We use an optimizer
 from scipy to manually compute the maximum likelihood estimator.</p>
@@ -387,7 +387,8 @@ from scipy to manually compute the maximum likelihood estimator.</p>
 <li><p><strong>threshold</strong> (<em>float</em>) – The minimum probability needed to classify a datapoint as a 1.</p></li>
 <li><p><strong>number_labels</strong> (<em>int</em>) – The number of labels present in the data.</p></li>
 <li><p><strong>standardized</strong> (<em>bool</em>) – Whether to center/scale the data (train/test done separately).
-True by default.</p></li>
+True by default. This isn’t strictly necessary, but it may help
+the Newton-Raphson algorithm converge. _[2]</p></li>
 </ul>
 </dd>
 </dl>
@@ -526,6 +527,12 @@ The algorithm terminates earlier if the tolerance is achieved, however,</p>
 </dl>
 </dd></dl>
 
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets">2</span></dt>
+<dd><p><a class="reference external" href="https://stats.stackexchange.com/a/113027s">https://stats.stackexchange.com/a/113027s</a></p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="logisticreg.Logistic.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.fit" title="Permalink to this definition">¶</a></dt>
@@ -589,15 +596,13 @@ conditional on the data and coefficient.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="logisticreg.Logistic.weighted_matrix">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">weighted_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.weighted_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.weighted_matrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">weighted_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probabilities</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/logisticreg.html#Logistic.weighted_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logisticreg.Logistic.weighted_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute weight matrix for the weighted least squares problem
 used in the Newton-Raphson algorithm of solving logistic regression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>features</strong> (<em>numpy.ndarray</em>) – A design matrix of observations (including all 1s column)</p></li>
-<li><p><strong>coefficients</strong> (<em>numpy.ndarray</em>) – A vector of possible coefficients</p></li>
-</ul>
+<dd class="field-odd"><p><strong>probabilities</strong> (<em>numpy.ndarray</em>) – An array of probabilities from which we compute
+the weight matrix.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>wt_matrix</strong> – Diagonal matrix with ith entries p(1-p), where
@@ -802,11 +807,11 @@ to the current point.</p>
 </dl>
 <p class="rubric">Notes</p>
 <p>An efficient numpy procedure (using its broadcasting functionality) to compute
-all pairwise differences between two collections of data points is given in <a class="footnote-reference brackets" href="#id3" id="id2">1</a>.
+all pairwise differences between two collections of data points is given in <a class="footnote-reference brackets" href="#id4" id="id3">1</a>.
 We use this, as an alternative to using a manual nested ‘for-loop’ procedure.</p>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
-<dt class="label" id="id3"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
+<dt class="label" id="id4"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id3">2</a>)</span></dt>
 <dd><p><a class="reference external" href="https://sparrow.dev/pairwise-distance-in-numpy/">https://sparrow.dev/pairwise-distance-in-numpy/</a></p>
 </dd>
 </dl>
@@ -1156,7 +1161,7 @@ of the rows of training data with class i.</p>
     <p>
         &#169; Copyright 2021, Akshay Prasadan.
       <span class="lastupdated">
-        Last updated on Jun 22, 2021.
+        Last updated on Jun 23, 2021.
       </span>
 
     </p>
