@@ -66,7 +66,7 @@ class QDA(Classification):
         self.priors = [QDA.prior(self.train_output, i) for i in range(self.number_labels)]
         self.features_subsets = [self.train_features[self.train_output == k] for k in range(self.number_labels)]
         self.class_feature_covs = [QDA.class_covariance(self.features_subsets[k]) for k in range(self.number_labels)]
-        self.feature_means = [np.mean(self.features_subsets[i], axis = 1) for i in range(self.number_labels)]
+        self.feature_means = [np.mean(self.features_subsets[i], axis = 0) for i in range(self.number_labels)]
         self.train_predictions = self.predict_many(self.train_features)
         self.test_predictions = self.predict_many(self.test_features)
         self.train_accuracy = evaluate_accuracy(self.train_predictions, 
@@ -119,12 +119,12 @@ class QDA(Classification):
 
         sample_size, dim = features_subset.shape
         class_mean = np.mean(features_subset, axis=0)
-
         centered_features_subset = features_subset - np.broadcast_to(class_mean, (sample_size, dim))
-        unscaled_class_cov = centered_features_subset @ centered_features_subset.T
+        unscaled_class_cov = centered_features_subset.T @ centered_features_subset
         if sample_size == 1:
             class_cov = 1/(sample_size) * unscaled_class_cov
-        else: class_cov = 1/(sample_size - 1) * unscaled_class_cov
+        else: 
+            class_cov = 1/(sample_size - 1) * unscaled_class_cov
         return class_cov
     
     @staticmethod
@@ -175,13 +175,15 @@ class QDA(Classification):
         discrim_term : float
             The value of the discriminant function at this point.
         '''
-
         class_cov = self.class_feature_covs[k]
         mean_term = self.feature_means[k]
+ 
         det_term = np.linalg.det(class_cov)
         inv_term = np.linalg.inv(class_cov)
         prior_term = np.log(self.priors[k])
 
+        middle_term = (point - mean_term).T @ inv_term @ (point - mean_term)
+        
         discrim_term = -0.5*det_term - 0.5*(point - mean_term).T @ inv_term @ (point - mean_term) + prior_term
 
         return discrim_term
@@ -199,9 +201,8 @@ class QDA(Classification):
         label : int
             The predicted class of the point.
         '''
-
         discrims = np.array([self.discriminant(point, k) for k in range(self.number_labels)], dtype=np.int8)
-        label = np.where(dicrims = np.min(discrims))[0]
+        label = np.where(discrims == np.max(discrims))[0][0]
         return label
     
     def predict_many(self, points):
@@ -217,7 +218,18 @@ class QDA(Classification):
         label : int
             The predicted classes of the points.
         '''
-        labels = np.apply_along_axis(self.predict_one, 1, points).astype(int8)
+        labels = np.apply_along_axis(self.predict_one, 1, points).astype(np.int8)
         return labels
+from sklearn import datasets
+iris = datasets.load_iris()
 
-    
+X = iris.data
+y = iris.target
+model = QDA(X, y)
+print(model.test_accuracy)
+from sklearn.metrics import accuracy_score
+
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+lda = LinearDiscriminantAnalysis()
+X_r2 = lda.fit(X, y)
+print(X_r2.score(X,y))

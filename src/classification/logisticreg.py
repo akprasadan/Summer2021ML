@@ -38,7 +38,8 @@ class Logistic(Classification):
         The number of labels present in the data.
     standardized : bool
         Whether to center/scale the data (train/test done separately).
-        True by default.
+        True by default. This isn't strictly necessary, but it may help
+        the Newton-Raphson algorithm converge. _[2]
 
     Attributes
     ----------
@@ -70,11 +71,14 @@ class Logistic(Classification):
     test_confusion : numpy.ndarray
         A confusion matrix of the classifier evaluated on test data.
 
+    References
+    ------------
+    .. [2] https://stats.stackexchange.com/a/113027s
     '''
 
     def __init__(self, features, output, split_proportion=0.75, threshold=0.5, 
-                 number_labels=None, standardized=True, tolerance = 0.01,
-                 max_steps = 500):
+                 number_labels=None, standardized=True, tolerance = 0.001,
+                 max_steps = 100):
         if standardized:
             self.features = scale_and_center(features)
 
@@ -87,6 +91,7 @@ class Logistic(Classification):
                          standardized=False)
         self.tolerance = tolerance
         self.max_steps = max_steps
+        self.steps = None
         self.coefficients = self.fit()
         self.threshold = threshold
         self.train_probs = Logistic.probability_estimate(self.train_features, 
@@ -126,29 +131,40 @@ class Logistic(Classification):
             The estimated probability of an label of 1 for each observation,
             conditional on the data and coefficient.
         '''
-        n = features.shape[0]
-        dot_prods = features @ coefficients
+        if features.ndim > 1 and (features.shape[1] != coefficients.shape[0]):
+            raise TypeError("Must pass in coefficients and features of the same dimension")
+            
+        if coefficients.ndim > 1:
+            raise TypeError("Coefficient argument must be a 1D Numpy array.")
+
+        if features.ndim == 1:
+            n = 1
+            d = features.shape[0]
+        else:
+            n = features.shape[0]
+
+        dot_prods = np.broadcast_to(features @ coefficients, n)
         estimates = np.zeros(n)
+
         for i in range(n):
-            if dot_prods[i] > 40:
+            if dot_prods[i] > 20:
                 estimates[i] = 1
-            elif dot_prods[i] < -40:
+            elif dot_prods[i] < -20:
                 estimates[i] = 0
             else:
                 estimates[i] = 1 / (1 + np.exp(-dot_prods[i]))
         return estimates
 
     @staticmethod
-    def weighted_matrix(features, coefficients):
+    def weighted_matrix(probabilities):
         '''Compute weight matrix for the weighted least squares problem
         used in the Newton-Raphson algorithm of solving logistic regression.
         
         Parameters
         -------------
-        features : numpy.ndarray
-            A design matrix of observations (including all 1s column)
-        coefficients : numpy.ndarray
-            A vector of possible coefficients
+        probabilities : numpy.ndarray
+            An array of probabilities from which we compute
+            the weight matrix.
 
         Returns
         -------
@@ -160,7 +176,7 @@ class Logistic(Classification):
         ---------
         Logistic.newton_raphson_update : Implement a single step of the Newton-Raphson algorithm.
         '''
-        probabilities = Logistic.probability_estimate(features, coefficients)
+
         wt_matrix_one = np.diag(probabilities)
        
         wt_matrix_two = np.diag(1 - probabilities)
@@ -194,10 +210,11 @@ class Logistic(Classification):
             The updated coefficients.
         '''
         X = features
-        W = Logistic.weighted_matrix(features, beta_old)  # Weight matrix
+        probabilities = Logistic.probability_estimate(X, beta_old)
+        W = Logistic.weighted_matrix(probabilities)  # Weight matrix
         y = output
         probabilities = Logistic.probability_estimate(features, beta_old)
-        beta_new = beta_old + np.linalg.pinv(X.T @ W @ X) @ X.T @ (y - probabilities)
+        beta_new = beta_old + np.linalg.inv(X.T @ W @ X) @ X.T @ (y - probabilities)
 
         return beta_new
 
@@ -232,6 +249,6 @@ class Logistic(Classification):
             coeff_change = np.linalg.norm(beta_new - beta_init)
             beta_init = beta_new
             steps += 1
-
+        self.steps = steps
+        self.final_coeff_change = coeff_change
         return beta_new
-
