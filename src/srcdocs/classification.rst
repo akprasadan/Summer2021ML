@@ -7,6 +7,7 @@ This section includes:
 - :ref:`logist`
 - :ref:`knnclass`
 - :ref:`qdaclass` 
+- :ref:`ldaclass` 
 
 The code is similar to the Regression code, except the output types are non-negative integers and we use different evaluation metrics. For example, we report a confusion matrix for each classifier, in addition to accuracy.
 
@@ -41,6 +42,8 @@ Quadratic Discriminant Analysis
 
 .. automodule:: qda
    :members:
+
+.. _ldaclass:
 
 Linear Discriminant Analysis
 ------------------------------------
