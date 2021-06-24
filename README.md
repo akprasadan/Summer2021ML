@@ -21,7 +21,7 @@ The labellings below are as follows:
 
 ### Algorithms
 
-- Classification: KNN (+), Logistic (+++, *), QDA (+)
+- Classification: KNN (+), Logistic (+++, *), QDA (++, *)
 - Regression: Linear (+++, *), Poisson (++, *), KNN (+)
 - Clustering: K-Means (+)
 - Model evaluation techniques: accuracy (+++, *), confusion matrix (+++, *), MSE (+++)
