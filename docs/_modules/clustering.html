@@ -103,6 +103,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../classification.html#module-logisticreg">Logistic Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classification.html#module-knn_classify">K-Nearest Neighbor Classifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classification.html#module-qda">Quadratic Discriminant Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classification.html#module-lda">Linear Discriminant Analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../clustering.html">Clustering Algorithms</a><ul>
@@ -231,7 +232,7 @@
 <span class="sd">        Separately scale/center the train and test data so each feature</span>
 <span class="sd">        (column of observations) has 0 mean and unit variance.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_features</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_features</span> <span class="o">=</span> <span class="n">scale_and_center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_features</span><span class="p">)</span></div></div>
 </pre></div>
 

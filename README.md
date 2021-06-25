@@ -23,7 +23,7 @@ The labellings below are as follows:
 
 - Classification: KNN (+++, *), Logistic (+++, *), QDA (+++, *)
 - Regression: Linear (+++, *), Poisson (+, *), KNN (+)
-- Clustering: K-Means (+)
+- Clustering: K-Means (++)
 - Model evaluation techniques: accuracy (+++, *), confusion matrix (+++, *), MSE (+++)
 
 ### Data Engineering and Preparation

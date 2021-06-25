@@ -41,5 +41,5 @@ class Clustering:
         Separately scale/center the train and test data so each feature
         (column of observations) has 0 mean and unit variance.
         '''
-        self.train_features = scale_and_center(self.train_features)
+        self.features= scale_and_center(self.train_features)
         self.test_features = scale_and_center(self.test_features)

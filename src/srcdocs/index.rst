@@ -30,7 +30,7 @@ Algorithms
 
 - Classification: KNN (+++, \*), Logistic (+++, \*), QDA (+++, \*), LDA(+)
 - Regression: Linear (+++, \*), Poisson (+, \*), KNN (+)
-- Clustering: K-Means (+)
+- Clustering: K-Means (++)
 - Model evaluation techniques: accuracy (+++, \*), confusion matrix (+++, \*), MSE (+++)
 
 Data Engineering and Preparation
