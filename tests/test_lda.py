@@ -51,4 +51,3 @@ def test_many_sklearn():
         proportion_agree = np.sum(skpredictions == akpredictions) / n
         assert proportion_agree > 0.8
 
-test_with_sklearn()

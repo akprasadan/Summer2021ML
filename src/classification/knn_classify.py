@@ -62,37 +62,26 @@ class KNNClassify(Classification):
                          standardized)
         self.k = k
         if classify:
-            self.test_predictions = KNNClassify.predict_class(
-                                                self.train_features,
-                                                self.train_output,
-                                                self.test_features,
-                                                self.k)
+            self.test_predictions = self.predict_class()
             self.test_accuracy = evaluate_accuracy(self.test_predictions, 
                                                    self.test_output)
             self.test_confusion = confusion_matrix(self.number_labels, 
                                                    self.test_predictions, 
                                                    self.test_output)
         else:
-            self.test_predictions_reg = KNNClassify.predict_value(self.train_features,
-                                                        self.train_output,
-                                                        self.test_features,
-                                                        self.k)
+            self.test_predictions_reg = self.predict_value()
             self.test_error = evaluate_regression_error(self.test_predictions_reg, 
                                                         self.test_output)
 
-    @staticmethod
-    def k_neighbors_idx(features, current_location, k):
+
+    def k_neighbors_idx(self, current_location):
         '''Find row indices (in given data) of the k closest neighbors 
         to a given data point.
         
         Parameters
         -----------
-        features : numpy.ndarray 
-            Design matrix of explanatory variables
         current_location : numpy.ndarray
             Point we would like to classify, using its neighbors.
-        k : int
-            The number of neighbors to use.
 
         Returns
         --------
@@ -111,25 +100,20 @@ class KNNClassify(Classification):
         .. [1] https://sparrow.dev/pairwise-distance-in-numpy/
         '''
         current_location = np.reshape(current_location, (1, current_location.shape[0]))
-        pairwise_differences = features[:, None, :] - current_location[None, :, :]
+        pairwise_differences = self.train_features[:, None, :] - current_location[None, :, :]
         distance_matrix = np.linalg.norm(pairwise_differences, axis = -1).ravel()
-        k_nearest_idx = np.argsort(distance_matrix, axis = 0)[:k]
+        k_nearest_idx = np.argsort(distance_matrix, axis = 0)[:self.k]
+
         return k_nearest_idx
     
-    @staticmethod
-    def classify_point(features, output, current_location, k):
+
+    def classify_point(self, current_location):
         '''Classify a new datapoint based on its k neighbors.
         
         Parameters
         -----------
-        features : numpy.ndarray 
-            Design matrix of explanatory variables.
-        output : numpy.ndarray
-            Labels corresponding to features.
         current_location : numpy.ndarray
             Point we would like to classify, using its neighbors.
-        k : int
-            The number of neighbors to use.
 
         Returns
         --------
@@ -142,30 +126,24 @@ class KNNClassify(Classification):
 
         See Also
         ---------
-        KNNClassify.estimate_point : Find average output value among neighbors instead 
+        estimate_point : Find average output value among neighbors instead 
                                      of most common label (for regression).
         '''
 
-        k_nearest_idx = KNNClassify.k_neighbors_idx(features, current_location, k)
-        nearest_k_labels = output[k_nearest_idx]
+        k_nearest_idx = self.k_neighbors_idx(current_location)
+        nearest_k_labels = self.train_output[k_nearest_idx]
         label_mode = mode(nearest_k_labels)[0]
 
         return label_mode
 
-    @staticmethod
-    def estimate_point(features, output, current_location, k):
+
+    def estimate_point(self, current_location):
         '''Estimate (for a regression context) a new datapoint based on its k neighbors.
         
         Parameters
         -----------
-        features : numpy.ndarray 
-            Design matrix of explanatory variables.
-        output : numpy.ndarray
-            Labels corresponding to features.
         current_location : numpy.ndarray
             Point we would like to classify, using its neighbors.
-        k : int
-            The number of neighbors to use.
 
         Returns
         --------
@@ -174,28 +152,23 @@ class KNNClassify(Classification):
 
         See Also
         ---------
-        KNNClassify.classify_point : Find most common label among neighbors instead of
+        classify_point : Find most common label among neighbors instead of
                                      average output value (for classification).
         '''
 
-        k_nearest_idx = KNNClassify.k_neighbors_idx(features, current_location, k)
-        output_estimate = np.mean(output[k_nearest_idx])
+        k_nearest_idx = self.k_neighbors_idx(current_location)
+        output_estimate = np.mean(self.train_output[k_nearest_idx])
 
         return output_estimate
 
-    def predict_class(train_features, train_output, test_features, k):
+
+    def predict_class(self):
         '''Classify many new datapoints based on their k neighbors.
         
         Parameters
         -----------
-        train_features : numpy.ndarray 
-            Design matrix of explanatory variables.
-        train_output : numpy.ndarray
-            Labels corresponding to features.
         test_features : numpy.ndarray
             Points we would like to classify, using their neighbors.
-        k : int
-            The number of neighbors to use.
 
         Returns
         --------
@@ -203,32 +176,24 @@ class KNNClassify(Classification):
             The predicted labels for each test datapoint.
         See Also
         ---------
-        KNNClassify.predict_value : Predict output value instead 
+        predict_value : Predict output value instead 
                                      of label (for regression).
         '''
-        test_sample_size = test_features.shape[0]
-        test_labels = np.zeros(test_sample_size, dtype = np.int8)
+        test_labels = np.zeros(self.test_size, dtype = np.int8)
 
-        for row in range(test_sample_size):
-            test_labels[row] = KNNClassify.classify_point(train_features, 
-                                                           train_output,
-                                                           test_features[row, :],
-                                                           k)
+        for row in range(self.test_size):
+            test_labels[row] = self.classify_point(self.test_features[row, :])
+
         return test_labels
 
-    def predict_value(train_features, train_output, test_features, k):
+
+    def predict_value(self, test_features, k):
         '''Classify many new datapoints based on their k neighbors.
         
         Parameters
         -----------
-        train_features : numpy.ndarray 
-            Design matrix of explanatory variables.
-        train_output : numpy.ndarray
-            Labels corresponding to features.
         test_features : numpy.ndarray
             Points we would like to classify, using their neighbors.
-        k : int
-            The number of neighbors to use.
 
         Returns
         --------
@@ -237,24 +202,16 @@ class KNNClassify(Classification):
 
         See Also
         ---------
-        KNNClassify.predict_class : Predict label instead of output 
+        predict_class : Predict label instead of output 
                                     value (for classification).
         '''
         test_sample_size = test_features.shape[0]
         test_estimates = np.zeros(test_sample_size)
 
         for row in range(test_sample_size):
-            test_estimates[row] = KNNClassify.estimate_point(train_features, 
-                                                           train_output,
-                                                           test_features[row, :],
-                                                           k)
+            test_estimates[row] = self.estimate_point(test_features[row, :])
         return test_estimates
 
 
 
         
-
-
-
-    
-

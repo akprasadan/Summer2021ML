@@ -39,7 +39,7 @@ class Logistic(Classification):
     standardized : bool
         Whether to center/scale the data (train/test done separately).
         True by default. This isn't strictly necessary, but it may help
-        the Newton-Raphson algorithm converge. _[2]
+        the Newton-Raphson algorithm converge. [2]_
 
     Attributes
     ----------
