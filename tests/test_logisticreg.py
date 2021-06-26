@@ -33,6 +33,7 @@ def test_probability_estimate2():
     coeff_2 = np.array([0, 1, 0, 0])
     coeff_3 = np.array([0, 0, 1, 0])
     coeff_4 = np.array([0, 0, 0, 1])
+    # blah blah blah
     
     result_1 = Logistic.probability_estimate(row, coeff_1)
     result_2 = Logistic.probability_estimate(row, coeff_2)

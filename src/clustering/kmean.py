@@ -158,6 +158,7 @@ class KCluster(Clustering):
         # An k times d array
         initial_means = self.features[initial_data_idx, :]
         self.initial_means = initial_means
+        # Add comment
         # Initialize arbitrary large error, so first step will always run
         error = np.inf
 
